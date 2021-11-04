@@ -11,6 +11,7 @@ namespace Toolbox.TweenMachine.Tweens
         private Vector3 direction;
 
         //constructor
+        public TweenPosition(){}
         public TweenPosition(GameObject gameObject, Vector3 targetPos, float speed)
         {
             this.gameObject = gameObject;

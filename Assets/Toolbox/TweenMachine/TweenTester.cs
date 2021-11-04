@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System.Linq;
 using Toolbox.TweenMachine.Tweens;
 using UnityEngine;
 
@@ -12,11 +11,7 @@ namespace Toolbox.TweenMachine
 
         private void Awake()
         {
-            // tweenBuild = new TweenBuild(this.gameObject);
-            //
-            // Tween tweenScale = tweenBuild.SetTweenScale(new Vector3(0.5f, 0.5f, 0.5f), 5, EasingType.Linear); // new scale, speed, easingType
-            //
-            // tweenBuild.StartTween();
+            Debug.Log(tweenBuild.tweens.Count);
         }
     }
 }

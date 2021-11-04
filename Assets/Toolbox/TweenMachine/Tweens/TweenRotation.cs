@@ -11,6 +11,7 @@ namespace Toolbox.TweenMachine.Tweens
         private Vector3 direction;
 
 
+        public TweenRotation(){}
         public TweenRotation(GameObject gameObject, Quaternion targetRotation, float speed)
         {
             this.gameObject = gameObject;

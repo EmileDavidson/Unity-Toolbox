@@ -11,6 +11,7 @@ namespace Toolbox.TweenMachine.Tweens
         private Vector3 scaleDirection;
 
 
+        public TweenScale(){}
         public TweenScale(GameObject gameObject, Vector3 targetScale, float speed)
         {
             this.gameObject = gameObject;

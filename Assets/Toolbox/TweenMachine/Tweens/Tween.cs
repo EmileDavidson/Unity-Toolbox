@@ -9,28 +9,21 @@ namespace Toolbox.TweenMachine.Tweens
     public abstract class Tween
     {
         //variable declaration 
-        protected Func<float, float> EaseMethode;
-        protected float speed;
-        protected float percent;
-        public GameObject gameObject; 
+        [SerializeReference] protected Func<float, float> EaseMethode;
+        [SerializeReference] protected float speed;
+        [SerializeReference] protected float percent;
+        [SerializeReference] public GameObject gameObject; 
     
         //actions
         private UnityAction _onTweenStart;
         private UnityAction _onTweenFinish;
         private UnityAction _onTweenUpdate;
 
-        public bool IsFinished
-        {
-            get { return percent >= 1; }
-        }
-    
-        protected bool HasStarted
-        {
-            get { return percent > 0; }
-        }
-    
+        public bool IsFinished => percent >= 1;
+        protected bool HasStarted => percent > 0;
+
         //functions
-        public void Update(float dt)
+        public void UpdateTween(float dt)
         {
             //invoke tweenstart action if not started yet
             if(!HasStarted) OnTweenStart?.Invoke();

@@ -7,8 +7,11 @@ using UnityEngine.UIElements;
 namespace Toolbox.TweenMachine.Editor
 {
     [CustomPropertyDrawer(typeof(TweenBuild))]
-    public class TestingEditor : PropertyDrawer
+    public class TweenBuildPropertyDrawer : PropertyDrawer
     {
+
+        public static TweenBuild tweenBuild;
+        
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
@@ -28,21 +31,22 @@ namespace Toolbox.TweenMachine.Editor
                 return;
             }
 
-            TweenBuild tweenBuild = field.GetValue(targetObject) as TweenBuild;
+            tweenBuild = field.GetValue(targetObject) as TweenBuild;
             
             if (tweenBuild == null)
             {
-                EditorGUI.HelpBox(position, "Tween build is null", MessageType.Info);
-                return;
+                tweenBuild = new TweenBuild();
             }
             
             Rect pos = position;
-            string buttonName = tweenBuild.name == default ? property.propertyPath : tweenBuild.name;
+            if (tweenBuild.name == default || string.IsNullOrEmpty(tweenBuild.name)) tweenBuild.name = property.propertyPath;
+            string buttonName = tweenBuild.name;
+            
             if (GUI.Button(pos, $"{buttonName}"))
             {
                 TweenBuildWindow tweenBuildWindow = TweenBuildWindow.ShowWindow();
+                tweenBuildWindow.Gameobject = myGameObject;
                 tweenBuildWindow.TweenBuild = tweenBuild;
-                tweenBuildWindow.GameObject = myGameObject;
             }
 
             EditorGUI.EndProperty();

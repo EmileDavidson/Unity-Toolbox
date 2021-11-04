@@ -9,12 +9,12 @@ namespace Toolbox.TweenMachine.Tweens
     {
         private Color targetColor;
         private Color startingColor;
-        private Renderer _renderer;
+        [SerializeReference]private Renderer _renderer;
 
-        private float _directionR;
-        private float _directionG;
-        private float _directionB;
-        private float _directionA;
+        [SerializeReference]private float _directionR;
+        [SerializeReference]private float _directionG;
+        [SerializeReference]private float _directionB;
+        [SerializeReference] private float _directionA;
 
         //constructor
         public TweenColor(){}

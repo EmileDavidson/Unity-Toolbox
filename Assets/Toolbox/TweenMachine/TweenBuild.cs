@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
 using Toolbox.TweenMachine.Tweens;
 using UnityEngine;
 using UnityEngine.Events;
@@ -13,8 +12,8 @@ namespace Toolbox.TweenMachine
     public class TweenBuild
     {
         private GameObject _gameObject;
-        public List<Tween> tweens = new List<Tween>();
-        
+        [SerializeReference] public List<Tween> tweens = new List<Tween>();
+
         //complete tweens
         public string name = default;
         public UnityEvent onTweenBuildFinish = new UnityEvent();
@@ -22,7 +21,11 @@ namespace Toolbox.TweenMachine
         public UnityEvent onTweenBuildStart = new UnityEvent();
         public bool tweenBuildFinished = false;
 
-        public TweenBuild() { }
+        public TweenBuild()
+        {
+            
+        }
+        
         public TweenBuild(GameObject gameObject)
         {
             _gameObject = gameObject;
@@ -32,34 +35,6 @@ namespace Toolbox.TweenMachine
         {
             get => _gameObject;
             set => _gameObject = value;
-        }
-
-        struct test
-        {
-            public Action action;
-            public System.Type type;
-        }
-        public Tween Create(Type value, GameObject target)
-        {
-            // Dictionary<System.Type, test> awomeness = new Dictionary<Type, test>();
-            //
-            // var test = new test();
-            // test.action = () => new TweenColor(target, Color.red)
-            //     awomeness.Add(typeof(TweenColor));
-            //
-            //
-            // if (value == typeof(TweenColor))
-            // {
-            //     return new TweenColor(target, Color.white, 1);
-            // }
-            //
-            // if (value == typeof(TweenPosition))
-            // {
-            //     return new TweenPosition(target, Vector3.zero, 1);
-            // }
-            //
-            // return null;
-            return null;
         }
 
         //position
@@ -199,7 +174,7 @@ namespace Toolbox.TweenMachine
             if (tweenBuildFinished) return;
             
             foreach (Tween tween in tweens){
-                if(!tween.IsFinished) tween.Update(dt);
+                if(!tween.IsFinished) tween.UpdateTween(dt);
             }
 
             CheckComplete();

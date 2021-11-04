@@ -235,7 +235,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenBuild:
     tweens: []
-    label: new label
+    name: tweenBuild
     onTweenBuildFinish:
       m_PersistentCalls:
         m_Calls: []
