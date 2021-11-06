@@ -234,8 +234,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweenBuild:
-    tweens: []
-    name: tweenBuild
+    gameObject: {fileID: 1964445512}
+    tweens:
+    - id: 0
+    - id: 1
+    - id: 2
+    - id: 3
     onTweenBuildFinish:
       m_PersistentCalls:
         m_Calls: []
@@ -248,6 +252,35 @@ MonoBehaviour:
     tweenBuildFinished: 0
   references:
     version: 1
+    00000000:
+      type: {class: TweenScale, ns: Toolbox.TweenMachine.Tweens, asm: Assembly-CSharp}
+      data:
+        speed: 2.25
+        percent: 79.92
+        gameObject: {fileID: 0}
+    00000001:
+      type: {class: TweenRotation, ns: Toolbox.TweenMachine.Tweens, asm: Assembly-CSharp}
+      data:
+        speed: 0
+        percent: 0
+        gameObject: {fileID: 0}
+    00000002:
+      type: {class: TweenPosition, ns: Toolbox.TweenMachine.Tweens, asm: Assembly-CSharp}
+      data:
+        speed: 0
+        percent: 0
+        gameObject: {fileID: 0}
+    00000003:
+      type: {class: TweenColor, ns: Toolbox.TweenMachine.Tweens, asm: Assembly-CSharp}
+      data:
+        speed: 0
+        percent: 0
+        gameObject: {fileID: 0}
+        _renderer: {fileID: 0}
+        _directionR: 0
+        _directionG: 0
+        _directionB: 0
+        _directionA: 0
 --- !u!4 &1964445514
 Transform:
   m_ObjectHideFlags: 0

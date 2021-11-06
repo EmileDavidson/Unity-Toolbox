@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Linq;
-using System.Linq.Expressions;
 using Toolbox.MethodExtensions;
 using Toolbox.TweenMachine.Tweens;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace Toolbox.TweenMachine.Editor
 {
@@ -20,28 +16,13 @@ namespace Toolbox.TweenMachine.Editor
 
         private TweenBuild tweenBuild;
 
-        public TweenBuild TweenBuild
-        {
-            get => tweenBuild;
-            set => tweenBuild = value;
-        }
-
-        private GameObject gameObject;
-
-        public GameObject Gameobject
-        {
-            get => gameObject;
-            set => gameObject = value;
-        }
-
-        private int _selectionIndex = 0;
-
-        public static TweenBuildWindow ShowWindow()
+        public static TweenBuildWindow ShowWindow(TweenBuild tweenBuild)
         {
             // Get existing open window or if none, make a new one:
             TweenBuildWindow window = GetWindow<TweenBuildWindow>();
             window.Show();
             window.reopenNeeded = false;
+            window.tweenBuild = tweenBuild;
             return window;
         }
 
@@ -57,18 +38,19 @@ namespace Toolbox.TweenMachine.Editor
             {
                 EditorGUILayout.HelpBox("All changes made will not be saved when leaving playMode", MessageType.Error);
             }
-
-            TweenBuild.GameObject =
-                EditorGUILayout.ObjectField("Target object", Gameobject, typeof(GameObject), true) as GameObject;
-            TweenBuild.name = EditorGUILayout.TextField("Name", TweenBuild.name);
-
+            
+            tweenBuild.GameObject = EditorGUILayout.ObjectField(new GUIContent("Target object", "Target object that all Tweens use except if they have there own custom target"), tweenBuild.GameObject, typeof(GameObject), true) as GameObject;
+            EditorGUILayout.Space();
+            
             TweenDisplayer();
 
             EditorGUILayout.Space();
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Reset"))
             {
-                TweenBuild.tweens.Clear();
+                //reset logica
+                tweenBuild.GameObject = null;
+                tweenBuild.tweens.Clear();
             }
 
             if (GUILayout.Button("Copy"))
@@ -94,9 +76,9 @@ namespace Toolbox.TweenMachine.Editor
                 for (int i = 0; i < tweenTypes.Count; i++) foldOuts.Add(false);
             }
 
-            if (!TweenBuild.tweens.IsEmpty())
+            if (!tweenBuild.tweens.IsEmpty())
             {
-                foreach (var tween in TweenBuild.tweens.Where(tween => tween != null))
+                foreach (var tween in tweenBuild.tweens.Where(tween => tween != null))
                 {
                     createdTweens.Add(tween.GetType());
                 }
@@ -115,7 +97,7 @@ namespace Toolbox.TweenMachine.Editor
 
         private void DrawAddButton(Type type)
         {
-            if (GUILayout.Button($"Create: {type.Name}"))
+            if (GUILayout.Button($"add: {type.Name}"))
             {
                 tweenBuild.tweens.Add(TweenCreator.CreateTween[type].Invoke());
             }

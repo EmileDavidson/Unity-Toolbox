@@ -11,11 +11,10 @@ namespace Toolbox.TweenMachine
     [Serializable]
     public class TweenBuild
     {
-        private GameObject _gameObject;
+        [SerializeReference] private GameObject gameObject;
         [SerializeReference] public List<Tween> tweens = new List<Tween>();
 
         //complete tweens
-        public string name = default;
         public UnityEvent onTweenBuildFinish = new UnityEvent();
         public UnityEvent onTweenBuildUpdate = new UnityEvent();
         public UnityEvent onTweenBuildStart = new UnityEvent();
@@ -28,26 +27,26 @@ namespace Toolbox.TweenMachine
         
         public TweenBuild(GameObject gameObject)
         {
-            _gameObject = gameObject;
+            this.gameObject = gameObject;
         }
 
         public GameObject GameObject
         {
-            get => _gameObject;
-            set => _gameObject = value;
+            get => gameObject;
+            set => gameObject = value;
         }
 
         //position
         public Tween SetTweenPosition(Vector3 targetPos, float speed)
         {
-            Tween newTween = new TweenPosition(_gameObject, targetPos, speed);
+            Tween newTween = new TweenPosition(gameObject, targetPos, speed);
             tweens.Add(newTween);
             return newTween;
         }
         
         public Tween SetTweenPosition(Vector3 target, float speed, EasingType easingType)
         {
-            Tween tween =  new TweenPosition(_gameObject, target, speed).SetEasing(EasingDictonary.dict[easingType]);
+            Tween tween =  new TweenPosition(gameObject, target, speed).SetEasing(EasingDictonary.dict[easingType]);
             tweens.Add(tween);
             return tween;
         }
@@ -72,14 +71,14 @@ namespace Toolbox.TweenMachine
         //rotation
         public Tween SetTweenRotation(Quaternion target, float speed)
         {
-            Tween tween = new TweenRotation(_gameObject, target, speed);
+            Tween tween = new TweenRotation(gameObject, target, speed);
             tweens.Add(tween);
             return tween;
         }
         
         public Tween SetTweenRotation(Quaternion target, float speed, EasingType easingType)
         {
-            Tween tween = new TweenRotation(_gameObject, target, speed).SetEasing(EasingDictonary.dict[easingType]);
+            Tween tween = new TweenRotation(gameObject, target, speed).SetEasing(EasingDictonary.dict[easingType]);
             tweens.Add(tween);
             return tween;
         }
@@ -104,14 +103,14 @@ namespace Toolbox.TweenMachine
         //scale
         public Tween SetTweenScale(Vector3 target, float speed)
         {
-            Tween tween = new TweenScale(_gameObject, target, speed);
+            Tween tween = new TweenScale(gameObject, target, speed);
             tweens.Add(tween);
             return tween;
         }
         
         public Tween SetTweenScale(Vector3 target, float speed, EasingType easingType)
         {
-            Tween tween = new TweenScale(_gameObject, target, speed).SetEasing(EasingDictonary.dict[easingType]);
+            Tween tween = new TweenScale(gameObject, target, speed).SetEasing(EasingDictonary.dict[easingType]);
             tweens.Add(tween);
             return tween;
         }
@@ -136,14 +135,14 @@ namespace Toolbox.TweenMachine
         //color
         public Tween SetTweenColor(Color target, float speed)
         {
-            Tween tween = new TweenColor(_gameObject, target, speed);
+            Tween tween = new TweenColor(gameObject, target, speed);
             tweens.Add(tween);
             return tween;
         }
         
         public Tween SetTweenColor(Color target, float speed, EasingType easingType)
         {
-            Tween tween = new TweenColor(_gameObject, target, speed).SetEasing(EasingDictonary.dict[easingType]);
+            Tween tween = new TweenColor(gameObject, target, speed).SetEasing(EasingDictonary.dict[easingType]);
             tweens.Add(tween);
             return tween;
         }
