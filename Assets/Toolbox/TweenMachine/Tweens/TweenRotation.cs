@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Toolbox.TweenMachine.Tweens
 {
     [Serializable]
-    public class TweenRotation : Tween
+    public class TweenRotation : TweenBase
     {
         private Vector3 startRotation;
         private Vector3 targetRotation;
@@ -29,7 +29,7 @@ namespace Toolbox.TweenMachine.Tweens
 
         protected override void UpdateTween()
         {
-            float easingstep = EaseMethode(percent);
+            float easingstep = GetEasingStep;
             
             float x = startRotation.x + (direction.x * easingstep);
             float y = startRotation.y + (direction.y * easingstep);

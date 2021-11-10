@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:Toggle label="Toggle" style="background-color: rgba(72, 38, 38, 255); width: 268px;" />
+    <ui:IMGUIContainer style="height: 194px; background-color: rgba(255, 71, 71, 255); width: auto;" />
+</ui:UXML>

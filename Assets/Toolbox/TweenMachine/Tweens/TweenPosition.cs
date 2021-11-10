@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Toolbox.TweenMachine.Tweens
 {
     [Serializable]
-    public class TweenPosition : Tween
+    public class TweenPosition : TweenBase
     {
         private Vector3 startPosition;
         private Vector3 targetPosition;
@@ -34,7 +34,6 @@ namespace Toolbox.TweenMachine.Tweens
         protected override void TweenEnd()
         {
             gameObject.transform.position = targetPosition;
-
         }
 
 

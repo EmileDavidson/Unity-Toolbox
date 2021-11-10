@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Toolbox.TweenMachine.Tweens
 {
     [Serializable]
-    public class TweenScale : Tween
+    public class TweenScale : TweenBase
     {
         private Vector3 startScale;
         private Vector3 targetScale;

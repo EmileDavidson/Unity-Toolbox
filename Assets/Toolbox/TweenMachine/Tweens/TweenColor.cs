@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Toolbox.TweenMachine.Tweens
 {
     [Serializable]
-    public class TweenColor : Tween
+    public class TweenColor : TweenBase
     {
         private Color targetColor;
         private Color startingColor;
