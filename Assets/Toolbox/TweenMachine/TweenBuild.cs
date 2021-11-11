@@ -17,7 +17,7 @@ namespace Toolbox.TweenMachine
         //default values for all tweens except if customized
         [SerializeReference] private GameObject gameObject;
         [SerializeReference] private float defaultSpeed = 1;
-        [SerializeReference] private EasingType defaultEasingType = EasingType.Linear;
+        private EasingType defaultEasingType = EasingType.Linear;
 
 
         [SerializeReference] public List<TweenBase> tweens = new List<TweenBase>();

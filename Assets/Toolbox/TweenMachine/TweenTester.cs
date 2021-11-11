@@ -11,6 +11,7 @@ namespace Toolbox.TweenMachine
 
         private void Awake()
         {
+            print(tweenBuild.onTweenBuildStart.GetPersistentEventCount());
             Debug.Log(tweenBuild.tweens.Count);
         }
     }
