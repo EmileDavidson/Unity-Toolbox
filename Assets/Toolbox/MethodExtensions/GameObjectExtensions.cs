@@ -16,10 +16,8 @@ namespace Toolbox.MethodExtensions
             {
                 return gameObject.GetComponent<T>();
             }
-            else
-            {
-                return gameObject.AddComponent<T>();
-            }
+
+            return gameObject.AddComponent<T>();
         }
 
         /// <summary>
@@ -30,12 +28,8 @@ namespace Toolbox.MethodExtensions
         /// <returns>Previously or newly attached component.</returns>
         public static T GetOrAddComponentToParent<T>(this GameObject gameObject) where T : Component
         {
-            if (gameObject.transform.parent.HasComponent<T>())
-            {
-                return gameObject.transform.parent.GetComponent<T>();
-            }
-
-            return gameObject.transform.parent.AddComponent<T>();
+            var parent = gameObject.transform.parent;
+            return parent.HasComponent<T>() ? parent.GetComponent<T>() : parent.AddComponent<T>();
         }
 
         /// <summary>
