@@ -7,13 +7,23 @@ using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
 [Serializable]
-public class SerializedEvent : UnityEvent{}
+public class SerializedEvent : UnityEvent
+{
+}
 
 namespace Toolbox.TweenMachine
 {
     [Serializable]
     public class TweenBuild
     {
+#if UNITY_EDITOR
+        public bool positionFoldout;
+        public bool scaleFoldout;
+        public bool rotationFoldout;
+        public bool colorFoldout;
+        public bool tweenFoldout;
+#endif
+
         //default values for all tweens except if customized
         [SerializeReference] private GameObject gameObject;
         [SerializeReference] private float defaultSpeed = 1;
@@ -30,9 +40,8 @@ namespace Toolbox.TweenMachine
 
         public TweenBuild()
         {
-            
         }
-        
+
         public TweenBuild(GameObject gameObject)
         {
             this.gameObject = gameObject;
@@ -43,6 +52,7 @@ namespace Toolbox.TweenMachine
             get => defaultEasingType;
             set => defaultEasingType = value;
         }
+
         public float DefaultSpeed
         {
             get => defaultSpeed;
@@ -62,14 +72,14 @@ namespace Toolbox.TweenMachine
             tweens.Add(newTween);
             return newTween;
         }
-        
+
         public TweenBase SetTweenPosition(Vector3 target, float speed, EasingType easingType)
         {
-            TweenBase tween =  new TweenPosition(gameObject, target, speed).SetEasing(easingType);
+            TweenBase tween = new TweenPosition(gameObject, target, speed).SetEasing(easingType);
             tweens.Add(tween);
             return tween;
         }
-        
+
         public TweenBase SetTweenPosition(TweenPosition tween)
         {
             tweens.Add(tween);
@@ -86,7 +96,7 @@ namespace Toolbox.TweenMachine
                 }
             }
         }
-        
+
         //rotation
         public TweenBase SetTweenRotation(Quaternion target, float speed)
         {
@@ -94,20 +104,20 @@ namespace Toolbox.TweenMachine
             tweens.Add(tween);
             return tween;
         }
-        
+
         public TweenBase SetTweenRotation(Quaternion target, float speed, EasingType easingType)
         {
             TweenBase tween = new TweenRotation(gameObject, target, speed).SetEasing(easingType);
             tweens.Add(tween);
             return tween;
         }
-        
+
         public TweenBase SetTweenRotation(TweenRotation tween)
         {
             tweens.Add(tween);
             return tween;
         }
-        
+
         public void RemoveAllTweenRotations()
         {
             foreach (Tween tween in tweens)
@@ -118,7 +128,7 @@ namespace Toolbox.TweenMachine
                 }
             }
         }
-        
+
         //scale
         public TweenBase SetTweenScale(Vector3 target, float speed)
         {
@@ -126,20 +136,20 @@ namespace Toolbox.TweenMachine
             tweens.Add(tween);
             return tween;
         }
-        
+
         public TweenBase SetTweenScale(Vector3 target, float speed, EasingType easingType)
         {
             TweenBase tween = new TweenScale(gameObject, target, speed).SetEasing(easingType);
             tweens.Add(tween);
             return tween;
         }
-        
+
         public TweenBase SetTweenScale(TweenScale tween)
         {
             tweens.Add(tween);
             return tween;
         }
-        
+
         public void RemoveAllTweenScale()
         {
             foreach (Tween tween in tweens)
@@ -150,7 +160,7 @@ namespace Toolbox.TweenMachine
                 }
             }
         }
-        
+
         //color
         public TweenBase SetTweenColor(Color target, float speed)
         {
@@ -158,7 +168,7 @@ namespace Toolbox.TweenMachine
             tweens.Add(tween);
             return tween;
         }
-        
+
         public TweenBase SetTweenColor(Color target, float speed, EasingType easingType)
         {
             TweenBase tween = new TweenColor(gameObject, target, speed).SetEasing(easingType);
@@ -171,39 +181,41 @@ namespace Toolbox.TweenMachine
             tweens.Add(tween);
             return tween;
         }
-        
+
         public void RemoveAllTweenColor()
         {
             foreach (TweenBase tween in tweens)
             {
                 if (tween is TweenColor)
-                { 
+                {
                     tweens.Remove(tween);
                 }
             }
         }
 
-        
+
         //functional functions
         public void UpdateTween(float dt)
         {
             onTweenBuildUpdate.Invoke();
-            
+
             if (tweenBuildFinished) return;
-            
-            foreach (TweenBase tween in tweens){
-                if(!tween.IsFinished) tween.UpdateTween(dt);
+
+            foreach (TweenBase tween in tweens)
+            {
+                if (!tween.IsFinished) tween.UpdateTween(dt);
             }
 
             CheckComplete();
         }
-        
+
         public void StartTween()
         {
             foreach (var tween in tweens)
             {
                 if (tween.gameObject == null) tween.gameObject = this.GameObject;
             }
+
             TweenController.Instance.acitveTweens.Add(this);
             onTweenBuildStart.Invoke();
         }
@@ -220,4 +232,3 @@ namespace Toolbox.TweenMachine
         }
     }
 }
-

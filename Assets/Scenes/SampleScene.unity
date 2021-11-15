@@ -239,9 +239,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweenBuild:
+    positionFoldout: 0
+    scaleFoldout: 0
+    rotationFoldout: 0
+    colorFoldout: 0
+    tweenFoldout: 0
     gameObject: {fileID: 1964445512}
     defaultSpeed: 1
-    defaultEasingType: 0
     tweens: []
     onTweenBuildFinish:
       m_PersistentCalls:
@@ -251,43 +255,7 @@ MonoBehaviour:
         m_Calls: []
     onTweenBuildStart:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1964445512}
-          m_TargetAssemblyTypeName: 
-          m_MethodName: 
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: 
-          m_MethodName: 
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: 
-          m_MethodName: 
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
     tweenBuildFinished: 0
   references:
     version: 1
