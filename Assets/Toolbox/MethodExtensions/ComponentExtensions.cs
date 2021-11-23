@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Toolbox.MethodExtensions
@@ -35,6 +36,57 @@ namespace Toolbox.MethodExtensions
         public static bool HasComponent<T>(this Component component) where T : Component
         {
             return component.GetComponent<T>() != null;
+        }
+
+        /// <summary>
+        /// checks if object has component and returns that and out's the component
+        /// </summary>
+        /// <param name="component"></param>
+        /// <param name="comp"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>returns if there was a component</returns>
+        public static bool HasAndGetComponent<T>(this Component component, out Component comp) where T : Component
+        {
+            comp = component.GetComponent<T>() ? component.GetComponent<T>() : null;
+            return comp != null;
+        }
+
+        /// <summary>
+        /// checks if object parent has component and returns that and out's the component
+        /// </summary>
+        /// <param name="component"></param>
+        /// <param name="comp"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>returns if there was a component</returns>
+        public static bool HasAndGetComponentInParent<T>(this Component component, out Component comp) where T : Component
+        {
+            comp = component.GetComponentInParent<T>() ? component.GetComponentInParent<T>() : null;
+            return comp != null;
+        }
+
+        /// <summary>
+        /// gets or add script from / to add children of GameObject and returns the list of components
+        /// </summary>
+        /// <param name="component"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static List<Component> GetOrAddComponentAllChildren<T>(this Component component) where T : Component
+        {
+            List<Component> components = new List<Component>();
+            List<GameObject> childGameObjects = component.gameObject.GetAllChildrenGameObjects();
+
+            foreach (GameObject child in childGameObjects)
+            {
+                if (child.HasAndGetComponent<T>(out var comp))
+                {
+                    components.Add(comp);
+                    continue;
+                }
+                var addedComp = child.AddComponent<T>();
+                components.Add(addedComp);
+            }
+
+            return components;
         }
     }
 }

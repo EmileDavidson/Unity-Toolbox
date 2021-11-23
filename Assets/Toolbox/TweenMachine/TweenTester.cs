@@ -11,7 +11,7 @@ namespace Toolbox.TweenMachine
 
         private void Awake()
         {
-            Debug.Log(tweenBuild.tweens.Count);
+            // Debug.Log(tweenBuild.tweens.Count);
         }
     }
 }
