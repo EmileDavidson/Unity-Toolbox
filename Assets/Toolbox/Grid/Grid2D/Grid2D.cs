@@ -109,12 +109,12 @@ namespace Toolbox.Grid.Grid2D
                 type = BorderType.BorderBottomTop;
                 return true;
             }
-            if (cell.gridPosition.y == RowAmount - 1)
+            if (cell.gridPosition.y == xAmount - 1)
             {
                 type = BorderType.BorderBottomBottom;
                 return true;
             }
-            if (cell.gridPosition.x == ColumnAmount - 1)
+            if (cell.gridPosition.x == yAmount - 1)
             {
                 type = BorderType.BorderBottomRight;
                 return true;
@@ -133,19 +133,19 @@ namespace Toolbox.Grid.Grid2D
                 return true;
             }
         
-            if (cell.gridPosition.x == ColumnAmount - 1 && cell.gridPosition.y == 0)
+            if (cell.gridPosition.x == yAmount - 1 && cell.gridPosition.y == 0)
             {
                 type = CornerType.BottomUpRight;
                 return true;
             }
         
-            if (cell.gridPosition.x == ColumnAmount - 1 && cell.gridPosition.y == RowAmount - 1)
+            if (cell.gridPosition.x == yAmount - 1 && cell.gridPosition.y == xAmount - 1)
             {
                 type = CornerType.BottomDownRight;
                 return true;
             }
         
-            if (cell.gridPosition.x == 0 && cell.gridPosition.y == RowAmount - 1)
+            if (cell.gridPosition.x == 0 && cell.gridPosition.y == xAmount - 1)
             {
                 type = CornerType.BottomDownLeft;
                 return true;
