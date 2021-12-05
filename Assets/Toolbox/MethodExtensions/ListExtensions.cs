@@ -122,5 +122,26 @@ namespace Toolbox.MethodExtensions
                 bool removed = list.Remove(item);
             }
         }
+
+        /// <summary>
+        /// Changes the given number to a number inside of the list size and returns it.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="index">The current index</param>
+        /// <param name="looped">if true we loop through array until we are at last number if false returns list.lenght - 1 or 0</param>
+        /// <returns></returns>
+        public static int GetNumberBetweenSize<T>(this IList<T> list, int index, bool looped = false)
+        {
+            if (list.IsEmpty()) return index;
+
+            if (!looped)
+            {
+                return index.FindClosestIndex(new[] { 0, (list.Count - 1) }).First();
+            }
+            if (index < 0) index = list.Count + index;
+            else if (index > list.Count - 1) index = index % list.Count;
+
+            return index;
+        }
     }
 }
