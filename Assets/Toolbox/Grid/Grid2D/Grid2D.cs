@@ -10,20 +10,20 @@ namespace Toolbox.Grid.Grid2D
     public class Grid2D<T> where T : Cell2D
     {
         [field: SerializeReference] public List<T> cells = new List<T>();
-        [Min(0), SerializeReference] private int rowAmount;
-        [Min(0), SerializeReference] private int columnAmount;
+        [Min(0), SerializeReference] private int xAmount;
+        [Min(0), SerializeReference] private int yAmount;
         [SerializeReference] public UnityEvent onResetGrid = new UnityEvent();
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="rowAmount">how many rows does the grid have?</param>
-        /// <param name="columnAmount">How many Columns does the grid have?</param>
+        /// <param name="xAmount">how many rows does the grid have?</param>
+        /// <param name="yAmount">How many Columns does the grid have?</param>
         /// <param name="generate">do we want to generate in constructor if not you can use GenerateGrid() methode </param>
-        public Grid2D(int rowAmount, int columnAmount, bool generate = true)
+        public Grid2D(int xAmount, int yAmount, bool generate = true)
         {
-            this.rowAmount = rowAmount;
-            this.columnAmount = columnAmount;
+            this.xAmount = xAmount;
+            this.yAmount = yAmount;
             if(generate) GenerateGrid();
         }
 
@@ -35,11 +35,11 @@ namespace Toolbox.Grid.Grid2D
         public Grid2D<T> GenerateGrid()
         {
             ResetGrid();
-            for (int gridY = 0; gridY < rowAmount; gridY++)
+            for (int gridX = 0; gridX < yAmount; gridX++)
             {
-                for (int gridX = 0; gridX < columnAmount; gridX++)
+                for (int gridY = 0; gridY < xAmount; gridY++)
                 {
-                    int index = gridX + columnAmount * gridY;
+                    int index = gridX + xAmount * gridY;
                     cells.Add((T)Activator.CreateInstance(typeof(T), new Vector2Int(gridX, gridY), index));
                 }
             }
@@ -61,16 +61,25 @@ namespace Toolbox.Grid.Grid2D
 
         public List<T> Cells => cells;
 
-        public int RowAmount
+        /// <summary>
+        /// x axis
+        /// </summary>
+        public int width => xAmount;
+        /// <summary>
+        /// y axis
+        /// </summary>
+        public int height => yAmount;
+        
+        public int XAmount
         {
-            get => rowAmount;
-            private set => rowAmount = value;
+            get => xAmount;
+            private set => xAmount = value;
         }
 
-        public int ColumnAmount
+        public int YAmount
         {
-            get => columnAmount;
-            private set => columnAmount = value;
+            get => yAmount;
+            private set => yAmount = value;
         }
 
         public T this[int i]

@@ -11,9 +11,9 @@ namespace Toolbox.Grid.Grid2D
     public class Grid3D<T> where T : Cell3D
     {
         [field: SerializeReference] public List<T> cells = new List<T>();
-        [Min(0), SerializeReference] private int rowAmount;
-        [Min(0), SerializeReference] private int columnAmount;
-        [Min(0), SerializeReference] private int heightAmount;
+        [Min(0), SerializeReference] private int xAmount;
+        [Min(0), SerializeReference] private int yAmount;
+        [Min(0), SerializeReference] private int zAmount;
         [SerializeReference] public UnityEvent onResetGrid = new UnityEvent();
 
         /// <summary>
@@ -22,11 +22,11 @@ namespace Toolbox.Grid.Grid2D
         /// <param name="rowAmount">how many rows does the grid have?</param>
         /// <param name="columnAmount">How many Columns does the grid have?</param>
         /// <param name="generate">do we want to generate in constructor if not you can use GenerateGrid() methode </param>
-        public Grid3D(int rowAmount, int columnAmount, int heightAmount, bool generate = true)
+        public Grid3D(int xAmount, int yAmount, int zAmount, bool generate = true)
         {
-            this.rowAmount = rowAmount;
-            this.columnAmount = columnAmount;
-            this.heightAmount = heightAmount;
+            this.xAmount = xAmount;
+            this.yAmount = yAmount;
+            this.zAmount = zAmount;
             if(generate) GenerateGrid();
         }
 
@@ -39,15 +39,15 @@ namespace Toolbox.Grid.Grid2D
         {
             ResetGrid();
 
-            for (int gridY = 0; gridY < heightAmount; gridY++)
+            int cellIndex = 0;    
+            for (int gridX = 0; gridX < xAmount; gridX++)
             {
-                for (int gridX = 0; gridX < rowAmount; gridX++)
+                for (int gridY = 0; gridY < yAmount; gridY++)
                 {
-                    for (int gridZ = 0; gridZ < columnAmount; gridZ++)
+                    for (int gridZ = 0; gridZ < zAmount; gridZ++)
                     {
-                        int index = (rowAmount * heightAmount * gridZ) + (rowAmount * gridY) + gridX;
-                        Debug.Log(index);
-                        cells.Add((T)Activator.CreateInstance(typeof(T), new Vector3Int(gridX, gridY, gridZ), index));                 
+                        cells.Add((T)Activator.CreateInstance(typeof(T), new Vector3Int(gridX, gridY, gridZ), cellIndex));
+                        cellIndex++;
                     }
                 }
             }
@@ -68,16 +68,36 @@ namespace Toolbox.Grid.Grid2D
         //========== getters && Setters ===========
         public List<T> Cells => cells;
 
-        public int RowAmount
+        /// <summary>
+        /// x axis
+        /// </summary>
+        public int Width => xAmount;
+        
+        /// <summary>
+        /// y axis
+        /// </summary>
+        public int height => yAmount;
+        /// <summary>
+        /// z axis
+        /// </summary>
+        public int lenght  => zAmount;
+
+        public int XAmount
         {
-            get => rowAmount;
-            private set => rowAmount = value;
+            get => xAmount;
+            private set => xAmount = value;
         }
 
-        public int ColumnAmount
+        public int YAmount
         {
-            get => columnAmount;
-            private set => columnAmount = value;
+            get => yAmount;
+            private set => yAmount = value;
+        }
+
+        public int ZAmount
+        {
+            get => zAmount;
+            private set => zAmount = value;
         }
 
         public T this[int i]
@@ -93,63 +113,7 @@ namespace Toolbox.Grid.Grid2D
         }
 
         //========== helping methods ===========
-        public bool IsBorder(Cell2D cell, out BorderType type)
-        {
-            type = BorderType.NONE;
-        
-            if (cell.gridPosition.x == 0)
-            {
-                type = BorderType.BorderBottomLeft;
-                return true;
-            }
-            if (cell.gridPosition.y == 0)
-            {
-                type = BorderType.BorderBottomTop;
-                return true;
-            }
-            if (cell.gridPosition.y == RowAmount - 1)
-            {
-                type = BorderType.BorderBottomBottom;
-                return true;
-            }
-            if (cell.gridPosition.x == ColumnAmount - 1)
-            {
-                type = BorderType.BorderBottomRight;
-                return true;
-            }
-
-            return false;
-        }
-        
-        public bool IsCorner(Cell2D cell, out CornerType type)
-        {
-            type = CornerType.NONE;
-                
-            if (cell.gridPosition.x == 0 && cell.gridPosition.y == 0)
-            {
-                type = CornerType.BottomUpLeft;
-                return true;
-            }
-        
-            if (cell.gridPosition.x == ColumnAmount - 1 && cell.gridPosition.y == 0)
-            {
-                type = CornerType.BottomUpRight;
-                return true;
-            }
-        
-            if (cell.gridPosition.x == ColumnAmount - 1 && cell.gridPosition.y == RowAmount - 1)
-            {
-                type = CornerType.BottomDownRight;
-                return true;
-            }
-        
-            if (cell.gridPosition.x == 0 && cell.gridPosition.y == RowAmount - 1)
-            {
-                type = CornerType.BottomDownLeft;
-                return true;
-            }
-        
-            return false;
-        }
+        public void IsBorder(){}
+        public void IsCorner(){}
     }
 }

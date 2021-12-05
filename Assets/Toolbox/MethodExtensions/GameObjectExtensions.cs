@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Toolbox.MethodExtensions
@@ -58,13 +59,12 @@ namespace Toolbox.MethodExtensions
             return gameObject.GetComponentInParent<T>() != null;
         }
 
-        public static void RemoveComponent<T>(this GameObject obj, bool immediate = false) where T : Component
+        public static bool RemoveComponent<T>(this GameObject obj, bool immediate = false) where T : Component
         {
-            if (!(obj.HasComponent<T>())) return;
+            if (!(obj.HasComponent<T>())) return false;
             if (immediate) Object.DestroyImmediate(obj.GetComponent<T>(), true);
             else Object.Destroy(obj.GetComponent<T>());
-<<<<<<< Updated upstream
-=======
+            
             return true;
         }
 
@@ -133,7 +133,6 @@ namespace Toolbox.MethodExtensions
             List<GameObject> childGameObjects = new List<GameObject>();
             childrenTransforms.ForEach((objTrans => childGameObjects.Add(objTrans.gameObject)));
             return childGameObjects;
->>>>>>> Stashed changes
         }
 
         
