@@ -8,6 +8,12 @@ namespace Toolbox.MethodExtensions
 {
     public static class TypeExtentions
     {
+        public static bool IsDerivedFrom(this Type myType, Type baseType)
+        {
+            var dict = myType.GetInheritedClassesDict();
+            return dict.All(keyValuePair => keyValuePair.Value != myType);
+        }
+
         /// <summary>
         /// Get list of all inherited classes 
         /// </summary>
