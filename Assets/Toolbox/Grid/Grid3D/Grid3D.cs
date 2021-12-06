@@ -1,14 +1,14 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Toolbox.Grid.Enums;
 using Toolbox.Grid.Grid3D.Cells;
+using UnityEngine;
 using UnityEngine.Events;
 
-namespace Toolbox.Grid.Grid2D
+namespace Toolbox.Grid.Grid3D
 {
     [Serializable]
-    public class Grid3D<T> where T : Cell3D
+    public class Grid3D<T> where T : ICell3D
     {
         [field: SerializeReference] public List<T> cells = new List<T>();
         [Min(0), SerializeReference] private int xAmount;
@@ -46,7 +46,11 @@ namespace Toolbox.Grid.Grid2D
                 {
                     for (int gridX = 0; gridX < xAmount; gridX++)
                     {
-                        cells.Add((T)Activator.CreateInstance(typeof(T), new Vector3Int(gridX, gridY, gridZ), cellIndex));
+                        T cell = (T)Activator.CreateInstance(typeof(T));
+                        cell.Index = cellIndex;
+                        cell.GridPosition = new Vector3Int(gridX, gridY, gridZ);
+                        
+                        cells.Add(cell);
                         cellIndex++;
                     }
                 }
@@ -113,41 +117,41 @@ namespace Toolbox.Grid.Grid2D
         }
 
         //========== helping methods ===========
-        public bool IsBorder(Cell3D cell3D, out BorderType type)
+        public bool IsBorder(ICell3D cell3D, out BorderType type)
         {
             type = BorderType.NONE;
 
-            if (cell3D.gridPosition.z == 0)
+            if (cell3D.GridPosition.z == 0)
             {
                 type = BorderType.front;
                 return true;
             }
 
-            if (cell3D.gridPosition.z == lenght - 1)
+            if (cell3D.GridPosition.z == lenght - 1)
             {
                 type = BorderType.back;
                 return true;
             }
 
-            if (cell3D.gridPosition.y == height - 1)
+            if (cell3D.GridPosition.y == height - 1)
             {
                 type = BorderType.Top;
                 return true;
             }
 
-            if (cell3D.gridPosition.y == 0)
+            if (cell3D.GridPosition.y == 0)
             {
                 type = BorderType.Bottom;
                 return true;
             }
 
-            if (cell3D.gridPosition.x == 0)
+            if (cell3D.GridPosition.x == 0)
             {
                 type = BorderType.Left;
                 return true;
             }
 
-            if (cell3D.gridPosition.x == Width - 1)
+            if (cell3D.GridPosition.x == Width - 1)
             {
                 type = BorderType.Right;
                 return true;
@@ -156,12 +160,12 @@ namespace Toolbox.Grid.Grid2D
             return false;
         }
 
-        public bool IsCorner(Cell3D cell3D, out CornerType type)
+        public bool IsCorner(ICell3D cell3D, out CornerType type)
         {
             type = CornerType.NONE;
-            var x = cell3D.gridPosition.x;
-            var y = cell3D.gridPosition.y;
-            var z = cell3D.gridPosition.z;
+            var x = cell3D.GridPosition.x;
+            var y = cell3D.GridPosition.y;
+            var z = cell3D.GridPosition.z;
 
             if (x == 0 && y == 0 && z == 0)
             {
