@@ -12,7 +12,7 @@ namespace Toolbox.Editor
             if (GUILayout.Button("Try"))
             {
                 Tester tester = target as Tester;
-                if(tester != null) tester.Test();
+                // if(tester != null) tester.Test();
             }
         }
     }

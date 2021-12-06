@@ -4,14 +4,12 @@
     {
         NONE,
         //2D
-        BorderBottomLeft,
-        BorderBottomRight,
-        BorderBottomTop,
-        BorderBottomBottom,
-        //3D
-        BorderTopLeft,
-        BorderTopRight,
-        BorderTopBottom,
-        BorderTopTop
+        Bottom,
+        Top,
+        Right,
+        Left,
+        //3d
+        front,
+        back
     }
 }

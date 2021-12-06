@@ -40,11 +40,11 @@ namespace Toolbox.Grid.Grid2D
             ResetGrid();
 
             int cellIndex = 0;    
-            for (int gridX = 0; gridX < xAmount; gridX++)
+            for (int gridZ = 0; gridZ < zAmount; gridZ++)
             {
                 for (int gridY = 0; gridY < yAmount; gridY++)
                 {
-                    for (int gridZ = 0; gridZ < zAmount; gridZ++)
+                    for (int gridX = 0; gridX < xAmount; gridX++)
                     {
                         cells.Add((T)Activator.CreateInstance(typeof(T), new Vector3Int(gridX, gridY, gridZ), cellIndex));
                         cellIndex++;
@@ -113,7 +113,106 @@ namespace Toolbox.Grid.Grid2D
         }
 
         //========== helping methods ===========
-        public void IsBorder(){}
-        public void IsCorner(){}
+        public bool IsBorder(Cell3D cell3D, out BorderType type)
+        {
+            type = BorderType.NONE;
+
+            if (cell3D.gridPosition.z == 0)
+            {
+                type = BorderType.front;
+                return true;
+            }
+
+            if (cell3D.gridPosition.z == lenght - 1)
+            {
+                type = BorderType.back;
+                return true;
+            }
+
+            if (cell3D.gridPosition.y == height - 1)
+            {
+                type = BorderType.Top;
+                return true;
+            }
+
+            if (cell3D.gridPosition.y == 0)
+            {
+                type = BorderType.Bottom;
+                return true;
+            }
+
+            if (cell3D.gridPosition.x == 0)
+            {
+                type = BorderType.Left;
+                return true;
+            }
+
+            if (cell3D.gridPosition.x == Width - 1)
+            {
+                type = BorderType.Right;
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool IsCorner(Cell3D cell3D, out CornerType type)
+        {
+            type = CornerType.NONE;
+            var x = cell3D.gridPosition.x;
+            var y = cell3D.gridPosition.y;
+            var z = cell3D.gridPosition.z;
+
+            if (x == 0 && y == 0 && z == 0)
+            {
+                type = CornerType.BottomLeft;
+                return true;
+            }
+
+            if (x == Width - 1 && y == 0 && z == 0)
+            {
+                type = CornerType.BottomRight;
+                return true;
+            }
+
+            if (x == Width - 1 && y == 0 && z == lenght - 1)
+            {
+                type = CornerType.TopRight;
+                return true;
+            }
+
+            if (x == 0 && y == 0 && z == lenght - 1)
+            {
+                type = CornerType.TopLeft;
+                return true;
+            }
+            
+            //3d
+            if (x == 0 && y == height - 1 && z == 0)
+            {
+                type = CornerType.TopBottomLeft;
+                return true;
+            }
+
+            if (x == Width - 1 && y == height - 1 && z == 0)
+            {
+                type = CornerType.TopBottomRight;
+                return true;
+            }
+
+            if (x == Width - 1 && y == height - 1 && z == lenght - 1)
+            {
+                type = CornerType.TopTopRight;
+                return true;
+            }
+
+            if (x == 0 && y == height - 1 && z == lenght - 1)
+            {
+                type = CornerType.TopTopLeft;
+                return true;
+            }
+            
+            return false;
+        }
     }
 }

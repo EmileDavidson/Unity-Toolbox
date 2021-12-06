@@ -7,14 +7,14 @@
     {
         NONE,
         //2D
-        BottomUpRight,
-        BottomUpLeft,
-        BottomDownRight,
-        BottomDownLeft,
+        BottomLeft,
+        BottomRight,
+        TopLeft,
+        TopRight,
         //3d
-        TopUpRight,
-        TopUpLeft,
-        TopDownRight,
-        TopDownLeft,
+        TopBottomLeft,
+        TopBottomRight,
+        TopTopLeft,
+        TopTopRight,
     }
 }

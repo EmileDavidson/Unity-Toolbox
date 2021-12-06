@@ -133,7 +133,7 @@ namespace Toolbox.MethodExtensions
         public static int GetNumberBetweenSize<T>(this IList<T> list, int index, bool looped = false)
         {
             if (list.IsEmpty()) return index;
-
+        
             if (!looped)
             {
                 return index.FindClosestIndex(new[] { 0, (list.Count - 1) }).First();
@@ -142,6 +142,11 @@ namespace Toolbox.MethodExtensions
             else if (index > list.Count - 1) index = index % list.Count;
 
             return index;
+        }
+
+        public static bool ContainsSlot<T>(this IList<T> list, int index)
+        {
+            return index >= 0 && list.Count - 1 >= index;
         }
     }
 }

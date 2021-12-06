@@ -101,22 +101,22 @@ namespace Toolbox.Grid.Grid2D
         
             if (cell.gridPosition.x == 0)
             {
-                type = BorderType.BorderBottomLeft;
+                type = BorderType.Left;
                 return true;
             }
             if (cell.gridPosition.y == 0)
             {
-                type = BorderType.BorderBottomTop;
+                type = BorderType.Top;
                 return true;
             }
             if (cell.gridPosition.y == xAmount - 1)
             {
-                type = BorderType.BorderBottomBottom;
+                type = BorderType.Bottom;
                 return true;
             }
             if (cell.gridPosition.x == yAmount - 1)
             {
-                type = BorderType.BorderBottomRight;
+                type = BorderType.Right;
                 return true;
             }
 
@@ -129,25 +129,25 @@ namespace Toolbox.Grid.Grid2D
                 
             if (cell.gridPosition.x == 0 && cell.gridPosition.y == 0)
             {
-                type = CornerType.BottomUpLeft;
+                type = CornerType.TopLeft;
                 return true;
             }
         
             if (cell.gridPosition.x == yAmount - 1 && cell.gridPosition.y == 0)
             {
-                type = CornerType.BottomUpRight;
+                type = CornerType.TopRight;
                 return true;
             }
         
             if (cell.gridPosition.x == yAmount - 1 && cell.gridPosition.y == xAmount - 1)
             {
-                type = CornerType.BottomDownRight;
+                type = CornerType.BottomRight;
                 return true;
             }
         
             if (cell.gridPosition.x == 0 && cell.gridPosition.y == xAmount - 1)
             {
-                type = CornerType.BottomDownLeft;
+                type = CornerType.BottomLeft;
                 return true;
             }
         
