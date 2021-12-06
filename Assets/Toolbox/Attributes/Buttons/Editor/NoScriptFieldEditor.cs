@@ -21,7 +21,7 @@ namespace Toolbox.Attributes
             if (RemoveLogEntriesByMode == null)
             {
                 Debug.LogError($"Could not find the {logEntryClassName}.{removeLogMethodName}() method. " +
-                               "Please submit an issue and specify your Unity version: https://github.com/madsbangh/EasyButtons/issues/new");
+                               "Please submit an issue and specify your Unity version: https://github.com/EmileDavidson/Unity-Toolbox/issues/new");
             }
         }
 
