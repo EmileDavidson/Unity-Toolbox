@@ -1,5 +1,8 @@
 ﻿# Easy buttons for the Unity default inspector
-> created from https://github.com/madsbangh/EasyButtons#readme
+> created from https://github.com/madsbangh/EasyButtons <br>
+> slightly changed some files and naming fixed to use jetbrains rider's naming convention 
+> <br>
+
 > These tiny scripts add the ability to quickly show a button in the inspector for any method.
 
 ## How to use:
