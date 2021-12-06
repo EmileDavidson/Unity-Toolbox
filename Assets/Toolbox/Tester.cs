@@ -1,34 +1,24 @@
-﻿using Toolbox.Attributes;
+﻿using System;
+using Toolbox.Attributes;
+using Toolbox.Grid.Grid2D;
+using Toolbox.Grid.Grid3D.Cells;
 using UnityEngine;
 
 namespace Toolbox
 {
     public class Tester : MonoBehaviour
     {
-        public string a = "";
-        public string a1 = "";
-        public string a2= "";
-        public string a3 = "";
-        public string a4 = "";
-        public string a5 = "";
-        public string a6 = "";
-        public string a7 = "";
-        public string a8 = "";
-        
-        [Button(Expanded = true, Mode = ButtonMode.EnabledInPlayMode)]
-        public void test(int para, int para2, EasingType easingType)
+        private Grid2D<Cell2D> grid = new Grid2D<Cell2D>(5,5);
+
+        private void Awake()
         {
-            
+            print(grid.cells.Count);
+            print(grid.cells[0].GetType());
+
+            foreach (var VARIABLE in grid.cells)
+            {
+                print(VARIABLE.Index + " gridpos: " + VARIABLE.GridPosition);
+            }
         }
-        
-        public string a32 = "";
-        public string a9 = "";
-        public string a10= "";
-        public string a11 = "";
-        public string a92 = "";
-        public string a93 = "";
-        public string a94 = "";
-        public string a95 = "";
-        public string a96= "";
     }
 }

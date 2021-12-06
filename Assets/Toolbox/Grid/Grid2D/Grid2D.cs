@@ -40,7 +40,12 @@ namespace Toolbox.Grid.Grid2D
                 for (int gridY = 0; gridY < xAmount; gridY++)
                 {
                     int index = gridX + xAmount * gridY;
-                    cells.Add((T)Activator.CreateInstance(typeof(T), new Vector2Int(gridX, gridY), index));
+
+                    T cell = (T)Activator.CreateInstance(typeof(T));
+                    cell.Index = index;
+                    cell.GridPosition = new Vector2Int(gridX, gridY);
+                    
+                    cells.Add(cell);
                 }
             }
             return this;
@@ -99,22 +104,22 @@ namespace Toolbox.Grid.Grid2D
         {
             type = BorderType.NONE;
         
-            if (cell.gridPosition.x == 0)
+            if (cell.GridPosition.x == 0)
             {
                 type = BorderType.Left;
                 return true;
             }
-            if (cell.gridPosition.y == 0)
+            if (cell.GridPosition.y == 0)
             {
                 type = BorderType.Top;
                 return true;
             }
-            if (cell.gridPosition.y == xAmount - 1)
+            if (cell.GridPosition.y == xAmount - 1)
             {
                 type = BorderType.Bottom;
                 return true;
             }
-            if (cell.gridPosition.x == yAmount - 1)
+            if (cell.GridPosition.x == yAmount - 1)
             {
                 type = BorderType.Right;
                 return true;
@@ -127,25 +132,25 @@ namespace Toolbox.Grid.Grid2D
         {
             type = CornerType.NONE;
                 
-            if (cell.gridPosition.x == 0 && cell.gridPosition.y == 0)
+            if (cell.GridPosition.x == 0 && cell.GridPosition.y == 0)
             {
                 type = CornerType.TopLeft;
                 return true;
             }
         
-            if (cell.gridPosition.x == yAmount - 1 && cell.gridPosition.y == 0)
+            if (cell.GridPosition.x == yAmount - 1 && cell.GridPosition.y == 0)
             {
                 type = CornerType.TopRight;
                 return true;
             }
         
-            if (cell.gridPosition.x == yAmount - 1 && cell.gridPosition.y == xAmount - 1)
+            if (cell.GridPosition.x == yAmount - 1 && cell.GridPosition.y == xAmount - 1)
             {
                 type = CornerType.BottomRight;
                 return true;
             }
         
-            if (cell.gridPosition.x == 0 && cell.gridPosition.y == xAmount - 1)
+            if (cell.GridPosition.x == 0 && cell.GridPosition.y == xAmount - 1)
             {
                 type = CornerType.BottomLeft;
                 return true;
