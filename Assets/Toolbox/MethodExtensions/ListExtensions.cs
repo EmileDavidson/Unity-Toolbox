@@ -74,7 +74,7 @@ namespace Toolbox.MethodExtensions
         public static T Get<T>(this IList<T> list, int index)
         {
             if (index < 0) index = list.Count + index;
-            else if (index > list.Count - 1) index = index % list.Count;
+            else if (index > list.Count - 1) index %= list.Count;
 
             return list[index];
         }
@@ -89,7 +89,7 @@ namespace Toolbox.MethodExtensions
         public static void SetAt<T>(this IList<T> list, int index, T item)
         {
             if (index < 0) index = list.Count + index;
-            else if (index > list.Count - 1) index = index % list.Count;
+            else if (index > list.Count - 1) index %= list.Count;
 
             list.Insert(index, item);
         }
@@ -121,6 +121,41 @@ namespace Toolbox.MethodExtensions
                 if(!list.Contains(item)) continue;
                 bool removed = list.Remove(item);
             }
+        }
+
+        /// <summary>
+        /// Changes the given number to a number inside of the list size and returns it.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="index">The current index</param>
+        /// <param name="looped">if true we loop through array until we are at last number if false returns list.lenght - 1 or 0</param>
+        /// <returns></returns>
+        public static int GetNumberBetweenSize<T>(this IList<T> list, int index, bool looped = false)
+        {
+            if (list.IsEmpty()) return index;
+        
+            if (!looped)
+            {
+                return index.FindClosestIndex(new[] { 0, (list.Count - 1) }).First();
+            }
+            
+            if (index < 0) index = list.Count + index;
+            else if (index > list.Count - 1) index %= list.Count;
+
+            return index;
+        }
+
+        
+        /// <summary>
+        /// ContainsSlot checks if the given number is between the list size.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="index"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool ContainsSlot<T>(this IList<T> list, int index)
+        {
+            return index >= 0 && list.Count - 1 >= index;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Toolbox.MethodExtensions
@@ -16,10 +17,8 @@ namespace Toolbox.MethodExtensions
             {
                 return gameObject.GetComponent<T>();
             }
-            else
-            {
-                return gameObject.AddComponent<T>();
-            }
+
+            return gameObject.AddComponent<T>();
         }
 
         /// <summary>
@@ -30,12 +29,8 @@ namespace Toolbox.MethodExtensions
         /// <returns>Previously or newly attached component.</returns>
         public static T GetOrAddComponentToParent<T>(this GameObject gameObject) where T : Component
         {
-            if (gameObject.transform.parent.HasComponent<T>())
-            {
-                return gameObject.transform.parent.GetComponent<T>();
-            }
-
-            return gameObject.transform.parent.AddComponent<T>();
+            var parent = gameObject.transform.parent;
+            return parent.HasComponent<T>() ? parent.GetComponent<T>() : parent.AddComponent<T>();
         }
 
         /// <summary>
@@ -58,11 +53,58 @@ namespace Toolbox.MethodExtensions
             return gameObject.GetComponentInParent<T>() != null;
         }
 
-        public static void RemoveComponent<T>(this GameObject obj, bool immediate = false) where T : Component
+        /// <summary>
+        /// Checks if GameObject has component and removes it.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="immediate"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>if component is removed or not</returns>
+        public static bool RemoveComponent<T>(this GameObject obj, bool immediate = false) where T : Component
         {
-            if (!(obj.HasComponent<T>())) return;
+            if (!(obj.HasComponent<T>())) return false;
             if (immediate) Object.DestroyImmediate(obj.GetComponent<T>(), true);
             else Object.Destroy(obj.GetComponent<T>());
+            return true;
+        }
+        
+
+        /// <summary>
+        /// gets or add script from / to add children of GameObject and returns the list of components
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static List<Component> GetOrAddComponentAllChildren<T>(this GameObject gameObject) where T : Component
+        {
+            List<Component> components = new List<Component>();
+            List<GameObject> childGameObjects = GetAllChildrenGameObjects(gameObject);
+
+            foreach (GameObject child in childGameObjects)
+            {
+                if (child.TryGetComponent<T>(out var comp))
+                {
+                    components.Add(comp);
+                    continue;
+                }
+                var addedComp = child.AddComponent<T>();
+                components.Add(addedComp);
+            }
+
+            return components;
+        }
+
+        /// <summary>
+        /// returns list of all children GameObjects
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <returns></returns>
+        public static List<GameObject> GetAllChildrenGameObjects(this GameObject gameObject)
+        {
+            List<Transform> childrenTransforms = new List<Transform>(gameObject.transform.GetComponentsInChildren<Transform>());
+            List<GameObject> childGameObjects = new List<GameObject>();
+            childrenTransforms.ForEach((objTrans => childGameObjects.Add(objTrans.gameObject)));
+            return childGameObjects;
         }
     }
 }
