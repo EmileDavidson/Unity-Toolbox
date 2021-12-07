@@ -11,7 +11,6 @@ namespace Toolbox.Attributes
         protected override void DrawInternal(IEnumerable<object> targets)
         {
             if (!GUILayout.Button(displayName)) return;
-
             foreach (object obj in targets)
             {
                 method.Invoke(obj, null);

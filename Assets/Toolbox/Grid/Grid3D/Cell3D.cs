@@ -1,7 +1,7 @@
-﻿using Toolbox.Grid.Grid3D.Cells;
+﻿using Toolbox.Grid;
 using UnityEngine;
 
-namespace Toolbox.Grid.Grid3D
+namespace Toolbox.Grid
 {
     public class Cell3D : ICell3D
     {
