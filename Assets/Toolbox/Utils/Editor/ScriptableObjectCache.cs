@@ -9,7 +9,7 @@ using Toolbox.MethodExtensions;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Toolbox.Editor.Utils
+namespace Toolbox.Utils
 {
     internal static class ScriptableObjectCache
     {

@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Toolbox
+namespace Toolbox.Utils
 {
     public static class InspectorTools
     {
