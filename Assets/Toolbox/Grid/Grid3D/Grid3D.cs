@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toolbox.Grid.Enums;
-using Toolbox.Grid.Grid3D.Cells;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Toolbox.Grid.Grid3D
+namespace Toolbox.Grid
 {
     [Serializable]
     public class Grid3D<T> where T : ICell3D

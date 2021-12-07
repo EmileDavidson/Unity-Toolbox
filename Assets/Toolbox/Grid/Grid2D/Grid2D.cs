@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
-using Toolbox.Grid.Enums;
+using Toolbox.Grid;
 using UnityEngine.Events;
 
-namespace Toolbox.Grid.Grid2D
+namespace Toolbox.Grid
 {
     [Serializable]
     public class Grid2D<T> where T : Cell2D

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Toolbox.Grid.Grid2D
+namespace Toolbox.Grid
 {
     [Serializable]
     public class Cell2D : ICell2D
