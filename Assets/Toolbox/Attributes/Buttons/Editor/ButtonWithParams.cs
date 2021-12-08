@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Toolbox.Editor.Utils;
+using Toolbox.Utils;
 using UnityEngine;
 
 namespace Toolbox.Attributes

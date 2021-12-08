@@ -30,6 +30,7 @@ public enum EasingType {
         EaseInOutBack,
         EaseInBounce,
         EaseOutBounce,
-        EaseInOutBounce
+        EaseInOutBounce,
+        AnimationCurve
 }
 

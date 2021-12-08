@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace Toolbox.TweenMachine.Tweens
 {
     [Serializable]
-    public abstract class Tween
+    public abstract class TweenBase
     {
         //variable declaration 
         [SerializeReference] protected Func<float, float> EaseMethode;
@@ -47,9 +47,10 @@ namespace Toolbox.TweenMachine.Tweens
         protected abstract void TweenEnd();
 
         //getters & setters
-        public virtual Tween SetEasing(Func<float, float> func)
+        public virtual TweenBase SetEasing(EasingType easingType)
         {
-            EaseMethode = func;
+            if ((easingType == EasingType.AnimationCurve)) return this;
+            EaseMethode = EasingDictonary.dict[easingType];
             return this; 
         }
 
@@ -75,5 +76,8 @@ namespace Toolbox.TweenMachine.Tweens
         {
             action += del;
         }
+        
+        public float GetEasingStep => EaseMethode(percent);
+        
     }
 }
