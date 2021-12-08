@@ -14,13 +14,22 @@ namespace Toolbox.Attributes
         private readonly Parameter[] _parameters;
         private bool _expanded;
 
-        public ButtonWithParams(MethodInfo method, ButtonAttribute buttonAttribute, ParameterInfo[] parameters)
-            : base(method, buttonAttribute)
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="method"></param>
+        /// <param name="buttonAttribute"></param>
+        /// <param name="parameters"></param>
+        public ButtonWithParams(MethodInfo method, ButtonAttribute buttonAttribute, ParameterInfo[] parameters) : base(method, buttonAttribute)
         {
             _parameters = parameters.Select(paramInfo => new Parameter(paramInfo)).ToArray();
             _expanded = buttonAttribute.Expanded;
         }
 
+        /// <summary>
+        /// Draws all the parameters
+        /// </summary>
+        /// <param name="targets"></param>
         protected override void DrawInternal(IEnumerable<object> targets)
         {
             (Rect foldoutRect, Rect buttonRect) = DrawUtility.GetFoldoutAndButtonRects(displayName);

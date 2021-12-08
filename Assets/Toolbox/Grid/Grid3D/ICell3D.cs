@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Toolbox.Grid.Grid3D.Cells
+namespace Toolbox.Grid
 {
     public interface ICell3D
     {

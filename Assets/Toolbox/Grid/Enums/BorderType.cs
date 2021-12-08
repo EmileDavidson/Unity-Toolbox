@@ -1,4 +1,4 @@
-﻿namespace Toolbox.Grid.Enums
+﻿namespace Toolbox.Grid
 {
     public enum BorderType
     {
