@@ -7,7 +7,7 @@ using UnityEngine.Events;
 namespace Toolbox.Grid
 {
     [Serializable]
-    public class Grid2D<T> where T : Cell2D
+    public class Grid2D<T> where T : ICell2D
     {
         [field: SerializeReference] public List<T> cells = new List<T>();
         [Min(0), SerializeReference] private int xAmount;
