@@ -1,52 +1,122 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toolbox.TweenMachine.Tweens;
+using System.Linq;
+using Toolbox.MethodExtensions;
 using UnityEngine;
 using UnityEngine.Events;
-using Quaternion = UnityEngine.Quaternion;
-using Vector3 = UnityEngine.Vector3;
-
-[Serializable]
-public class SerializedEvent : UnityEvent
-{
-}
 
 namespace Toolbox.TweenMachine
 {
     [Serializable]
     public class TweenBuild
     {
-#if UNITY_EDITOR
-        public bool positionFoldout;
-        public bool scaleFoldout;
-        public bool rotationFoldout;
-        public bool colorFoldout;
-        public bool tweenFoldout;
-#endif
-
         //default values for all tweens except if customized
         [SerializeReference] private GameObject gameObject;
         [SerializeReference] private float defaultSpeed = 1;
-        private EasingType defaultEasingType = EasingType.Linear;
-
-
+        [SerializeReference] private EasingType defaultEasingType = EasingType.Linear;
         [SerializeReference] public List<TweenBase> tweens = new List<TweenBase>();
 
         //complete tweens
-        public SerializedEvent onTweenBuildFinish = new SerializedEvent();
-        public SerializedEvent onTweenBuildUpdate = new SerializedEvent();
-        public SerializedEvent onTweenBuildStart = new SerializedEvent();
-        public bool tweenBuildFinished = false;
+        public UnityEvent onTweenBuildFinish = new UnityEvent();
+        public UnityEvent onTweenBuildUpdate = new UnityEvent();
+        public UnityEvent onTweenBuildStart = new UnityEvent();
 
-        public TweenBuild()
+        /// <summary>
+        /// Create and add new tween of given type.
+        /// </summary>
+        /// <param name="targetObj"></param>
+        /// <param name="speed"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T CreateAndAddTween<T>(GameObject targetObj, float speed = 0) where T : TweenBase
         {
+            var tween = (T)Activator.CreateInstance(typeof(T));
+            tween.Setup(targetObj, speed);
+            tweens.Add(tween);
+            return tween;
         }
 
-        public TweenBuild(GameObject gameObject)
+        /// <summary>
+        /// Creates a new tween but does not add it to the build yet.
+        /// </summary>
+        /// <param name="targetObj"></param>
+        /// <param name="speed"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T Create<T>(GameObject targetObj, float speed = 0) where T : TweenBase
         {
-            this.gameObject = gameObject;
+            var tween = (T)Activator.CreateInstance(typeof(T));
+            tween.Setup(gameObject, speed);
+            return tween;
         }
 
+        /// <summary>
+        /// adds the given tween to the list.
+        /// </summary>
+        /// <param name="tween"></param>
+        /// <returns></returns>
+        public TweenBuild AddTween(TweenBase tween)
+        {
+            tweens.Add(tween);
+            return this;
+        }
+        
+        /// <summary>
+        /// removes all the tweens in the build of the given type
+        /// </summary>
+        /// <param name="removeType"></param>
+        public void RemoveAllTweensOfType(Type removeType)
+        {
+            tweens.RemoveAll(tween => tween.GetType() == removeType);
+        }
+        
+        /// <summary>
+        /// Updates the tweens that are not finished yet.
+        /// </summary>
+        /// <param name="dt"></param>
+        public void UpdateTween(float dt)
+        {
+            onTweenBuildUpdate.Invoke();
+            if (IsFinished) return;
+
+            foreach (var tween in tweens.Where(tween => !tween.IsFinished))
+            {
+                tween.UpdateTween(dt);
+            }
+
+            CheckComplete();
+        }
+
+        /// <summary>
+        /// Adds the tween to the controller so it start running until all tweens are finished or the build is paused.
+        /// </summary>
+        public void StartTween()
+        {
+            foreach (var tween in tweens.Where(tween => tween.gameObject == null))
+            {
+                tween.gameObject = this.GameObject;
+            }
+
+            TweenController.Instance.activeBuilds.Add(this);
+            onTweenBuildStart.Invoke();
+        }
+
+        /// <summary>
+        /// Checks if all tweens in this build are completed. and invokes event if it is. 
+        /// </summary>
+        private void CheckComplete()
+        {
+            if (IsFinished) return;
+            onTweenBuildFinish?.Invoke();
+        }
+
+        /// <summary>
+        /// returns if there is still a tween running in this build.
+        /// </summary>
+        public bool IsFinished => tweens.Where(tween => !tween.IsFinished).ToArray().IsEmpty();
+        
+        //======= getters && setter
+        
         public EasingType DefaultEasingType
         {
             get => defaultEasingType;
@@ -65,170 +135,10 @@ namespace Toolbox.TweenMachine
             set => gameObject = value;
         }
 
-        //position
-        public TweenBase SetTweenPosition(Vector3 targetPos, float speed)
+        public List<TweenBase> Tweens
         {
-            TweenBase newTween = new TweenPosition(gameObject, targetPos, speed);
-            tweens.Add(newTween);
-            return newTween;
-        }
-
-        public TweenBase SetTweenPosition(Vector3 target, float speed, EasingType easingType)
-        {
-            TweenBase tween = new TweenPosition(gameObject, target, speed).SetEasing(easingType);
-            tweens.Add(tween);
-            return tween;
-        }
-
-        public TweenBase SetTweenPosition(TweenPosition tween)
-        {
-            tweens.Add(tween);
-            return tween;
-        }
-
-        public void RemoveAllPositionTweens()
-        {
-            foreach (Tween tween in tweens)
-            {
-                if (tween is TweenPosition)
-                {
-                    tweens.Remove(tween);
-                }
-            }
-        }
-
-        //rotation
-        public TweenBase SetTweenRotation(Quaternion target, float speed)
-        {
-            TweenBase tween = new TweenRotation(gameObject, target, speed);
-            tweens.Add(tween);
-            return tween;
-        }
-
-        public TweenBase SetTweenRotation(Quaternion target, float speed, EasingType easingType)
-        {
-            TweenBase tween = new TweenRotation(gameObject, target, speed).SetEasing(easingType);
-            tweens.Add(tween);
-            return tween;
-        }
-
-        public TweenBase SetTweenRotation(TweenRotation tween)
-        {
-            tweens.Add(tween);
-            return tween;
-        }
-
-        public void RemoveAllTweenRotations()
-        {
-            foreach (Tween tween in tweens)
-            {
-                if (tween is TweenRotation)
-                {
-                    tweens.Remove(tween);
-                }
-            }
-        }
-
-        //scale
-        public TweenBase SetTweenScale(Vector3 target, float speed)
-        {
-            TweenBase tween = new TweenScale(gameObject, target, speed);
-            tweens.Add(tween);
-            return tween;
-        }
-
-        public TweenBase SetTweenScale(Vector3 target, float speed, EasingType easingType)
-        {
-            TweenBase tween = new TweenScale(gameObject, target, speed).SetEasing(easingType);
-            tweens.Add(tween);
-            return tween;
-        }
-
-        public TweenBase SetTweenScale(TweenScale tween)
-        {
-            tweens.Add(tween);
-            return tween;
-        }
-
-        public void RemoveAllTweenScale()
-        {
-            foreach (Tween tween in tweens)
-            {
-                if (tween is TweenScale)
-                {
-                    tweens.Remove(tween);
-                }
-            }
-        }
-
-        //color
-        public TweenBase SetTweenColor(Color target, float speed)
-        {
-            TweenBase tween = new TweenColor(gameObject, target, speed);
-            tweens.Add(tween);
-            return tween;
-        }
-
-        public TweenBase SetTweenColor(Color target, float speed, EasingType easingType)
-        {
-            TweenBase tween = new TweenColor(gameObject, target, speed).SetEasing(easingType);
-            tweens.Add(tween);
-            return tween;
-        }
-
-        public TweenBase SetTweenColor(TweenColor tween)
-        {
-            tweens.Add(tween);
-            return tween;
-        }
-
-        public void RemoveAllTweenColor()
-        {
-            foreach (TweenBase tween in tweens)
-            {
-                if (tween is TweenColor)
-                {
-                    tweens.Remove(tween);
-                }
-            }
-        }
-
-
-        //functional functions
-        public void UpdateTween(float dt)
-        {
-            onTweenBuildUpdate.Invoke();
-
-            if (tweenBuildFinished) return;
-
-            foreach (TweenBase tween in tweens)
-            {
-                if (!tween.IsFinished) tween.UpdateTween(dt);
-            }
-
-            CheckComplete();
-        }
-
-        public void StartTween()
-        {
-            foreach (var tween in tweens)
-            {
-                if (tween.gameObject == null) tween.gameObject = this.GameObject;
-            }
-
-            TweenController.Instance.acitveTweens.Add(this);
-            onTweenBuildStart.Invoke();
-        }
-
-        private void CheckComplete()
-        {
-            foreach (TweenBase tween in tweens)
-            {
-                if (!tween.IsFinished) return;
-            }
-
-            onTweenBuildFinish?.Invoke();
-            tweenBuildFinished = true;
+            get => tweens;
+            private set => tweens = value;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Toolbox.MethodExtensions
         /// <param name="property"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T ToProperty<T>(this SerializedProperty property) where T : class
+        public static T To<T>(this SerializedProperty property) where T : class
         {
             var targetObject = property.serializedObject.targetObject;
             if (targetObject == null) return null;

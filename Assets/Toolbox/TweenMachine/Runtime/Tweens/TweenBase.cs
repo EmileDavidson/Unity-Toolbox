@@ -1,18 +1,21 @@
 ﻿using System;
+using Toolbox.MethodExtensions;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
-namespace Toolbox.TweenMachine.Tweens
+namespace Toolbox.TweenMachine
 {
     [Serializable]
     public abstract class TweenBase
     {
         //variable declaration 
-        [SerializeReference] protected Func<float, float> EaseMethode;
-        [SerializeReference] protected float speed;
-        [SerializeReference] protected float percent;
-        [SerializeReference] public GameObject gameObject; 
+        protected Func<float, float> easeMethode;
+        protected AnimationCurve easeCurve;
+        protected bool useCurve = true;
+        
+        protected float speed;
+        protected float percent;
+        public GameObject gameObject; 
     
         //actions
         private UnityAction _onTweenStart;
@@ -22,22 +25,55 @@ namespace Toolbox.TweenMachine.Tweens
         public bool IsFinished => percent >= 1;
         protected bool HasStarted => percent > 0;
 
-        //functions
+
+        /// <summary>
+        /// Empty constructor so we can have constructor with different parameters in derived classes.
+        /// </summary>
+        public TweenBase(){}
+        
+        /// <summary>
+        /// Base Constructor that need to be in all derived classes! this is used for the generic function to create new tween. 
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="speed"></param>
+        public TweenBase(GameObject gameObject, float speed)
+        {
+            this.gameObject = gameObject;
+            this.speed = speed;
+        }
+
+        public virtual void Setup(GameObject aGameObject, float aSpeed)
+        {
+            this.gameObject = aGameObject;
+            this.speed = aSpeed;
+        }
+        
+        //Methods 
+        public virtual void TweenStart()
+        {
+            if (useCurve)
+            {
+                speed = easeCurve.GetDuration();
+            }
+        }
+        
         public void UpdateTween(float dt)
         {
-            //invoke tweenstart action if not started yet
-            if(!HasStarted) OnTweenStart?.Invoke();
-        
-            //invoke update action
+            if(!HasStarted)
+            {
+                TweenStart();
+                OnTweenStart?.Invoke();
+            }
+            
             OnTweenUpdate?.Invoke();
         
+            
             percent += dt / speed;
             if (!IsFinished)
             {
                 UpdateTween();
                 return;
             }
-            //invoke finshed action
             OnTweenFinish?.Invoke();
             
             TweenEnd();
@@ -46,14 +82,57 @@ namespace Toolbox.TweenMachine.Tweens
         protected abstract void UpdateTween();
         protected abstract void TweenEnd();
 
-        //getters & setters
-        public virtual TweenBase SetEasing(EasingType easingType)
+        protected float GetStep()
+        {
+            if(!useCurve) return easeMethode(percent);
+            return easeCurve.Evaluate(percent);
+        }
+        
+        //Chain Setters
+        public TweenBase ChainSetGameObject(GameObject newObj)
+        {
+            gameObject = newObj;
+            return this;
+        }
+        
+        public TweenBase ChainSetSpeed(float newSpeed)
+        {
+            speed = newSpeed;
+            return this;
+        }
+        
+        public virtual TweenBase ChainSetEasing(EasingType easingType)
         {
             if ((easingType == EasingType.AnimationCurve)) return this;
-            EaseMethode = EasingDictonary.dict[easingType];
+            easeMethode = EasingDictonary.dict[easingType];
             return this; 
         }
+        
+        //Getters and setters
 
+        public AnimationCurve Curve
+        {
+            get => easeCurve;
+            set => easeCurve = value;
+        }
+        
+        public bool UseCurve
+        {
+            get => useCurve;
+            set => useCurve = value;
+        }
+        public GameObject GameObject
+        {
+            get => gameObject;
+            set => gameObject = value;
+        }
+
+        public float Speed
+        {
+            get => speed;
+            set => speed = value;
+        }
+        
         public UnityAction OnTweenFinish
         {
             get => _onTweenFinish;
@@ -77,7 +156,7 @@ namespace Toolbox.TweenMachine.Tweens
             action += del;
         }
         
-        public float GetEasingStep => EaseMethode(percent);
+        public float GetEasingStep => easeMethode(percent);
         
     }
 }

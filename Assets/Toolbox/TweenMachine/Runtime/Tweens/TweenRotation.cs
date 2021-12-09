@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Toolbox.TweenMachine.Tweens
+namespace Toolbox.TweenMachine
 {
     [Serializable]
     public class TweenRotation : TweenBase
@@ -10,8 +10,11 @@ namespace Toolbox.TweenMachine.Tweens
         private Vector3 targetRotation;
         private Vector3 direction;
 
-
+        /// <summary>
+        /// empty constructor
+        /// </summary>
         public TweenRotation(){}
+
         public TweenRotation(GameObject gameObject, Quaternion targetRotation, float speed)
         {
             this.gameObject = gameObject;
@@ -24,16 +27,17 @@ namespace Toolbox.TweenMachine.Tweens
 
             this.speed = speed;
             this.percent = 0;
-            this.EaseMethode = Easing.Linear;
+            this.easeMethode = Easing.Linear;
         }
 
         protected override void UpdateTween()
         {
-            float easingstep = GetEasingStep;
+            if (gameObject == null) return;
+            float step = GetStep();
             
-            float x = startRotation.x + (direction.x * easingstep);
-            float y = startRotation.y + (direction.y * easingstep);
-            float z = startRotation.z + (direction.z * easingstep);
+            float x = startRotation.x + (direction.x * step);
+            float y = startRotation.y + (direction.y * step);
+            float z = startRotation.z + (direction.z * step);
             
             Vector3 newRotation = new Vector3(x, y, z);
             

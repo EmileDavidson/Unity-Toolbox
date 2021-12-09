@@ -2,65 +2,68 @@
 using Toolbox.MethodExtensions;
 using UnityEngine;
 
-namespace Toolbox.TweenMachine.Tweens
+namespace Toolbox.TweenMachine
 {
     [Serializable]
     public class TweenColor : TweenBase
     {
-        private Color targetColor;
-        private Color startingColor;
-        [SerializeReference]private Renderer _renderer;
+        [SerializeReference] private Color targetColor;
+        [SerializeReference] private Color startingColor;
+        [SerializeReference] private Renderer renderer;
 
-        [SerializeReference]private float _directionR;
-        [SerializeReference]private float _directionG;
-        [SerializeReference]private float _directionB;
-        [SerializeReference] private float _directionA;
-
-        //constructor
+        [SerializeReference] private float directionR;
+        [SerializeReference] private float directionG;
+        [SerializeReference] private float directionB;
+        [SerializeReference] private float directionA;
+        
+        /// <summary>
+        /// empty constructor
+        /// </summary>
         public TweenColor(){}
+        
+        /// <summary>
+        /// Constructor with all information needed to work and do want you want. 
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="targetColor"></param>
+        /// <param name="speed"></param>
         public TweenColor(GameObject gameObject, Color targetColor, float speed)
         {
             this.gameObject = gameObject;
             this.targetColor = targetColor;
             this.speed = speed;
 
-            _renderer = gameObject.GetComponent<Renderer>();
-            if(_renderer is null)
+            renderer = gameObject.GetOrAddComponent<Renderer>();
+            if (renderer != null)
             {
-                Debug.Log("Trying to add tween color to GameObject that does not have a renderer ");
-                _renderer = gameObject.AddComponent<Renderer>();
-            }
-            if (_renderer != null)
-            {
-                startingColor = _renderer.material.color;
+                startingColor = renderer.material.color;
 
-                _directionR = targetColor.r - startingColor.r;
-                _directionG = targetColor.g - startingColor.g;
-                _directionB = targetColor.b - startingColor.b;
-                _directionA = targetColor.a - startingColor.a;
+                directionR = targetColor.r - startingColor.r;
+                directionG = targetColor.g - startingColor.g;
+                directionB = targetColor.b - startingColor.b;
+                directionA = targetColor.a - startingColor.a;
             }
 
             percent = 0;
-            EaseMethode = Easing.Linear;
+            easeMethode = Easing.Linear;
         }
-
-        //update
-
+        
         protected override void UpdateTween()
         {
-            float easingstep = EaseMethode(percent);
+            if (gameObject == null) return;
+            float step = GetStep();
         
-            float r = startingColor.r + (_directionR * easingstep);
-            float g = startingColor.g + (_directionG * easingstep);
-            float b = startingColor.b + (_directionB * easingstep);
-            float a = startingColor.a + (_directionA * easingstep);
+            float r = startingColor.r + (directionR * step);
+            float g = startingColor.g + (directionG * step);
+            float b = startingColor.b + (directionB * step);
+            float a = startingColor.a + (directionA * step);
         
-            _renderer.material.color = new Color(r, g, b, a);
+            renderer.material.color = new Color(r, g, b, a);
         }
 
         protected override void TweenEnd()
         {
-            _renderer.material.color = targetColor;
+            renderer.material.color = targetColor;
         }
     
     }

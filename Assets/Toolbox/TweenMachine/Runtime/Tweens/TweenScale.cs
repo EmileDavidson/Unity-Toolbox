@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Toolbox.TweenMachine.Tweens
+namespace Toolbox.TweenMachine
 {
     [Serializable]
     public class TweenScale : TweenBase
@@ -11,7 +11,11 @@ namespace Toolbox.TweenMachine.Tweens
         private Vector3 scaleDirection;
 
 
+        /// <summary>
+        /// empty constructor
+        /// </summary>
         public TweenScale(){}
+        
         public TweenScale(GameObject gameObject, Vector3 targetScale, float speed)
         {
             this.gameObject = gameObject;
@@ -22,13 +26,14 @@ namespace Toolbox.TweenMachine.Tweens
 
             this.speed = speed;
             this.percent = 0;
-            this.EaseMethode = Easing.Linear;
+            this.easeMethode = Easing.Linear;
         }
 
         protected override void UpdateTween()
         {
-            float easingstep = EaseMethode(percent);
-            gameObject.transform.localScale = startScale + (scaleDirection * easingstep);
+            if (gameObject == null) return;
+            float step = GetStep();
+            gameObject.transform.localScale = startScale + (scaleDirection * step);
         }
 
         protected override void TweenEnd()

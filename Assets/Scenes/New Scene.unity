@@ -149,9 +149,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 128479909}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f48257cf6340437696a7ed67c9a2975b, type: 3}
+  m_Script: {fileID: 11500000, guid: 16d8c419515a5664b929f03eec5c99e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tweenBuild:
+    positionFoldout: 1
+    scaleFoldout: 1
+    rotationFoldout: 1
+    colorFoldout: 1
+    tweenFoldout: 1
+    gameObject: {fileID: 128479909}
+    defaultSpeed: 1
+    tweens: []
+    onTweenBuildFinish:
+      m_PersistentCalls:
+        m_Calls: []
+    onTweenBuildUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+    onTweenBuildStart:
+      m_PersistentCalls:
+        m_Calls: []
+    tweenBuildFinished: 0
+  references:
+    version: 1
 --- !u!4 &128479911
 Transform:
   m_ObjectHideFlags: 0

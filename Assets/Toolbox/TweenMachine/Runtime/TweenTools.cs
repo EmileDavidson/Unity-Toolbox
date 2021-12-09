@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Toolbox.TweenMachine.Tweens;
 using UnityEngine;
 
 namespace Toolbox.TweenMachine

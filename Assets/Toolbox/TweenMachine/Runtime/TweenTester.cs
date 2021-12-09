@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using Toolbox.TweenMachine.Tweens;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Toolbox.TweenMachine
 {
@@ -11,7 +8,11 @@ namespace Toolbox.TweenMachine
 
         private void Awake()
         {
-            // Debug.Log(tweenBuild.tweens.Count);
+            TweenPosition tweenPosition = new TweenPosition(gameObject, new Vector3(0,0,0), 1);
+            
+            tweenBuild.CreateAndAddTween<TweenPosition>(this.gameObject, 1)
+                .ChainSetTarget(new Vector3(1, 1, 1))
+                .UseCurve = true;
         }
     }
 }

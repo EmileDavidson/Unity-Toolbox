@@ -24,26 +24,26 @@ namespace Toolbox.TweenMachine
         
         #endregion
         
-        public List<TweenBuild> acitveTweens = new List<TweenBuild>();
-        public List<TweenBuild> doneTweens = new List<TweenBuild>();
-        private bool paused = false;
+        public List<TweenBuild> activeBuilds = new List<TweenBuild>();
+        public List<TweenBuild> doneBuilds = new List<TweenBuild>();
+        private bool _paused = false;
     
         private void Update()
         {
-            if (acitveTweens.Count <= 0) Destroy(this.gameObject);
-            if (paused) return;
+            if (activeBuilds.Count <= 0) Destroy(this.gameObject);
+            if (_paused) return;
             
             UpdateActiveTweens();
         }
     
         private void UpdateActiveTweens()
         {
-            for (int i = 0; i < acitveTweens.Count; i++)
+            for (int i = 0; i < activeBuilds.Count; i++)
             {
-                acitveTweens[i].UpdateTween(Time.deltaTime);
-                if (acitveTweens[i].tweenBuildFinished)
+                activeBuilds[i].UpdateTween(Time.deltaTime);
+                if (activeBuilds[i].IsFinished)
                 {
-                    acitveTweens.RemoveAt(i);
+                    activeBuilds.RemoveAt(i);
                     i--;
                 }
             }
@@ -51,9 +51,9 @@ namespace Toolbox.TweenMachine
 
         public void SetPaused()
         {
-            if (acitveTweens.Count >= 1)
+            if (activeBuilds.Count >= 1)
             {
-                paused = true;
+                _paused = true;
             }
         }
     }
