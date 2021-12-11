@@ -153,13 +153,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweenBuild:
-    positionFoldout: 1
-    scaleFoldout: 1
-    rotationFoldout: 1
-    colorFoldout: 1
-    tweenFoldout: 1
     gameObject: {fileID: 128479909}
     defaultSpeed: 1
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     tweens: []
     onTweenBuildFinish:
       m_PersistentCalls:
@@ -170,7 +171,30 @@ MonoBehaviour:
     onTweenBuildStart:
       m_PersistentCalls:
         m_Calls: []
-    tweenBuildFinished: 0
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   references:
     version: 1
 --- !u!4 &128479911

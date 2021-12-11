@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Toolbox.MethodExtensions;
 using UnityEngine;
 
@@ -16,10 +17,7 @@ namespace Toolbox.TweenMachine
         [SerializeReference] private float directionB;
         [SerializeReference] private float directionA;
         
-        /// <summary>
-        /// empty constructor
-        /// </summary>
-        public TweenColor(){}
+
         
         /// <summary>
         /// Constructor with all information needed to work and do want you want. 
@@ -27,7 +25,7 @@ namespace Toolbox.TweenMachine
         /// <param name="gameObject"></param>
         /// <param name="targetColor"></param>
         /// <param name="speed"></param>
-        public TweenColor(GameObject gameObject, Color targetColor, float speed)
+        public TweenColor(GameObject gameObject, float speed, Color targetColor)
         {
             this.gameObject = gameObject;
             this.targetColor = targetColor;
@@ -45,7 +43,6 @@ namespace Toolbox.TweenMachine
             }
 
             percent = 0;
-            easeMethode = Easing.Linear;
         }
         
         protected override void UpdateTween()
@@ -65,6 +62,5 @@ namespace Toolbox.TweenMachine
         {
             renderer.material.color = targetColor;
         }
-    
     }
 }

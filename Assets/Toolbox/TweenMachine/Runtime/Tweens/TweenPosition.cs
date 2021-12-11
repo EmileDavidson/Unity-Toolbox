@@ -7,22 +7,17 @@ namespace Toolbox.TweenMachine
     [Serializable]
     public class TweenPosition : TweenBase
     {
-        private Vector3 startPosition;
-        private Vector3 targetPosition;
-        private Vector3 direction;
-        
-        /// <summary>
-        /// empty constructor for generic creation. 
-        /// </summary>
-        public TweenPosition() { }
+        private Vector3 _startPosition;
+        private Vector3 _targetPosition;
+        private Vector3 _direction;
 
         public override void Setup(GameObject aGameObject, float aSpeed)
         {
             this.gameObject = aGameObject;
             this.speed = aSpeed;
 
-            this.startPosition = gameObject.transform.position;
-            this.targetPosition = startPosition;
+            this._startPosition = gameObject.transform.position;
+            this._targetPosition = _startPosition;
         }
         
         /// <summary>
@@ -31,17 +26,15 @@ namespace Toolbox.TweenMachine
         /// <param name="gameObject"></param>
         /// <param name="targetPos"></param>
         /// <param name="speed"></param>
-        public TweenPosition(GameObject gameObject, Vector3 targetPos, float speed)
+        public TweenPosition(GameObject gameObject,float speed, Vector3 targetPos)
         {
             this.gameObject = gameObject;
-            this.targetPosition = targetPos;
+            this._targetPosition = targetPos;
             this.speed = speed;
 
-            this.startPosition = gameObject.transform.position;
-            this.direction = targetPos - startPosition;
+            this._startPosition = gameObject.transform.position;
+            this._direction = targetPos - _startPosition;
             this.percent = 0;
-        
-            this.easeMethode = Easing.Linear;
         }
 
         /// <summary>
@@ -51,7 +44,7 @@ namespace Toolbox.TweenMachine
         {
             if (gameObject == null) return;
             float step = GetStep();
-            gameObject.transform.position = startPosition + (direction * step);
+            gameObject.transform.position = _startPosition + (_direction * step);
         }
 
         /// <summary>
@@ -59,24 +52,24 @@ namespace Toolbox.TweenMachine
         /// </summary>
         protected override void TweenEnd()
         {
-            gameObject.transform.position = targetPosition;
+            gameObject.transform.position = _targetPosition;
         }
 
         //======== CHAIN SETTERS ========
         
         public TweenPosition ChainSetTarget(Vector3 targetPos)
         {
-            this.targetPosition = targetPos;
+            this._targetPosition = targetPos;
 
-            this.startPosition = gameObject.transform.position;
-            this.direction = targetPos - startPosition;
+            this._startPosition = gameObject.transform.position;
+            this._direction = targetPos - _startPosition;
             this.percent = 0;
             return this;
         }
 
         public TweenPosition ChainReset()
         {
-            this.startPosition = gameObject.transform.position;
+            this._startPosition = gameObject.transform.position;
             this.percent = 0;
             return this;
         }
@@ -84,8 +77,8 @@ namespace Toolbox.TweenMachine
         //getters & setter
         public Vector3 Target
         {
-            get => targetPosition;
-            set => targetPosition = value;
+            get => _targetPosition;
+            set => _targetPosition = value;
         }
     }
 }

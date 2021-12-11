@@ -6,39 +6,32 @@ namespace Toolbox.TweenMachine
     [Serializable]
     public class TweenScale : TweenBase
     {
-        private Vector3 startScale;
-        private Vector3 targetScale;
-        private Vector3 scaleDirection;
+        private Vector3 _startScale;
+        private Vector3 _targetScale;
+        private Vector3 _scaleDirection;
 
-
-        /// <summary>
-        /// empty constructor
-        /// </summary>
-        public TweenScale(){}
-        
-        public TweenScale(GameObject gameObject, Vector3 targetScale, float speed)
+        public TweenScale(GameObject gameObject, float speed, Vector3 targetScale)
         {
             this.gameObject = gameObject;
-            this.startScale = gameObject.transform.localScale;
-            this.targetScale = targetScale;
+            this._startScale = gameObject.transform.localScale;
+            this._targetScale = targetScale;
 
-            scaleDirection = targetScale - startScale;
+            _scaleDirection = targetScale - _startScale;
 
             this.speed = speed;
             this.percent = 0;
-            this.easeMethode = Easing.Linear;
         }
 
         protected override void UpdateTween()
         {
             if (gameObject == null) return;
             float step = GetStep();
-            gameObject.transform.localScale = startScale + (scaleDirection * step);
+            gameObject.transform.localScale = _startScale + (_scaleDirection * step);
         }
 
         protected override void TweenEnd()
         {
-            gameObject.transform.localScale = targetScale;
+            gameObject.transform.localScale = _targetScale;
         }
     }
 }

@@ -6,28 +6,22 @@ namespace Toolbox.TweenMachine
     [Serializable]
     public class TweenRotation : TweenBase
     {
-        private Vector3 startRotation;
-        private Vector3 targetRotation;
-        private Vector3 direction;
+        private Vector3 _startRotation;
+        private Vector3 _targetRotation;
+        private Vector3 _direction;
 
-        /// <summary>
-        /// empty constructor
-        /// </summary>
-        public TweenRotation(){}
-
-        public TweenRotation(GameObject gameObject, Quaternion targetRotation, float speed)
+        public TweenRotation(GameObject gameObject, float speed, Quaternion targetRotation)
         {
             this.gameObject = gameObject;
-            this.startRotation = gameObject.transform.eulerAngles;
-            this.targetRotation = new Vector3(targetRotation.x, targetRotation.y, targetRotation.z);
+            this._startRotation = gameObject.transform.eulerAngles;
+            this._targetRotation = new Vector3(targetRotation.x, targetRotation.y, targetRotation.z);
     
-            this.direction.x = targetRotation.x - startRotation.x;
-            this.direction.y = targetRotation.x - startRotation.y;
-            this.direction.z = targetRotation.x - startRotation.z;
+            this._direction.x = targetRotation.x - _startRotation.x;
+            this._direction.y = targetRotation.x - _startRotation.y;
+            this._direction.z = targetRotation.x - _startRotation.z;
 
             this.speed = speed;
             this.percent = 0;
-            this.easeMethode = Easing.Linear;
         }
 
         protected override void UpdateTween()
@@ -35,9 +29,9 @@ namespace Toolbox.TweenMachine
             if (gameObject == null) return;
             float step = GetStep();
             
-            float x = startRotation.x + (direction.x * step);
-            float y = startRotation.y + (direction.y * step);
-            float z = startRotation.z + (direction.z * step);
+            float x = _startRotation.x + (_direction.x * step);
+            float y = _startRotation.y + (_direction.y * step);
+            float z = _startRotation.z + (_direction.z * step);
             
             Vector3 newRotation = new Vector3(x, y, z);
             
@@ -46,7 +40,7 @@ namespace Toolbox.TweenMachine
 
         protected override void TweenEnd()
         {
-            gameObject.transform.eulerAngles = new Vector3(targetRotation.x, targetRotation.y, targetRotation.z);
+            gameObject.transform.eulerAngles = new Vector3(_targetRotation.x, _targetRotation.y, _targetRotation.z);
         }
     
     }

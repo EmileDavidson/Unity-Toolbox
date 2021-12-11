@@ -9,8 +9,7 @@ namespace Toolbox.TweenMachine
     public abstract class TweenBase
     {
         //variable declaration 
-        protected Func<float, float> easeMethode;
-        protected AnimationCurve easeCurve;
+        protected AnimationCurve easeCurve = new AnimationCurve();
         protected bool useCurve = true;
         
         protected float speed;
@@ -82,9 +81,8 @@ namespace Toolbox.TweenMachine
         protected abstract void UpdateTween();
         protected abstract void TweenEnd();
 
-        protected float GetStep()
+        public float GetStep()
         {
-            if(!useCurve) return easeMethode(percent);
             return easeCurve.Evaluate(percent);
         }
         
@@ -100,14 +98,7 @@ namespace Toolbox.TweenMachine
             speed = newSpeed;
             return this;
         }
-        
-        public virtual TweenBase ChainSetEasing(EasingType easingType)
-        {
-            if ((easingType == EasingType.AnimationCurve)) return this;
-            easeMethode = EasingDictonary.dict[easingType];
-            return this; 
-        }
-        
+
         //Getters and setters
 
         public AnimationCurve Curve
@@ -155,8 +146,5 @@ namespace Toolbox.TweenMachine
         {
             action += del;
         }
-        
-        public float GetEasingStep => easeMethode(percent);
-        
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Toolbox.Animation;
+using UnityEngine;
 
 namespace Toolbox.MethodExtensions
 {
@@ -30,6 +31,10 @@ namespace Toolbox.MethodExtensions
             var lastKey = targetCurve.keys[targetCurve.keys.Length - 1];
             return lastKey.time;
         }
-    
+
+        public static void ToEasing(this AnimationCurve curve, EasingTools.EasingFunction function, int resolution = 15)
+        {
+            curve = EasingTools.GenerateCurve(function, resolution);
+        }
     }
 }
