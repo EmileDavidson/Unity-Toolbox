@@ -1,150 +1,146 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using Toolbox.Animation;
 using Toolbox.MethodExtensions;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Toolbox.TweenMachine
 {
+    /// <summary>
+    /// TweenBase is the base of the Tween classes the generic it needs is the generic of the Inheritance class.
+    /// Please do not use any other class because it might give errors. 
+    /// </summary>
     [Serializable]
     public abstract class TweenBase
+
     {
-        //variable declaration 
-        protected AnimationCurve easeCurve = new AnimationCurve();
-        protected bool useCurve = true;
-        
-        protected float speed;
-        protected float percent;
-        public GameObject gameObject; 
-    
-        //actions
-        private UnityAction _onTweenStart;
-        private UnityAction _onTweenFinish;
-        private UnityAction _onTweenUpdate;
+    //variable declaration 
+    protected AnimationCurve easeCurve =
+        new AnimationCurve().ChainToCurve(EasingTools.easingCurve[EasingTools.EasingType.Linear]);
 
-        public bool IsFinished => percent >= 1;
-        protected bool HasStarted => percent > 0;
+    protected float percent;
+    public GameObject gameObject;
+    protected bool paused = false;
+
+    //actions
+    public UnityAction onTweenStart;
+    public UnityAction onTweenFinish;
+    public UnityAction onTweenUpdate;
+
+    public bool IsFinished => percent >= 1;
+    protected bool HasStarted => percent > 0;
 
 
-        /// <summary>
-        /// Empty constructor so we can have constructor with different parameters in derived classes.
-        /// </summary>
-        public TweenBase(){}
-        
-        /// <summary>
-        /// Base Constructor that need to be in all derived classes! this is used for the generic function to create new tween. 
-        /// </summary>
-        /// <param name="gameObject"></param>
-        /// <param name="speed"></param>
-        public TweenBase(GameObject gameObject, float speed)
-        {
-            this.gameObject = gameObject;
-            this.speed = speed;
-        }
+    #region ========== Constructors ==========
 
-        public virtual void Setup(GameObject aGameObject, float aSpeed)
+    /// <summary>
+    /// Empty constructor so we can have constructor with different parameters in derived classes.
+    /// </summary>
+    protected TweenBase()
+    {
+    }
+
+    /// <summary>
+    /// Base Constructor that need to be in all derived classes! this is used for the generic function to create new tween. 
+    /// </summary>
+    /// <param name="gameObject"></param>
+    protected TweenBase(GameObject gameObject)
+    {
+        this.gameObject = gameObject;
+    }
+
+    #endregion
+
+    #region ========== Tween logic functions ==========
+
+    public abstract void TweenStart();
+    protected abstract void UpdateTween();
+    protected abstract void TweenEnd();
+
+    #endregion
+
+    #region ========== functions callers =========
+
+    public void Update(float dt)
+    {
+        if (paused) return;
+        if (!HasStarted)
         {
-            this.gameObject = aGameObject;
-            this.speed = aSpeed;
-        }
-        
-        //Methods 
-        public virtual void TweenStart()
-        {
-            if (useCurve)
-            {
-                speed = easeCurve.GetDuration();
-            }
-        }
-        
-        public void UpdateTween(float dt)
-        {
-            if(!HasStarted)
-            {
-                TweenStart();
-                OnTweenStart?.Invoke();
-            }
-            
-            OnTweenUpdate?.Invoke();
-        
-            
-            percent += dt / speed;
-            if (!IsFinished)
-            {
-                UpdateTween();
-                return;
-            }
-            OnTweenFinish?.Invoke();
-            
-            TweenEnd();
+            TweenStart();
+            onTweenStart?.Invoke();
         }
 
-        protected abstract void UpdateTween();
-        protected abstract void TweenEnd();
+        percent += dt / Curve.GetDuration();
 
-        public float GetStep()
+        if (!IsFinished)
         {
-            return easeCurve.Evaluate(percent);
-        }
-        
-        //Chain Setters
-        public TweenBase ChainSetGameObject(GameObject newObj)
-        {
-            gameObject = newObj;
-            return this;
-        }
-        
-        public TweenBase ChainSetSpeed(float newSpeed)
-        {
-            speed = newSpeed;
-            return this;
+            onTweenUpdate?.Invoke();
+            UpdateTween();
+            return;
         }
 
-        //Getters and setters
+        onTweenFinish?.Invoke();
 
-        public AnimationCurve Curve
-        {
-            get => easeCurve;
-            set => easeCurve = value;
-        }
-        
-        public bool UseCurve
-        {
-            get => useCurve;
-            set => useCurve = value;
-        }
-        public GameObject GameObject
-        {
-            get => gameObject;
-            set => gameObject = value;
-        }
+        TweenEnd();
+    }
 
-        public float Speed
-        {
-            get => speed;
-            set => speed = value;
-        }
-        
-        public UnityAction OnTweenFinish
-        {
-            get => _onTweenFinish;
-            set => _onTweenFinish = value;
-        }
+    #endregion
 
-        public UnityAction OnTweenStart
-        {
-            get => _onTweenStart;
-            set => _onTweenStart = value;
-        }
+    #region ========== Helping functions ==========
 
-        public UnityAction OnTweenUpdate
-        {
-            get => _onTweenUpdate;
-            set => _onTweenUpdate = value;
-        }
+    /// <summary>
+    /// Get value out curve from current percentage
+    /// </summary>
+    /// <returns></returns>
+    public float GetStep()
+    {
+        return easeCurve.Evaluate(Curve.GetDuration() / 100 * (percent * 100));
+    }
 
-        public void AddListener(UnityAction action, UnityAction del)
-        {
-            action += del;
-        }
+    /// <summary>
+    /// Gets the last value in curve this makes it so the new value equals exactly the target value and curve end value
+    /// </summary>
+    /// <returns></returns>
+    public float GetLastCurveValue()
+    {
+        return (Curve[Curve.keys.Length - 1].value);
+    }
+
+    #endregion
+
+    #region ========== ChainSetters ============
+
+    public virtual TweenBase ChainSetGameObject(GameObject newObj)
+    {
+        gameObject = newObj;
+        return this;
+    }
+
+    public virtual TweenBase ChainSetCurve(AnimationCurve curve)
+    {
+        this.Curve = curve;
+        return this;
+    }
+
+    #endregion
+
+    #region ========== Getters & Setters ============
+
+    public AnimationCurve Curve
+    {
+        get => easeCurve;
+        set => easeCurve = value;
+    }
+
+    public GameObject GameObject
+    {
+        get => gameObject;
+        set => gameObject = value;
+    }
+
+    #endregion
+
     }
 }

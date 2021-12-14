@@ -12,5 +12,10 @@ namespace Toolbox.MethodExtensions
                 .Select(constructor => constructor.GetParameters())
                 .Any(constructorParameters => constructorParameters.TakeWhile((parameterInfo, index) => parameterInfo.ParameterType == parameters[index].GetType()).Any());
         }
+
+        public static bool HasEmptyConstructor(this object aObject)
+        {
+            return aObject.GetType().GetConstructors().Where(info => info.GetParameters().IsEmpty()).ToArray().IsEmpty();
+        }
     }
 }

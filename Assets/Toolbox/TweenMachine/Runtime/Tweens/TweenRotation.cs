@@ -10,25 +10,37 @@ namespace Toolbox.TweenMachine
         private Vector3 _targetRotation;
         private Vector3 _direction;
 
-        public TweenRotation(GameObject gameObject, float speed, Quaternion targetRotation)
+        /// <summary>
+        /// empty constructor
+        /// </summary>
+        public TweenRotation() { }
+
+        /// <summary>
+        /// Constructor with targeted GameObject and target value
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="targetRotation"></param>
+        public TweenRotation(GameObject gameObject, Quaternion targetRotation)
         {
             this.gameObject = gameObject;
             this._startRotation = gameObject.transform.eulerAngles;
             this._targetRotation = new Vector3(targetRotation.x, targetRotation.y, targetRotation.z);
-    
-            this._direction.x = targetRotation.x - _startRotation.x;
-            this._direction.y = targetRotation.x - _startRotation.y;
-            this._direction.z = targetRotation.x - _startRotation.z;
-
-            this.speed = speed;
-            this.percent = 0;
         }
 
+        //========== Tween logic functions ==========
+        public override void TweenStart()
+        {
+            this._direction.x = _targetRotation.x - _startRotation.x;
+            this._direction.y = _targetRotation.y - _startRotation.y;
+            this._direction.z = _targetRotation.z - _startRotation.z;
+
+            this.percent = 0;
+        }
+        
         protected override void UpdateTween()
         {
             if (gameObject == null) return;
             float step = GetStep();
-            
             float x = _startRotation.x + (_direction.x * step);
             float y = _startRotation.y + (_direction.y * step);
             float z = _startRotation.z + (_direction.z * step);
@@ -40,7 +52,22 @@ namespace Toolbox.TweenMachine
 
         protected override void TweenEnd()
         {
-            gameObject.transform.eulerAngles = new Vector3(_targetRotation.x, _targetRotation.y, _targetRotation.z);
+            gameObject.transform.eulerAngles = _startRotation + (new Vector3(_targetRotation.x, _targetRotation.y, _targetRotation.z) * GetLastCurveValue());
+        }
+        
+        //======== CHAIN SETTERS ========
+        
+        public TweenRotation ChainSetTarget(Vector3 targetRotation)
+        {
+            this._targetRotation = targetRotation;
+            return this;
+        }
+
+        //getters & setter
+        public Vector3 Target
+        {
+            get => _targetRotation;
+            set => _targetRotation = value;
         }
     
     }

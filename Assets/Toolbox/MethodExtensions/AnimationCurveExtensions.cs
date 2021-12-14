@@ -1,4 +1,6 @@
-﻿using Toolbox.Animation;
+﻿using System;
+using JetBrains.Annotations;
+using Toolbox.Animation;
 using UnityEngine;
 
 namespace Toolbox.MethodExtensions
@@ -32,9 +34,15 @@ namespace Toolbox.MethodExtensions
             return lastKey.time;
         }
 
-        public static void ToEasing(this AnimationCurve curve, EasingTools.EasingFunction function, int resolution = 15)
+        public static void CurveFromMethod(this AnimationCurve curve, EasingTools.EasingFunction function, int resolution = 15)
         {
             curve = EasingTools.GenerateCurve(function, resolution);
+        }
+
+        public static AnimationCurve ChainToCurve(this AnimationCurve curve, AnimationCurve newCurve)
+        {
+            curve = new AnimationCurve(newCurve.keys);
+            return curve;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using UnityEditor;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace Toolbox.TweenMachine
@@ -11,48 +11,43 @@ namespace Toolbox.TweenMachine
         private Vector3 _targetPosition;
         private Vector3 _direction;
 
-        public override void Setup(GameObject aGameObject, float aSpeed)
-        {
-            this.gameObject = aGameObject;
-            this.speed = aSpeed;
+        /// <summary>
+        /// empty constructor
+        /// </summary>
+        public TweenPosition() { }
 
-            this._startPosition = gameObject.transform.position;
-            this._targetPosition = _startPosition;
-        }
-        
+
         /// <summary>
         /// Constructor for when you create it without the use of TweenBuild class and add it to the tweens in TweenBuild
         /// </summary>
         /// <param name="gameObject"></param>
         /// <param name="targetPos"></param>
-        /// <param name="speed"></param>
-        public TweenPosition(GameObject gameObject,float speed, Vector3 targetPos)
+        public TweenPosition(GameObject gameObject, Vector3 targetPos)
         {
             this.gameObject = gameObject;
             this._targetPosition = targetPos;
-            this.speed = speed;
-
             this._startPosition = gameObject.transform.position;
-            this._direction = targetPos - _startPosition;
+        }
+        
+        //========== Tween logic functions ==========
+
+        public override void TweenStart()
+        {
+            this._direction = _targetPosition - _startPosition;
             this.percent = 0;
         }
-
-        /// <summary>
-        /// When we update the tween we calculate where whe should be and move towards it by using the current %
-        /// </summary>
+        
         protected override void UpdateTween()
         {
             if (gameObject == null) return;
             float step = GetStep();
             gameObject.transform.position = _startPosition + (_direction * step);
         }
-
-        /// <summary>
-        /// Sets the current position to target position for precision 
-        /// </summary>
+        
         protected override void TweenEnd()
         {
-            gameObject.transform.position = _targetPosition;
+            if (gameObject == null) return;
+            gameObject.transform.position = _startPosition + (_direction * GetLastCurveValue());
         }
 
         //======== CHAIN SETTERS ========
@@ -60,17 +55,6 @@ namespace Toolbox.TweenMachine
         public TweenPosition ChainSetTarget(Vector3 targetPos)
         {
             this._targetPosition = targetPos;
-
-            this._startPosition = gameObject.transform.position;
-            this._direction = targetPos - _startPosition;
-            this.percent = 0;
-            return this;
-        }
-
-        public TweenPosition ChainReset()
-        {
-            this._startPosition = gameObject.transform.position;
-            this.percent = 0;
             return this;
         }
 

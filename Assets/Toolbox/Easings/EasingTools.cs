@@ -4,6 +4,14 @@ using UnityEngine;
 
 namespace Toolbox.Animation
 {
+    /// <summary>
+    /// This class has a list of tools
+    /// - Enum with all easings
+    /// - dict that uses enum to receive method.
+    /// - dict that used enum to receive AnimationCurve
+    /// - function that transfers method to AnimationCurve
+    /// and much more to come! 
+    /// </summary>
     public static class EasingTools
     {
         public delegate float EasingFunction(float time);

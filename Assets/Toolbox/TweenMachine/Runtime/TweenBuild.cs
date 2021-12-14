@@ -1,26 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
+using JetBrains.Annotations;
+using Toolbox.Animation;
 using Toolbox.MethodExtensions;
 using UnityEngine;
 using UnityEngine.Events;
-using Object = System.Object;
 
 namespace Toolbox.TweenMachine
 {
     [Serializable]
     public class TweenBuild
     {
-        [SerializeReference] private GameObject gameObject;
-        [SerializeReference] private float defaultSpeed = 1;
-        [SerializeReference] private AnimationCurve curve = new AnimationCurve();
-        [SerializeReference] public List<TweenBase> tweens = new List<TweenBase>();
-        
+        private GameObject _gameObject;
+
+        protected AnimationCurve curve =
+            new AnimationCurve().ChainToCurve(EasingTools.easingCurve[EasingTools.EasingType.Linear]);
+
+        public List<TweenBase> tweenList = new List<TweenBase>();
+        public bool paused = false;
+
         public UnityEvent onTweenBuildFinish = new UnityEvent();
         public UnityEvent onTweenBuildUpdate = new UnityEvent();
         public UnityEvent onTweenBuildStart = new UnityEvent();
 
+        #region ========= Creators ========
+
+        public T CreateAndAddTween<T>() where T : TweenBase
+        {
+            if (!typeof(T).HasEmptyConstructor()) return null;
+            var tween = (T)Activator.CreateInstance(typeof(T));
+            tweenList.Add(tween);
+            return tween;
+        }
+        
         /// <summary>
         /// creates and add tween when there is a constructor containing all given parameters in the right order.
         /// </summary>
@@ -31,14 +44,15 @@ namespace Toolbox.TweenMachine
         {
             if (parameters.IsEmpty())
             {
+                if (!typeof(T).HasEmptyConstructor()) return null;
                 var emptyTween = (T)Activator.CreateInstance(typeof(T));
-                tweens.Add(emptyTween);
+                tweenList.Add(emptyTween);
                 return emptyTween;
             }
-            
+
             if (!typeof(T).ContainsConstructorWithTheseParams(parameters)) return null;
             var tween = (T)Activator.CreateInstance(typeof(T), parameters);
-            tweens.Add(tween);
+            tweenList.Add(tween);
             return tween;
         }
 
@@ -47,36 +61,39 @@ namespace Toolbox.TweenMachine
         /// without the target value it still uses the targetObj and speed
         /// </summary>
         /// <param name="targetObj"></param>
-        /// <param name="speed"></param>
         /// <param name="targetValue"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T CreateAndAddTween<T>(GameObject targetObj, float speed, object targetValue = null) where T : TweenBase
+        public T CreateAndAddTween<T>(GameObject targetObj, [NotNull] object targetValue = null!) where T : TweenBase
         {
-            if (HasConstructorWithTargetParameter<T>() && targetValue != null && targetValue.GetType() == GetTargetType<T>())
+            if (HasConstructorWithTargetParameter<T>() && targetValue != null &&
+                targetValue?.GetType() == GetTargetType<T>())
             {
-                var tweenWithTarget = (T) Activator.CreateInstance(typeof(T), targetObj, speed, targetValue);
-                tweens.Add(tweenWithTarget);
+                var tweenWithTarget = (T)Activator.CreateInstance(typeof(T), targetObj, targetValue);
+                tweenList.Add(tweenWithTarget);
                 return tweenWithTarget;
             }
-     
+
+            if (!typeof(T).HasEmptyConstructor()) return null;
             var tween = (T)Activator.CreateInstance(typeof(T));
-            tween.Setup(targetObj, speed);
-            tweens.Add(tween);
-            return tween;   
+            tween.gameObject = _gameObject;
+            tweenList.Add(tween);
+            return tween;
         }
 
         public T Create<T>(object[] parameters) where T : TweenBase
         {
             if (parameters.IsEmpty())
             {
+                if (!typeof(T).HasEmptyConstructor()) return null;
                 var emptyTween = (T)Activator.CreateInstance(typeof(T));
-                tweens.Add(emptyTween);
+                tweenList.Add(emptyTween);
                 return emptyTween;
             }
 
+            if (!typeof(T).ContainsConstructorWithTheseParams(parameters)) return null;
             var tween = (T)Activator.CreateInstance(typeof(T), parameters);
-            tweens.Add(tween);
+            tweenList.Add(tween);
             return tween;
         }
 
@@ -91,28 +108,22 @@ namespace Toolbox.TweenMachine
         /// <returns></returns>
         public T Create<T>(GameObject targetObj, float speed, object targetValue = null) where T : TweenBase
         {
-            if (HasConstructorWithTargetParameter<T>() && targetValue != null && targetValue.GetType() == GetTargetType<T>())
+            if (HasConstructorWithTargetParameter<T>() && targetValue != null &&
+                targetValue.GetType() == GetTargetType<T>())
             {
-                var tweenWithTarget = (T) Activator.CreateInstance(typeof(T), targetObj, speed, targetValue);
-                tweens.Add(tweenWithTarget);
+                var tweenWithTarget = (T)Activator.CreateInstance(typeof(T), targetObj, speed, targetValue);
+                tweenList.Add(tweenWithTarget);
                 return tweenWithTarget;
             }
-     
+
             var tween = (T)Activator.CreateInstance(typeof(T));
-            tween.Setup(targetObj, speed);
+            tween.gameObject = this._gameObject;
             return tween;
         }
-        
-        /// <summary>
-        /// adds the given tween to the list
-        /// </summary>
-        /// <param name="tween"></param>
-        /// <returns></returns>
-        public TweenBuild ChainAdd(TweenBase tween)
-        {
-            tweens.Add(tween);
-            return this;
-        }
+
+        #endregion
+
+        #region ========== Checkers ==========
 
         /// <summary>
         /// Checks if the derived class has a function with 3 parameters (First: GameObject, Second: float, third: Object)
@@ -122,56 +133,23 @@ namespace Toolbox.TweenMachine
         /// <returns></returns>
         public bool HasConstructorWithTargetParameter<T>()
         {
-            var possibleConstructors = typeof(T).GetConstructors().Where(info => info.GetParameters().Length == 3).ToArray();
+            var possibleConstructors =
+                typeof(T).GetConstructors().Where(info => info.GetParameters().Length == 2).ToArray();
             foreach (var constructorInfo in possibleConstructors)
             {
                 var parameterInfos = constructorInfo.GetParameters();
-                if (parameterInfos.Length < 3) continue;
+                if (parameterInfos.Length < 2) continue;
                 if (parameterInfos[0].ParameterType != typeof(GameObject)) continue;
-                if (parameterInfos[1].ParameterType != typeof(float)) continue;
-                if (possibleConstructors.Count() > 1 && !parameterInfos[2].Name.Equals("targetValue")) continue;
-
+                if (possibleConstructors.Count() > 1 && !parameterInfos[1].Name.Equals("targetValue")) continue;
                 return true;
             }
+
             return false;
         }
 
-        /// <summary>
-        /// Get the index of all constructors with the right parameters / naming 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public int GetConstructorWithTargetParameterIndex<T>()
-        {
-            var possibleConstructors = typeof(T).GetConstructors().Where(info => info.GetParameters().Length == 3).ToArray();
-            int index = -1;
-            foreach (var constructorInfo in possibleConstructors)
-            {
-                index++;
-                var parameterInfos = constructorInfo.GetParameters();
-                if (parameterInfos.Length < 3) continue;
-                if (parameterInfos[0].ParameterType != typeof(GameObject)) continue;
-                if (parameterInfos[1].ParameterType != typeof(float)) continue;
-                if (possibleConstructors.Count() > 1 && !parameterInfos[2].Name.Equals("targetValue")) continue;
+        #endregion
 
-                return index;
-            }
-            return -1;
-        }
-
-        /// <summary>
-        /// Gets the target type from the constructor 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public Type GetTargetType<T>() where T : TweenBase
-        {
-            if (!HasConstructorWithTargetParameter<T>()) return null;
-            var parameterInfos = typeof(T).GetConstructors()[GetConstructorWithTargetParameterIndex<T>()].GetParameters();
-            
-            var type = parameterInfos[2].ParameterType;
-            return type;
-        }
+        #region ======== helping methods =========
 
         /// <summary>
         /// removes all the tweens in the build of the given type
@@ -179,21 +157,27 @@ namespace Toolbox.TweenMachine
         /// <param name="removeType"></param>
         public void RemoveAllTweensOfType(Type removeType)
         {
-            tweens.RemoveAll(tween => tween.GetType() == removeType);
+            tweenList.RemoveAll(tween => tween.GetType() == removeType);
         }
-        
+
+        #endregion
+
+        #region ===== tween logic =======
+
         /// <summary>
         /// Updates the tweens that are not finished yet.
         /// </summary>
         /// <param name="dt"></param>
         public void UpdateTween(float dt)
         {
+            if (paused) return;
+
             onTweenBuildUpdate.Invoke();
             if (IsFinished) return;
 
-            foreach (var tween in tweens.Where(tween => !tween.IsFinished))
+            foreach (var tween in tweenList.Where(tween => !tween.IsFinished))
             {
-                tween.UpdateTween(dt);
+                tween.Update(dt);
             }
 
             CheckComplete();
@@ -204,12 +188,15 @@ namespace Toolbox.TweenMachine
         /// </summary>
         public void StartTween()
         {
-            foreach (var tween in tweens.Where(tween => tween.gameObject == null))
+            if (_gameObject != null)
             {
-                tween.gameObject = this.GameObject;
+                foreach (var tween in tweenList.Where(tween => tween.gameObject == null))
+                {
+                    tween.gameObject = this.GameObject;
+                }
             }
 
-            TweenController.Instance.activeBuilds.Add(this);
+            TweenController.Singleton.Instance.activeBuilds.Add(this);
             onTweenBuildStart.Invoke();
         }
 
@@ -225,25 +212,92 @@ namespace Toolbox.TweenMachine
         /// <summary>
         /// returns if there is still a tween running in this build.
         /// </summary>
-        public bool IsFinished => tweens.Where(tween => !tween.IsFinished).ToArray().IsEmpty();
-        
-        //======= getters && setter
-        public float DefaultSpeed
+        public bool IsFinished => tweenList.Where(tween => !tween.IsFinished).ToArray().IsEmpty();
+
+        #endregion
+
+        #region ========= Chain Setters =========
+
+        /// <summary>
+        /// adds the given tween to the list
+        /// </summary>
+        /// <param name="tween"></param>
+        /// <returns></returns>
+        public TweenBuild ChainAdd(TweenBase tween)
         {
-            get => defaultSpeed;
-            set => defaultSpeed = value;
+            tweenList.Add(tween);
+            return this;
+        }
+
+        /// <summary>
+        /// adds the given tweenList to currentList
+        /// </summary>
+        /// <param name="tweens"></param>
+        /// <returns></returns>
+        public TweenBuild ChainAddList(List<TweenBase> tweens)
+        {
+            tweenList.AddList(tweens);
+            return this;
+        }
+
+        #endregion
+
+        #region ====== Getters & Setters ========
+
+        /// <summary>
+        /// Get the index of all constructors with the right parameters / naming 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public int GetConstructorWithTargetParameterIndex<T>()
+        {
+            var possibleIndexes = new List<int>();
+            int index = 0;
+            foreach (var constructorInfo in typeof(T).GetConstructors())
+            {
+                var parameterInfos = constructorInfo.GetParameters();
+                if (parameterInfos.Length <= 1) continue;
+                if (parameterInfos[0].ParameterType != typeof(GameObject)) continue;
+                possibleIndexes.Add(index);
+                index++;
+            }
+
+            if (possibleIndexes.Count <= 1) return possibleIndexes[0];
+            for (var i = 0; i < possibleIndexes.Count; i++)
+            {
+                if (!typeof(T).GetConstructors()[i].GetParameters()[1].Name.Equals("targetValue")) continue;
+                return i;
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Gets the target type from the constructor 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Type GetTargetType<T>() where T : TweenBase
+        {
+            if (!HasConstructorWithTargetParameter<T>()) return null;
+            var parameterInfos = typeof(T).GetConstructors()[GetConstructorWithTargetParameterIndex<T>() + 1]
+                .GetParameters();
+            var type = parameterInfos[1].ParameterType;
+            return type;
         }
 
         public GameObject GameObject
         {
-            get => gameObject;
-            set => gameObject = value;
+            get => _gameObject;
+            set => _gameObject = value;
         }
 
         public List<TweenBase> Tweens
         {
-            get => tweens;
-            private set => tweens = value;
+            get => tweenList;
+            private set => tweenList = value;
         }
+
+        #endregion
     }
 }

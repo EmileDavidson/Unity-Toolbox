@@ -1,28 +1,12 @@
 ﻿using System.Collections.Generic;
+using Toolbox.Other;
 using UnityEngine;
 
 namespace Toolbox.TweenMachine
 {
     public class TweenController : MonoBehaviour
     {
-        #region SINGLETON PATTERN
-        private static TweenController _instance;
-        public static TweenController Instance
-        {
-            get
-            {
-                if (_instance != null) return _instance;
-
-                _instance = GameObject.FindObjectOfType<TweenController>();
-                if (_instance != null) return _instance;
-
-                GameObject container = new GameObject("TweenMachine");
-                _instance = container.AddComponent<TweenController>();
-                return _instance;
-            }
-        }
-        
-        #endregion
+        public static readonly Singleton<TweenController> Singleton = new Singleton<TweenController>();
         
         public List<TweenBuild> activeBuilds = new List<TweenBuild>();
         public List<TweenBuild> doneBuilds = new List<TweenBuild>();

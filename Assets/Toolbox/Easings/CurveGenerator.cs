@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Toolbox.Animation
 {
+    /// <summary>
+    /// This class adds easing methods to new Unity AnimationCurve preset
+    /// </summary>
     public class CurveGenerator : MonoBehaviour
     {
         [MenuItem("Assets/Create/EasingCurves")]
