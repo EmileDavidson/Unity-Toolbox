@@ -5,7 +5,7 @@ namespace Toolbox.TweenMachine
 {
     public class TweenTester : MonoBehaviour
     {
-        public TweenBuild tweenBuild = new TweenBuild(true);
+        public TweenBuild tweenBuild = new TweenBuild(false);
 
         private void Awake()
         {
