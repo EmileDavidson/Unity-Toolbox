@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Runtime.InteropServices;
+using UnityEditor;
 using UnityEngine;
 
 namespace Toolbox.TweenMachine
@@ -7,8 +7,9 @@ namespace Toolbox.TweenMachine
     [Serializable]
     public class TweenPosition : TweenBase
     {
+        [SerializeReference] private Vector3 targetPosition;
+
         private Vector3 _startPosition;
-        private Vector3 _targetPosition;
         private Vector3 _direction;
 
         /// <summary>
@@ -25,7 +26,7 @@ namespace Toolbox.TweenMachine
         public TweenPosition(GameObject gameObject, Vector3 targetPos)
         {
             this.gameObject = gameObject;
-            this._targetPosition = targetPos;
+            this.targetPosition = targetPos;
             this._startPosition = gameObject.transform.position;
         }
         
@@ -33,7 +34,7 @@ namespace Toolbox.TweenMachine
 
         public override void TweenStart()
         {
-            this._direction = _targetPosition - _startPosition;
+            this._direction = targetPosition - _startPosition;
             this.percent = 0;
         }
         
@@ -54,15 +55,37 @@ namespace Toolbox.TweenMachine
         
         public TweenPosition ChainSetTarget(Vector3 targetPos)
         {
-            this._targetPosition = targetPos;
+            this.targetPosition = targetPos;
             return this;
         }
 
         //getters & setter
         public Vector3 Target
         {
-            get => _targetPosition;
-            set => _targetPosition = value;
+            get => targetPosition;
+            set => targetPosition = value;
         }
+        
+        #region ========== EDITOR FUNCTIONS ==========
+
+#if UNITY_EDITOR
+
+        public override void DrawProperties(Rect currentPosition, out int addedHeight, out Rect newCurrentPosition)
+        {
+            addedHeight = 0;
+            newCurrentPosition = currentPosition;
+            
+            base.DrawProperties(currentPosition, out addedHeight, out newCurrentPosition);
+            newCurrentPosition.y += 16;
+            addedHeight += 16;
+
+            targetPosition = EditorGUI.Vector3Field(newCurrentPosition, "Target vector", targetPosition);
+            newCurrentPosition.y += 32;
+            addedHeight += 32;
+        }
+
+#endif
+
+        #endregion
     }
 }

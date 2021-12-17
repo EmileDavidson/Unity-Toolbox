@@ -239,49 +239,56 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweenBuild:
-    gameObject: {fileID: 0}
+    _gameObject: {fileID: 0}
     curve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     tweenList: []
+    paused: 0
     onTweenBuildFinish:
-      m_PersistentCalls:
-        m_Calls: []
+      id: 0
     onTweenBuildUpdate:
-      m_PersistentCalls:
-        m_Calls: []
+      id: 1
     onTweenBuildStart:
-      m_PersistentCalls:
-        m_Calls: []
-  easeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 5
-      value: 1
-      inSlope: 0.957397
-      outSlope: 0.957397
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.26081747
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+      id: 2
   references:
     version: 1
+    00000000:
+      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
+      data:
+        m_PersistentCalls:
+          m_Calls: []
+    00000001:
+      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
+      data:
+        m_PersistentCalls:
+          m_Calls: []
+    00000002:
+      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
+      data:
+        m_PersistentCalls:
+          m_Calls: []
 --- !u!65 &1057071480
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -391,49 +398,120 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweenBuild:
-    gameObject: {fileID: 0}
+    _gameObject: {fileID: 1106572016}
     curve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    tweenList: []
+    tweenList:
+    - id: 0
+    - id: 1
+    paused: 0
     onTweenBuildFinish:
-      m_PersistentCalls:
-        m_Calls: []
+      id: 2
     onTweenBuildUpdate:
-      m_PersistentCalls:
-        m_Calls: []
+      id: 3
     onTweenBuildStart:
-      m_PersistentCalls:
-        m_Calls: []
-  easeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0.957397
-      outSlope: 0.957397
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.26081747
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0.97445536
-      outSlope: 0.97445536
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.0993799
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+      id: 4
   references:
     version: 1
+    00000000:
+      type: {class: TweenPosition, ns: Toolbox.TweenMachine, asm: Assembly-CSharp}
+      data:
+        easeCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        percent: 0
+        gameObject: {fileID: 1106572016}
+        paused: 0
+        targetPosition: {x: 5, y: 5, z: 5}
+    00000001:
+      type: {class: TweenColor, ns: Toolbox.TweenMachine, asm: Assembly-CSharp}
+      data:
+        easeCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        percent: 0
+        gameObject: {fileID: 1106572016}
+        paused: 0
+        targetColor: {r: 0, g: 0, b: 0, a: 0}
+    00000002:
+      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
+      data:
+        m_PersistentCalls:
+          m_Calls: []
+    00000003:
+      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
+      data:
+        m_PersistentCalls:
+          m_Calls: []
+    00000004:
+      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
+      data:
+        m_PersistentCalls:
+          m_Calls: []
 --- !u!65 &1106572018
 BoxCollider:
   m_ObjectHideFlags: 0

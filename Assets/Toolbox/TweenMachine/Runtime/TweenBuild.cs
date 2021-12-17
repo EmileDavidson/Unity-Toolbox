@@ -12,17 +12,22 @@ namespace Toolbox.TweenMachine
     [Serializable]
     public class TweenBuild
     {
-        private GameObject _gameObject;
+        [SerializeReference] private readonly bool _drawer; 
+        
+        [SerializeReference] private GameObject gameObject;
+        [SerializeReference] protected AnimationCurve curve = new AnimationCurve().ChainToCurve(EasingTools.easingCurve[EasingTools.EasingType.Linear]);
 
-        protected AnimationCurve curve =
-            new AnimationCurve().ChainToCurve(EasingTools.easingCurve[EasingTools.EasingType.Linear]);
+        [SerializeReference] public List<TweenBase> tweenList = new List<TweenBase>();
+        [SerializeReference] public bool paused = false;
 
-        public List<TweenBase> tweenList = new List<TweenBase>();
-        public bool paused = false;
+        [SerializeReference] public UnityEvent onTweenBuildFinish = new UnityEvent();
+        [SerializeReference] public UnityEvent onTweenBuildUpdate = new UnityEvent();
+        [SerializeReference] public UnityEvent onTweenBuildStart = new UnityEvent();
 
-        public UnityEvent onTweenBuildFinish = new UnityEvent();
-        public UnityEvent onTweenBuildUpdate = new UnityEvent();
-        public UnityEvent onTweenBuildStart = new UnityEvent();
+        public TweenBuild(bool aDrawer = true)
+        {
+            _drawer = aDrawer;
+        }
 
         #region ========= Creators ========
 
@@ -76,11 +81,11 @@ namespace Toolbox.TweenMachine
 
             if (!typeof(T).HasEmptyConstructor()) return null;
             var tween = (T)Activator.CreateInstance(typeof(T));
-            tween.gameObject = _gameObject;
+            tween.gameObject = gameObject;
             tweenList.Add(tween);
             return tween;
         }
-
+        
         public T Create<T>(object[] parameters) where T : TweenBase
         {
             if (parameters.IsEmpty())
@@ -117,7 +122,7 @@ namespace Toolbox.TweenMachine
             }
 
             var tween = (T)Activator.CreateInstance(typeof(T));
-            tween.gameObject = this._gameObject;
+            tween.gameObject = this.gameObject;
             return tween;
         }
 
@@ -188,7 +193,7 @@ namespace Toolbox.TweenMachine
         /// </summary>
         public void StartTween()
         {
-            if (_gameObject != null)
+            if (gameObject != null)
             {
                 foreach (var tween in tweenList.Where(tween => tween.gameObject == null))
                 {
@@ -243,6 +248,9 @@ namespace Toolbox.TweenMachine
         #endregion
 
         #region ====== Getters & Setters ========
+        
+        public bool Drawer => _drawer;
+
 
         /// <summary>
         /// Get the index of all constructors with the right parameters / naming 
@@ -288,14 +296,20 @@ namespace Toolbox.TweenMachine
 
         public GameObject GameObject
         {
-            get => _gameObject;
-            set => _gameObject = value;
+            get => gameObject;
+            set => gameObject = value;
         }
 
         public List<TweenBase> Tweens
         {
             get => tweenList;
             private set => tweenList = value;
+        }
+
+        public AnimationCurve Curve
+        {
+            get => curve;
+            set => curve = value;
         }
 
         #endregion

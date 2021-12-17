@@ -7,7 +7,7 @@ namespace Toolbox.TweenMachine
     public class TweenScale : TweenBase
     {
         private Vector3 _startScale;
-        private Vector3 _targetScale;
+        [SerializeReference] private Vector3 targetScale;
         private Vector3 _scaleDirection;
 
         /// <summary>
@@ -24,13 +24,13 @@ namespace Toolbox.TweenMachine
         {
             this.gameObject = gameObject;
             this._startScale = gameObject.transform.localScale;
-            this._targetScale = targetScale;
+            this.targetScale = targetScale;
         }
         
         //========== Tween logic functions ==========
         public override void TweenStart()
         {
-            _scaleDirection = _targetScale - _startScale; 
+            _scaleDirection = targetScale - _startScale; 
             this.percent = 0;
         }
 
@@ -47,17 +47,17 @@ namespace Toolbox.TweenMachine
         
         //======== CHAIN SETTERS ========
         
-        public TweenScale ChainSetTarget(Vector3 targetScale)
+        public TweenScale ChainSetTarget(Vector3 target)
         {
-            this._targetScale = targetScale;
+            this.targetScale = target;
             return this;
         }
 
         //getters & setter
         public Vector3 Target
         {
-            get => _targetScale;
-            set => _targetScale = value;
+            get => targetScale;
+            set => targetScale = value;
         }
     }
 }

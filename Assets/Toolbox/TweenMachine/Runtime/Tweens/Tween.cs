@@ -6,7 +6,7 @@ namespace Toolbox.TweenMachine
 {
     public class Tween : TweenBase
     {
-        [PublicAPI] public Action<float> onUpdateTween;
+        [SerializeReference, PublicAPI] public Action<float> onUpdateTween;
         public Tween(){}
         
         //========== Tween logic functions ==========

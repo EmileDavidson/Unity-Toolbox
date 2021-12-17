@@ -6,8 +6,9 @@ namespace Toolbox.TweenMachine
     [Serializable]
     public class TweenRotation : TweenBase
     {
+        [SerializeReference] private Vector3 targetRotation;
+
         private Vector3 _startRotation;
-        private Vector3 _targetRotation;
         private Vector3 _direction;
 
         /// <summary>
@@ -24,15 +25,15 @@ namespace Toolbox.TweenMachine
         {
             this.gameObject = gameObject;
             this._startRotation = gameObject.transform.eulerAngles;
-            this._targetRotation = new Vector3(targetRotation.x, targetRotation.y, targetRotation.z);
+            this.targetRotation = new Vector3(targetRotation.x, targetRotation.y, targetRotation.z);
         }
 
         //========== Tween logic functions ==========
         public override void TweenStart()
         {
-            this._direction.x = _targetRotation.x - _startRotation.x;
-            this._direction.y = _targetRotation.y - _startRotation.y;
-            this._direction.z = _targetRotation.z - _startRotation.z;
+            this._direction.x = targetRotation.x - _startRotation.x;
+            this._direction.y = targetRotation.y - _startRotation.y;
+            this._direction.z = targetRotation.z - _startRotation.z;
 
             this.percent = 0;
         }
@@ -52,23 +53,23 @@ namespace Toolbox.TweenMachine
 
         protected override void TweenEnd()
         {
-            gameObject.transform.eulerAngles = _startRotation + (new Vector3(_targetRotation.x, _targetRotation.y, _targetRotation.z) * GetLastCurveValue());
+            gameObject.transform.eulerAngles = _startRotation + (new Vector3(targetRotation.x, targetRotation.y, targetRotation.z) * GetLastCurveValue());
         }
         
         //======== CHAIN SETTERS ========
         
-        public TweenRotation ChainSetTarget(Vector3 targetRotation)
+        public TweenRotation ChainSetTarget(Vector3 target)
         {
-            this._targetRotation = targetRotation;
+            this.targetRotation = target;
             return this;
         }
 
         //getters & setter
         public Vector3 Target
         {
-            get => _targetRotation;
-            set => _targetRotation = value;
+            get => targetRotation;
+            set => targetRotation = value;
         }
-    
+
     }
 }

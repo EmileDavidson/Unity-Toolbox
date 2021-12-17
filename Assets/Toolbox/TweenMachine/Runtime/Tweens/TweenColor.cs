@@ -8,20 +8,22 @@ namespace Toolbox.TweenMachine
     [Serializable]
     public class TweenColor : TweenBase
     {
-        private Color _targetColor;
+        [SerializeReference] private Color targetColor;
+        
         private Color _startingColor;
         private Renderer _renderer;
-        
         private float _directionR;
         private float _directionG;
         private float _directionB;
         private float _directionA;
-        
-        
+
+
         /// <summary>
         /// empty constructor
         /// </summary>
-        public TweenColor() { }
+        public TweenColor()
+        {
+        }
 
         /// <summary>
         /// Constructor with all information needed to work and do want you want. 
@@ -31,7 +33,7 @@ namespace Toolbox.TweenMachine
         public TweenColor(GameObject gameObject, Color targetColor)
         {
             this.gameObject = gameObject;
-            this._targetColor = targetColor;
+            this.targetColor = targetColor;
         }
 
         //========== Tween logic functions ==========
@@ -42,10 +44,10 @@ namespace Toolbox.TweenMachine
             {
                 _startingColor = _renderer.material.color;
 
-                _directionR = _targetColor.r - _startingColor.r;
-                _directionG = _targetColor.g - _startingColor.g;
-                _directionB = _targetColor.b - _startingColor.b;
-                _directionA = _targetColor.a - _startingColor.a;
+                _directionR = targetColor.r - _startingColor.r;
+                _directionG = targetColor.g - _startingColor.g;
+                _directionB = targetColor.b - _startingColor.b;
+                _directionA = targetColor.a - _startingColor.a;
             }
 
             percent = 0;
@@ -73,19 +75,21 @@ namespace Toolbox.TweenMachine
             _renderer.material.color = new Color(r,g,b,a);
         }
         
+        
         //======== CHAIN SETTERS ========
         
-        public TweenColor ChainSetTarget(Color targetColor)
+        public TweenColor ChainSetTarget(Color target)
         {
-            this._targetColor = targetColor;
+            this.targetColor = target;
             return this;
         }
 
         //getters & setter
         public Color Target
         {
-            get => _targetColor;
-            set => _targetColor = value;
+            get => targetColor;
+            set => targetColor = value;
         }
+
     }
 }
