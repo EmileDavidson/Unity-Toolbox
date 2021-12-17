@@ -1,39 +1,50 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Toolbox.TweenMachine.Tweens
+namespace Toolbox.TweenMachine
 {
     [Serializable]
     public class TweenRotation : TweenBase
     {
-        private Vector3 startRotation;
-        private Vector3 targetRotation;
-        private Vector3 direction;
+        [SerializeReference] private Vector3 targetRotation;
 
+        private Vector3 _startRotation;
+        private Vector3 _direction;
 
-        public TweenRotation(){}
-        public TweenRotation(GameObject gameObject, Quaternion targetRotation, float speed)
+        /// <summary>
+        /// empty constructor
+        /// </summary>
+        public TweenRotation() { }
+
+        /// <summary>
+        /// Constructor with targeted GameObject and target value
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="targetRotation"></param>
+        public TweenRotation(GameObject gameObject, Quaternion targetRotation)
         {
             this.gameObject = gameObject;
-            this.startRotation = gameObject.transform.eulerAngles;
+            this._startRotation = gameObject.transform.eulerAngles;
             this.targetRotation = new Vector3(targetRotation.x, targetRotation.y, targetRotation.z);
-    
-            this.direction.x = targetRotation.x - startRotation.x;
-            this.direction.y = targetRotation.x - startRotation.y;
-            this.direction.z = targetRotation.x - startRotation.z;
-
-            this.speed = speed;
-            this.percent = 0;
-            this.EaseMethode = Easing.Linear;
         }
 
+        //========== Tween logic functions ==========
+        public override void TweenStart()
+        {
+            this._direction.x = targetRotation.x - _startRotation.x;
+            this._direction.y = targetRotation.y - _startRotation.y;
+            this._direction.z = targetRotation.z - _startRotation.z;
+
+            this.percent = 0;
+        }
+        
         protected override void UpdateTween()
         {
-            float easingstep = GetEasingStep;
-            
-            float x = startRotation.x + (direction.x * easingstep);
-            float y = startRotation.y + (direction.y * easingstep);
-            float z = startRotation.z + (direction.z * easingstep);
+            if (gameObject == null) return;
+            float step = GetStep();
+            float x = _startRotation.x + (_direction.x * step);
+            float y = _startRotation.y + (_direction.y * step);
+            float z = _startRotation.z + (_direction.z * step);
             
             Vector3 newRotation = new Vector3(x, y, z);
             
@@ -42,8 +53,23 @@ namespace Toolbox.TweenMachine.Tweens
 
         protected override void TweenEnd()
         {
-            gameObject.transform.eulerAngles = new Vector3(targetRotation.x, targetRotation.y, targetRotation.z);
+            gameObject.transform.eulerAngles = _startRotation + (new Vector3(targetRotation.x, targetRotation.y, targetRotation.z) * GetLastCurveValue());
         }
-    
+        
+        //======== CHAIN SETTERS ========
+        
+        public TweenRotation ChainSetTarget(Vector3 target)
+        {
+            this.targetRotation = target;
+            return this;
+        }
+
+        //getters & setter
+        public Vector3 Target
+        {
+            get => targetRotation;
+            set => targetRotation = value;
+        }
+
     }
 }

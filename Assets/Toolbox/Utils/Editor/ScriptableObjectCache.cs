@@ -15,8 +15,7 @@ namespace Toolbox.Utils
     {
         private const string AssemblyName = "Toolbox.DynamicAssembly";
 
-        private static readonly AssemblyBuilder _assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-            new AssemblyName(AssemblyName)
+        private static readonly AssemblyBuilder _assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(new AssemblyName(AssemblyName)
         {
             CultureInfo = CultureInfo.InvariantCulture,
             Flags = AssemblyNameFlags.None,

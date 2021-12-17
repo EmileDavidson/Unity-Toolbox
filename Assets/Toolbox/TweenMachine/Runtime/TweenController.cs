@@ -1,49 +1,33 @@
 ﻿using System.Collections.Generic;
+using Toolbox.Other;
 using UnityEngine;
 
 namespace Toolbox.TweenMachine
 {
     public class TweenController : MonoBehaviour
     {
-        #region SINGLETON PATTERN
-        private static TweenController _instance;
-        public static TweenController Instance
-        {
-            get
-            {
-                if (_instance != null) return _instance;
-
-                _instance = GameObject.FindObjectOfType<TweenController>();
-                if (_instance != null) return _instance;
-
-                GameObject container = new GameObject("TweenMachine");
-                _instance = container.AddComponent<TweenController>();
-                return _instance;
-            }
-        }
+        public static readonly Singleton<TweenController> Singleton = new Singleton<TweenController>();
         
-        #endregion
-        
-        public List<TweenBuild> acitveTweens = new List<TweenBuild>();
-        public List<TweenBuild> doneTweens = new List<TweenBuild>();
-        private bool paused = false;
+        public List<TweenBuild> activeBuilds = new List<TweenBuild>();
+        public List<TweenBuild> doneBuilds = new List<TweenBuild>();
+        private bool _paused = false;
     
         private void Update()
         {
-            if (acitveTweens.Count <= 0) Destroy(this.gameObject);
-            if (paused) return;
+            if (activeBuilds.Count <= 0) Destroy(this.gameObject);
+            if (_paused) return;
             
             UpdateActiveTweens();
         }
     
         private void UpdateActiveTweens()
         {
-            for (int i = 0; i < acitveTweens.Count; i++)
+            for (int i = 0; i < activeBuilds.Count; i++)
             {
-                acitveTweens[i].UpdateTween(Time.deltaTime);
-                if (acitveTweens[i].tweenBuildFinished)
+                activeBuilds[i].UpdateTween(Time.deltaTime);
+                if (activeBuilds[i].IsFinished)
                 {
-                    acitveTweens.RemoveAt(i);
+                    activeBuilds.RemoveAt(i);
                     i--;
                 }
             }
@@ -51,9 +35,9 @@ namespace Toolbox.TweenMachine
 
         public void SetPaused()
         {
-            if (acitveTweens.Count >= 1)
+            if (activeBuilds.Count >= 1)
             {
-                paused = true;
+                _paused = true;
             }
         }
     }

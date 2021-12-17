@@ -1,6 +1,10 @@
 ﻿using System;
-using System.Security.Principal;
-using NUnit.Framework.Internal;
+using System.CodeDom;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Runtime.InteropServices;
+using Toolbox.MethodExtensions;
 using Toolbox.Utils;
 using UnityEditor;
 using UnityEngine;
@@ -16,12 +20,16 @@ namespace Toolbox.TweenMachine.Editor
 
         private SerializedProperty _property;
         private Rect _position;
+        private Rect _currentPosition;
         private TweenBuild _tweenBuild;
         private GameObject _myGameObject;
+        private GUIContent _label;
 
-        private Color guiColor;
-        private Color guiBackgroundColor;
-        private Color guiConentColor;
+        private Color _guiColor;
+        private Color _guiBackgroundColor;
+        private Color _guiContentColor;
+
+        private Dictionary<Type, bool> _subClassesDropdown = new Dictionary<Type, bool>();
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -30,133 +38,161 @@ namespace Toolbox.TweenMachine.Editor
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            guiColor = GUI.color;
-            guiBackgroundColor = GUI.backgroundColor;
-            guiConentColor = GUI.contentColor;
-            
-            _property = property;
-            _position = position;
-            _totalPropertyHeight = 0;
+            //repaint
+            EditorUtility.SetDirty(property.serializedObject.targetObject);
 
-            _myGameObject = GetGameObject(property);
-            _tweenBuild = GetTweenBuild(property);
+            //logic
+            Setup(position, property, label);
             if (CheckNull()) return;
 
             EditorGUI.BeginProperty(position, label, property);
 
-            Draw(position, property, label);
+            if(_tweenBuild.Drawer){Draw(position, property, label);}
+            else{ GUI.Label(_currentPosition, property.name);}
 
             EditorGUI.EndProperty();
         }
 
+        private void Setup(Rect position, SerializedProperty serializedProperty, GUIContent label)
+        {
+            _guiColor = GUI.color;
+            _guiBackgroundColor = GUI.backgroundColor;
+            _guiContentColor = GUI.contentColor;
+
+            _property = serializedProperty;
+            _position = position;
+            _position.height = 16;
+            _currentPosition = _position;
+            _totalPropertyHeight = 0;
+            _label = label;
+
+            foreach (var subClassType in typeof(TweenBase).GetDerrivedClasses())
+            {
+                if (_subClassesDropdown.ContainsKey(subClassType)) continue;
+                _subClassesDropdown.Add(subClassType, false);
+            }
+
+            var subClasses = typeof(TweenBase).GetDerrivedClasses();
+            foreach (var keyValuePair in _subClassesDropdown)
+            {
+                if (subClasses.Contains(keyValuePair.Key)) continue;
+                _subClassesDropdown.Remove(keyValuePair.Key);
+            }
+
+            _myGameObject = serializedProperty.GetGameObject();
+            _tweenBuild = serializedProperty.ToProperty<TweenBuild>();
+        }
+
         private void Draw(Rect position, SerializedProperty property, GUIContent label)
         {
-            Rect foldoutPos = new Rect(position.x, position.y, position.width, _standardPropertyHeight);
-            Rect editPos = new Rect(position.x + (position.width - 110), position.y, 110, _standardPropertyHeight);
+            if (CheckNull()) return;
 
-            // if (GUI.Button(editPos, "Open Editor..."))
-            // {
-            //     TweenBuildWindow.ShowWindow(_tweenBuild);
-            // }
-
-            EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-
-            property.isExpanded = EditorGUI.Foldout(foldoutPos, property.isExpanded, "");
-            if (property.isExpanded)
+            _property.isExpanded = DrawUtility.DrawFoldout(_currentPosition, _property.isExpanded, _label.text, () =>
             {
-                DefaultTweenValueDrawer();
+                _currentPosition.y += 16;
 
-                _tweenBuild.tweenFoldout = EditorGUI.Foldout(new Rect(position.x + 8, position.y + _totalPropertyHeight + _standardPropertyHeight, position.width, _standardPropertyHeight), _tweenBuild.tweenFoldout, "Tween values");
-                _totalPropertyHeight += _standardPropertyHeight;
-                if (_tweenBuild.tweenFoldout) TweenValueDrawer();
+                DrawDefaultClassValues();
+                DrawSubClasses();
+            });
+        }
 
-                _tweenBuild.positionFoldout = EditorGUI.Foldout(new Rect(position.x + 8, position.y + _totalPropertyHeight + _standardPropertyHeight, position.width, _standardPropertyHeight), _tweenBuild.positionFoldout, "Position values");
-                _totalPropertyHeight += _standardPropertyHeight;
-                if (_tweenBuild.positionFoldout) PositionValueDrawer();
+        private void DrawDefaultClassValues()
+        {
+            _currentPosition.x += 8;
+            _currentPosition.width -= 8;
 
-                _tweenBuild.rotationFoldout = EditorGUI.Foldout(new Rect(position.x + 8, position.y + _totalPropertyHeight + _standardPropertyHeight, position.width, _standardPropertyHeight), _tweenBuild.rotationFoldout, "Rotation values");
-                _totalPropertyHeight += _standardPropertyHeight;
-                if (_tweenBuild.rotationFoldout) RotationValueDrawer();
+            if (_tweenBuild.GameObject == null) _tweenBuild.GameObject = _myGameObject;
+            GameObject obj = DrawUtility.DrawGameObject(_currentPosition, "GameObject", _tweenBuild.GameObject, false, out var height);
+            _totalPropertyHeight += height;
+            _currentPosition.y += height;
 
-                _tweenBuild.scaleFoldout = EditorGUI.Foldout(new Rect(position.x + 8, position.y + _totalPropertyHeight + _standardPropertyHeight,position.width, _standardPropertyHeight), _tweenBuild.scaleFoldout, "Scale values");
-                _totalPropertyHeight += _standardPropertyHeight;
-                if (_tweenBuild.scaleFoldout) ScaleValueDrawer();
+            AnimationCurve curve = EditorGUI.CurveField(_currentPosition, "Curve", _tweenBuild.Curve);
+            _totalPropertyHeight += _standardPropertyHeight;
+            _currentPosition.y += _standardPropertyHeight;
 
-                _tweenBuild.colorFoldout = EditorGUI.Foldout(new Rect(position.x + 8, position.y + _totalPropertyHeight + _standardPropertyHeight, position.width, _standardPropertyHeight), _tweenBuild.colorFoldout, "Color values");
-                _totalPropertyHeight += _standardPropertyHeight;
-                if (_tweenBuild.colorFoldout) ColorValueDrawer();
+            bool paused = EditorGUI.Toggle(_currentPosition, "Paused", _tweenBuild.paused);
+            _totalPropertyHeight += _standardPropertyHeight;
+            _currentPosition.y += _standardPropertyHeight;
+        }
+
+        private void DrawSubClasses()
+        {
+            DrawSubClassDropdowns();
+        }
+
+        private void DrawSubClassDropdowns()
+        {
+            _currentPosition.x += 8;
+            _currentPosition.width -= 8;
+            foreach (var subClassType in typeof(TweenBase).GetDerrivedClasses())
+            {
+                _subClassesDropdown[subClassType] = DrawUtility.DrawFoldout(_currentPosition,
+                    _subClassesDropdown[subClassType], subClassType.Name, () =>
+                    {
+                        _currentPosition.x += 8;
+                        _currentPosition.width -= 8;
+
+                        if (_tweenBuild.tweenList.IsEmpty())
+                        {
+                            DrawAddButton(subClassType);
+
+                            _currentPosition.x -= 8;
+                            _currentPosition.width += 8;
+                            return;
+                        }
+
+                        var tweenOfSubType = _tweenBuild.tweenList.Where(tween => tween.GetType() == subClassType)
+                            .ToArray();
+                        if (tweenOfSubType.IsEmpty())
+                        {
+                            DrawAddButton(subClassType);
+
+                            _currentPosition.x -= 8;
+                            _currentPosition.width += 8;
+                            return;
+                        }
+
+                        var myTween = tweenOfSubType.First();
+                        _currentPosition.y += 16;
+                        _totalPropertyHeight += 16;
+
+                        myTween.DrawProperties(_currentPosition, out var addedHeight, out var newCurrentPosition);
+                        _currentPosition = newCurrentPosition;
+                        _totalPropertyHeight += addedHeight;
+                        
+                        _totalPropertyHeight += _standardPropertyHeight;
+                        _currentPosition.y += _standardPropertyHeight;
+                        if(GUI.Button(_currentPosition,"Remove!"))
+                        {
+                            _tweenBuild.RemoveAllTweensOfType(subClassType);
+                        }
+
+                        _currentPosition.x -= 8;
+                        _currentPosition.width += 8;
+                    });
+
+
+                _currentPosition.y += 16;
+                _totalPropertyHeight += 16;
             }
-            
-            GUI.backgroundColor = Color.red;
-            GUI.backgroundColor = guiBackgroundColor;
         }
 
-        private void DefaultTweenValueDrawer()
+        public void DrawAddButton(Type type)
         {
-            GameObject obj = _tweenBuild.GameObject == null ? _myGameObject : _tweenBuild.GameObject;
-            _tweenBuild.GameObject = InspectorTools.DrawGameObject(new Rect(_position.x + 16, _position.y + _totalPropertyHeight + _standardPropertyHeight, _position.width - 8, _standardPropertyHeight), "GameObject", obj, true, out float height);
-            _totalPropertyHeight += height + 2;
-
-            _tweenBuild.DefaultSpeed = EditorGUI.FloatField(new Rect(_position.x + 16, _position.y + _totalPropertyHeight + _standardPropertyHeight, _position.width - 8, _standardPropertyHeight), "Speed", _tweenBuild.DefaultSpeed);
-            _totalPropertyHeight += _standardPropertyHeight + 2 + _standardPropertyHeight;
-            
-            //start event
-            SerializedProperty propertyRelative;
-            SerializedEvent serializedEvent;
-            int listenerCount = 0;
-            int multiplier = 0;
-            
-            propertyRelative = _property.FindPropertyRelative("onTweenBuildStart");
-            serializedEvent = _tweenBuild.onTweenBuildStart;
-            listenerCount = serializedEvent.GetPersistentEventCount();
-            multiplier = (listenerCount <= 1) ? 0 : listenerCount - 1;
-
-            EditorGUI.PropertyField(
-                    new Rect(_position.x + 16, _position.y + _totalPropertyHeight + _standardPropertyHeight,
-                        _position.width - 30, _standardPropertyHeight), propertyRelative);
-            _totalPropertyHeight += (_standardPropertyHeight * 5) + (_standardPropertyHeight * 3 * multiplier) + 2;
-
-            //update event
-            propertyRelative = _property.FindPropertyRelative("onTweenBuildUpdate");
-            serializedEvent = _tweenBuild.onTweenBuildUpdate;
-            listenerCount = serializedEvent.GetPersistentEventCount();
-            multiplier = (listenerCount <= 1) ? 0 : listenerCount - 1;
-
-                EditorGUI.PropertyField(
-                    new Rect(_position.x + 16, _position.y + _totalPropertyHeight + (_standardPropertyHeight * 2),
-                        _position.width - 30, _standardPropertyHeight), propertyRelative);
-            _totalPropertyHeight += (_standardPropertyHeight * 5) + (_standardPropertyHeight * 3 * multiplier) + 2 + (_standardPropertyHeight);
-            //finish event
-            propertyRelative = _property.FindPropertyRelative("onTweenBuildFinish");
-            serializedEvent = _tweenBuild.onTweenBuildFinish;
-            listenerCount = serializedEvent.GetPersistentEventCount();
-            multiplier = (listenerCount <= 1) ? 0 : listenerCount - 1;
-
-            EditorGUI.PropertyField(
-                new Rect(_position.x + 16, _position.y + _totalPropertyHeight + (_standardPropertyHeight * 2),
-                    _position.width - 30, _standardPropertyHeight), propertyRelative);
-            _totalPropertyHeight += (_standardPropertyHeight * 5) + (_standardPropertyHeight * 3 * multiplier) + 2;
-            _totalPropertyHeight += _standardPropertyHeight * 2;
-        }
-
-        private void PositionValueDrawer()
-        {
-        }
-
-        private void RotationValueDrawer()
-        {
-        }
-
-        private void ScaleValueDrawer()
-        {
-        }
-
-        private void ColorValueDrawer()
-        {
-        }
-
-        private void TweenValueDrawer()
-        {
+            _currentPosition.y += 16;
+            _totalPropertyHeight += 16;
+            if (GUI.Button(_currentPosition, "Add: " + type.Name))
+            {
+                if (type.HasEmptyConstructor())
+                {
+                    if (!(Activator.CreateInstance(type) is TweenBase tween)) return;
+                    tween.gameObject = _tweenBuild.GameObject;
+                    tween.Curve = _tweenBuild.Curve;
+                    _tweenBuild.ChainAdd(tween);
+                    _totalPropertyHeight += 16;
+                    _currentPosition.y += 16;
+                }
+            }
         }
 
         private bool CheckNull()
@@ -182,25 +218,6 @@ namespace Toolbox.TweenMachine.Editor
             }
 
             return false;
-        }
-
-        private GameObject GetGameObject(SerializedProperty property)
-        {
-            var targetObject = property.serializedObject.targetObject;
-            var obj = targetObject as MonoBehaviour;
-            GameObject myGameObject = obj == null ? null : obj.gameObject;
-            return myGameObject;
-        }
-
-        private TweenBuild GetTweenBuild(SerializedProperty property)
-        {
-            var targetObject = property.serializedObject.targetObject;
-            if (targetObject == null) return null;
-            var targetObjectClassType = targetObject.GetType();
-            var field = targetObjectClassType.GetField(property.propertyPath);
-            if (field == null) return null;
-
-            return field.GetValue(targetObject) as TweenBuild;
         }
     }
 }

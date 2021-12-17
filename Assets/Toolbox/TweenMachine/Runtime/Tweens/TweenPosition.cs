@@ -1,50 +1,91 @@
 ﻿using System;
+using UnityEditor;
 using UnityEngine;
 
-namespace Toolbox.TweenMachine.Tweens
+namespace Toolbox.TweenMachine
 {
     [Serializable]
     public class TweenPosition : TweenBase
     {
-        private Vector3 startPosition;
-        private Vector3 targetPosition;
-        private Vector3 direction;
+        [SerializeReference] private Vector3 targetPosition;
 
-        //constructor
-        public TweenPosition(){}
-        public TweenPosition(GameObject gameObject, Vector3 targetPos, float speed)
+        private Vector3 _startPosition;
+        private Vector3 _direction;
+
+        /// <summary>
+        /// empty constructor
+        /// </summary>
+        public TweenPosition() { }
+
+
+        /// <summary>
+        /// Constructor for when you create it without the use of TweenBuild class and add it to the tweens in TweenBuild
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="targetPos"></param>
+        public TweenPosition(GameObject gameObject, Vector3 targetPos)
         {
             this.gameObject = gameObject;
             this.targetPosition = targetPos;
-            this.speed = speed;
-
-            this.startPosition = gameObject.transform.position;
-            this.direction = targetPos - startPosition;
-            this.percent = 0;
-        
-            this.EaseMethode = Easing.Linear;
+            this._startPosition = gameObject.transform.position;
         }
+        
+        //========== Tween logic functions ==========
 
+        public override void TweenStart()
+        {
+            this._direction = targetPosition - _startPosition;
+            this.percent = 0;
+        }
+        
         protected override void UpdateTween()
         {
-            float easingstep = EaseMethode(percent);
-            gameObject.transform.position = startPosition + (direction * easingstep);
+            if (gameObject == null) return;
+            float step = GetStep();
+            gameObject.transform.position = _startPosition + (_direction * step);
         }
-
+        
         protected override void TweenEnd()
         {
-            gameObject.transform.position = targetPosition;
+            if (gameObject == null) return;
+            gameObject.transform.position = _startPosition + (_direction * GetLastCurveValue());
         }
 
-
-        public void ChangeTarget(Vector3 targetPos, float sp)
+        //======== CHAIN SETTERS ========
+        
+        public TweenPosition ChainSetTarget(Vector3 targetPos)
         {
             this.targetPosition = targetPos;
-            this.speed = sp;
-
-            this.startPosition = gameObject.transform.position;
-            this.direction = targetPos - startPosition;
-            this.percent = 0;
+            return this;
         }
+
+        //getters & setter
+        public Vector3 Target
+        {
+            get => targetPosition;
+            set => targetPosition = value;
+        }
+        
+        #region ========== EDITOR FUNCTIONS ==========
+
+#if UNITY_EDITOR
+
+        public override void DrawProperties(Rect currentPosition, out int addedHeight, out Rect newCurrentPosition)
+        {
+            addedHeight = 0;
+            newCurrentPosition = currentPosition;
+            
+            base.DrawProperties(currentPosition, out addedHeight, out newCurrentPosition);
+            newCurrentPosition.y += 16;
+            addedHeight += 16;
+
+            targetPosition = EditorGUI.Vector3Field(newCurrentPosition, "Target vector", targetPosition);
+            newCurrentPosition.y += 32;
+            addedHeight += 32;
+        }
+
+#endif
+
+        #endregion
     }
 }

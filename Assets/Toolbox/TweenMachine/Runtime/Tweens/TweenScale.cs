@@ -1,39 +1,63 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Toolbox.TweenMachine.Tweens
+namespace Toolbox.TweenMachine
 {
     [Serializable]
     public class TweenScale : TweenBase
     {
-        private Vector3 startScale;
-        private Vector3 targetScale;
-        private Vector3 scaleDirection;
+        private Vector3 _startScale;
+        [SerializeReference] private Vector3 targetScale;
+        private Vector3 _scaleDirection;
 
-
-        public TweenScale(){}
-        public TweenScale(GameObject gameObject, Vector3 targetScale, float speed)
+        /// <summary>
+        /// empty constructor
+        /// </summary>
+        public TweenScale() { }
+        
+        /// <summary>
+        /// Constructor with targeted GameObject and target value
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="targetScale"></param>
+        public TweenScale(GameObject gameObject, Vector3 targetScale)
         {
             this.gameObject = gameObject;
-            this.startScale = gameObject.transform.localScale;
+            this._startScale = gameObject.transform.localScale;
             this.targetScale = targetScale;
-
-            scaleDirection = targetScale - startScale;
-
-            this.speed = speed;
+        }
+        
+        //========== Tween logic functions ==========
+        public override void TweenStart()
+        {
+            _scaleDirection = targetScale - _startScale; 
             this.percent = 0;
-            this.EaseMethode = Easing.Linear;
         }
 
         protected override void UpdateTween()
         {
-            float easingstep = EaseMethode(percent);
-            gameObject.transform.localScale = startScale + (scaleDirection * easingstep);
+            float step = GetStep();
+            gameObject.transform.localScale = _startScale + (_scaleDirection * step);
         }
 
         protected override void TweenEnd()
         {
-            gameObject.transform.localScale = targetScale;
+            gameObject.transform.localScale = _startScale + (_scaleDirection * GetLastCurveValue());
+        }
+        
+        //======== CHAIN SETTERS ========
+        
+        public TweenScale ChainSetTarget(Vector3 target)
+        {
+            this.targetScale = target;
+            return this;
+        }
+
+        //getters & setter
+        public Vector3 Target
+        {
+            get => targetScale;
+            set => targetScale = value;
         }
     }
 }
