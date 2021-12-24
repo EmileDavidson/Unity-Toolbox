@@ -6,7 +6,7 @@ namespace Toolbox.TweenMachine
 {
     public class TweenController : MonoBehaviour
     {
-        public static readonly Singleton<TweenController> Singleton = new Singleton<TweenController>();
+        public static readonly MonoSingleton<TweenController> MonoSingleton = new MonoSingleton<TweenController>();
         
         public List<TweenBuild> activeBuilds = new List<TweenBuild>();
         public List<TweenBuild> doneBuilds = new List<TweenBuild>();

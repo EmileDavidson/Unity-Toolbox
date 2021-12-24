@@ -201,7 +201,7 @@ namespace Toolbox.TweenMachine
                 }
             }
 
-            TweenController.Singleton.Instance.activeBuilds.Add(this);
+            TweenController.MonoSingleton.Instance.activeBuilds.Add(this);
             onTweenBuildStart.Invoke();
         }
 

@@ -1,17 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using Toolbox.MethodExtensions;
+using UnityEngine;
 
 namespace Toolbox.Other
 {
-    public class Singleton<T> where T : MonoBehaviour
+    public class Singleton<T>
     {
-        private T _instance;
-        private GameObject _container;
-        private readonly string _name;
 
-        public Singleton(string objectName = null)
-        {
-            _name = objectName;
-        }
+        private T _instance;
 
         public T Instance
         {
@@ -19,28 +15,10 @@ namespace Toolbox.Other
             {
                 if (_instance != null) return _instance;
 
-                _instance = Object.FindObjectOfType<T>();
-                if (_instance != null) return _instance;
+                if (!typeof(T).HasEmptyConstructor()) return _instance;
+                _instance = (T) Activator.CreateInstance(typeof(T));
 
-                GameObject singletonObject = new GameObject(_name ?? "Singleton: " + typeof(T).Name);
-                singletonObject.transform.parent = Container.transform;
-                _instance = singletonObject.AddComponent<T>();
                 return _instance;
-            }
-        }
-
-        public GameObject Container
-        {
-            get
-            {
-                if (_container != null) return _container;
-
-                _container = GameObject.Find("/Singletons");
-            
-                if (_container != null) return _container;
-
-                _container = new GameObject("Singletons");
-                return _container;
             }
         }
     }
