@@ -56,22 +56,32 @@ namespace Toolbox.Grid
                     cell.GridPosition = new Vector2Int(gridX, gridY);
 
                     cells.Add(cell);
-
-                    Debug.DrawLine(new Vector3(gridX + pivotPoint.x, gridY + pivotPoint.y, 0),
-                        new Vector3(gridX + pivotPoint.x, gridY + 1 + +pivotPoint.y, 0), Color.red, int.MaxValue);
-                    Debug.DrawLine(new Vector3(gridX + pivotPoint.x, gridY + pivotPoint.y, 0),
-                        new Vector3(gridX + 1 + pivotPoint.x, gridY + pivotPoint.y, 0), Color.red, int.MaxValue);
                 }
             }
-
-            // Debug.DrawLine(new Vector3(0 + pivotPoint.x, Cells.Last().GridPosition.y + 1 + pivotPoint.y, 0),
-            //     new Vector3(cells.Last().GridPosition.x + 1 + pivotPoint.x, cells.Last().GridPosition.y + 1 + pivotPoint.y, 0), Color.red, 
-            //     int.MaxValue);
-            // Debug.DrawLine(
-            //     new Vector3(cells.Last().GridPosition.x + 1 + pivotPoint.y, Cells.Last().GridPosition.y + 1, 0),
-            //     new Vector3(cells.Last().GridPosition.x + 1 + pivotPoint.x, 0 + pivotPoint.y, 0), Color.red, 
-            //     int.MaxValue);
+            LineDrawer();
             return this;
+        }
+
+        public void LineDrawer()
+        {
+            foreach (var cell in cells)
+            {
+                var gridX = cell.GridPosition.x;
+                var gridY = cell.GridPosition.y;
+                
+                Debug.DrawLine(new Vector3(gridX + pivotPoint.x, gridY + pivotPoint.y, 0),
+                    new Vector3(gridX + pivotPoint.x, gridY + 1 + +pivotPoint.y, 0), Color.red, int.MaxValue);
+                Debug.DrawLine(new Vector3(gridX + pivotPoint.x, gridY + pivotPoint.y, 0),
+                    new Vector3(gridX + 1 + pivotPoint.x, gridY + pivotPoint.y, 0), Color.red, int.MaxValue);
+            }
+            
+            Debug.DrawLine(new Vector3(0 + pivotPoint.x, Cells.Last().GridPosition.y + 1 + pivotPoint.y, 0),
+                new Vector3(cells.Last().GridPosition.x + 1 + pivotPoint.x, cells.Last().GridPosition.y + 1 + pivotPoint.y, 0), Color.red, 
+                int.MaxValue);
+            Debug.DrawLine(
+                new Vector3(cells.Last().GridPosition.x + 1 + pivotPoint.x, Cells.Last().GridPosition.y + 1 + pivotPoint.y, 0),
+                new Vector3(cells.Last().GridPosition.x + 1 + pivotPoint.x, 0 + pivotPoint.y, 0), Color.red, 
+                int.MaxValue);
         }
 
         /// <summary>
