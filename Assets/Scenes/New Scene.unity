@@ -238,7 +238,7 @@ MonoBehaviour:
   grid:
     onResetGrid:
       id: 0
-    pivotPoint: {x: 5, y: 5}
+    pivotPoint: {x: 20, y: 20}
   references:
     version: 1
     00000000:

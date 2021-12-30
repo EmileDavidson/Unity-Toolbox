@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Toolbox.Other;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Toolbox.Grid.Example.HeatmapExample
 {
@@ -11,12 +8,7 @@ namespace Toolbox.Grid.Example.HeatmapExample
 
         private void Awake()
         {
-            GridHeatmapHandler.Singleton.Instance.grids.Add(grid);
-            Grid2D<ICell2D> cell = GridHeatmapHandler.Singleton.Instance.grids[0] as Grid2D<ICell2D>;
-            
-            Debug.Log(grid);
-            Debug.Log(cell);
+            GridHeatmapHandler.Singleton.Instance.grids.Add(grid); // error Argument type 'Toolbox.Grid.Grid2D<Toolbox.Grid.Example.HeatmapExample.HeatMapCellObject>' is not assignable to parameter type 'Toolbox.Grid.Grid2D<Toolbox.Grid.ICell2D>
         }
-
     }
 }

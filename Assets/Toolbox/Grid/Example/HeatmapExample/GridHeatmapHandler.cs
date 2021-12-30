@@ -8,9 +8,7 @@ namespace Toolbox.Grid
     public class GridHeatmapHandler : MonoBehaviour
     {
         public static readonly MonoSingleton<GridHeatmapHandler> Singleton = new MonoSingleton<GridHeatmapHandler>();
-        public List<object> grids = new List<object>();
+        public Grid2DList<ICell2D> grids = new Grid2DList<ICell2D>();
 
-
-        
     }
 }

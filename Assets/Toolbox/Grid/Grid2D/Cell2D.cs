@@ -20,7 +20,7 @@ namespace Toolbox.Grid
             }
         }
         
-        int ICell2D.Index
+        int ICell.Index
         {
             get => this.Index;
             set
