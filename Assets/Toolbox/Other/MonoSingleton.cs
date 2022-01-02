@@ -1,19 +1,18 @@
-﻿using UnityEngine;
+﻿using JetBrains.Annotations;
+using Toolbox.Grid;
+using UnityEngine;
 
 namespace Toolbox.Other
 {
-    public class MonoSingleton<T> where T : MonoBehaviour
+    public class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
     {
-        private T _instance;
-        private GameObject _container;
-        private readonly string _name;
-
-        public MonoSingleton(string objectName = null)
-        {
-            _name = objectName;
-        }
-
-        public T Instance
+        private static T _instance;
+        private static GameObject _singletonContainer;
+        
+        /// <summary>
+        /// The singleton instance referring to the class
+        /// </summary>
+        public static T Instance
         {
             get
             {
@@ -22,26 +21,55 @@ namespace Toolbox.Other
                 _instance = Object.FindObjectOfType<T>();
                 if (_instance != null) return _instance;
 
-                GameObject singletonObject = new GameObject(_name ?? "Singleton: " + typeof(T).Name);
-                singletonObject.transform.parent = Container.transform;
+                GameObject singletonObject = new GameObject("Singleton: " + typeof(T).Name);
+                singletonObject.transform.parent = MonoSingleton<T>.SingletonContainer.transform;
                 _instance = singletonObject.AddComponent<T>();
                 return _instance;
             }
         }
 
-        private GameObject Container
+        /// <summary>
+        /// Container for all singletons created if they didn't exists yet
+        /// </summary>
+        public static GameObject SingletonContainer
         {
             get
             {
-                if (_container != null) return _container;
+                if (_singletonContainer != null) return _singletonContainer;
 
-                _container = GameObject.Find("/Singletons");
+                _singletonContainer = GameObject.Find("/Singletons");
 
-                if (_container != null) return _container;
+                if (_singletonContainer != null) return _singletonContainer;
 
-                _container = new GameObject("Singletons");
-                return _container;
+                _singletonContainer = new GameObject("Singletons");
+                return _singletonContainer;
             }
+        }
+
+        /// <summary>
+        /// start logic
+        /// if the game starts and this component is not the instance of the static instance we remove it because a singleton can only have one 
+        /// </summary>
+        private void Awake()
+        {
+            if (_instance != null && _instance != this)
+            {
+                if (Application.isPlaying) Destroy(gameObject);
+                else DestroyImmediate(gameObject);
+
+                return;
+            }
+
+            _instance = this as T;
+            Init();
+        }
+
+        /// <summary>
+        /// Awake Initializing 
+        /// </summary>
+        [PublicAPI]
+        public virtual void Init()
+        {
         }
     }
 }

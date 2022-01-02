@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace Toolbox.Grid
 {
     [Serializable]
-    public class Grid3D<T> where T : ICell3D
+    public class Grid3D<T> where T : ICell
     {
         [field: SerializeReference] public List<T> cells = new List<T>();
         [SerializeReference] public UnityEvent onResetGrid = new UnityEvent();
@@ -97,7 +97,7 @@ namespace Toolbox.Grid
         public Type CellType => cellType;
 
         //========== helping methods ===========
-        public bool IsBorder(ICell3D cell3D, out BorderType type)
+        public bool IsBorder(ICell cell3D, out BorderType type)
         {
             type = BorderType.NONE;
 
@@ -140,7 +140,7 @@ namespace Toolbox.Grid
             return false;
         }
 
-        public bool IsCorner(ICell3D cell3D, out CornerType type)
+        public bool IsCorner(ICell cell3D, out CornerType type)
         {
             type = CornerType.NONE;
             var x = cell3D.GridPosition.x;

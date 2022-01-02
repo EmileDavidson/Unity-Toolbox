@@ -4,10 +4,8 @@ using UnityEngine;
 
 namespace Toolbox.TweenMachine
 {
-    public class TweenController : MonoBehaviour
+    public class TweenController : MonoSingleton<TweenController>
     {
-        public static readonly MonoSingleton<TweenController> MonoSingleton = new MonoSingleton<TweenController>();
-        
         public List<TweenBuild> activeBuilds = new List<TweenBuild>();
         public List<TweenBuild> doneBuilds = new List<TweenBuild>();
         private bool _paused = false;

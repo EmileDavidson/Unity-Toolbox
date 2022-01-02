@@ -10,7 +10,7 @@ using Debug = UnityEngine.Debug;
 namespace Toolbox.Grid
 {
     [Serializable]
-    public class Grid2D<T> where T : ICell2D
+    public class Grid2D<T> where T : ICell
     {
         [field: SerializeReference] public List<T> cells = new List<T>();
         [SerializeReference] public UnityEvent onResetGrid = new UnityEvent();
@@ -53,7 +53,7 @@ namespace Toolbox.Grid
 
                     T cell = (T)Activator.CreateInstance(typeof(T));
                     cell.Index = index;
-                    cell.GridPosition = new Vector2Int(gridX, gridY);
+                    cell.GridPosition = new Vector3Int(gridX, gridY, 0);
 
                     cells.Add(cell);
                 }

@@ -4,14 +4,15 @@ using UnityEngine;
 
 namespace Toolbox.Grid
 {
-    public class Cell3D : ICell3D
+    public class Cell3D : ICell
     {
         [SerializeReference] private Action _onValueChange;
         [field: SerializeReference] private Vector3Int GridPosition { get; set; }
+        public int TestValue { get; set; }
         [field: SerializeReference] private int Index { get; set ; }
 
 
-        Vector3Int ICell3D.GridPosition
+        Vector3Int ICell.GridPosition
         {
             get => this.GridPosition;
             set
