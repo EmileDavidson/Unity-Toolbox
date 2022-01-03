@@ -8,7 +8,6 @@ namespace Toolbox.Grid
     {
         [SerializeReference] private Action _onValueChange;
         [field: SerializeReference] private Vector3Int GridPosition { get; set; }
-        public int TestValue { get; set; }
         [field: SerializeReference] private int Index { get; set ; }
 
 
