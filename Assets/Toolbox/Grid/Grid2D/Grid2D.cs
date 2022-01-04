@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using Toolbox.Grid;
 using UnityEngine.Events;
 using Debug = UnityEngine.Debug;
 
@@ -117,64 +115,12 @@ namespace Toolbox.Grid
         //========== helping methods ===========
         public bool IsBorder(Cell2D cell, out BorderType type)
         {
-            type = BorderType.NONE;
-
-            if (cell.GridPosition.x == 0)
-            {
-                type = BorderType.Left;
-                return true;
-            }
-
-            if (cell.GridPosition.y == 0)
-            {
-                type = BorderType.Top;
-                return true;
-            }
-
-            if (cell.GridPosition.y == Width - 1)
-            {
-                type = BorderType.Bottom;
-                return true;
-            }
-
-            if (cell.GridPosition.x == Height - 1)
-            {
-                type = BorderType.Right;
-                return true;
-            }
-
-            return false;
+            return GridHelper.IsBorder(cell, out type, Width, Height);
         }
 
         public bool IsCorner(Cell2D cell, out CornerType type)
         {
-            type = CornerType.NONE;
-
-            if (cell.GridPosition.x == 0 && cell.GridPosition.y == 0)
-            {
-                type = CornerType.TopLeft;
-                return true;
-            }
-
-            if (cell.GridPosition.x == Height - 1 && cell.GridPosition.y == 0)
-            {
-                type = CornerType.TopRight;
-                return true;
-            }
-
-            if (cell.GridPosition.x == Height - 1 && cell.GridPosition.y == Width - 1)
-            {
-                type = CornerType.BottomRight;
-                return true;
-            }
-
-            if (cell.GridPosition.x == 0 && cell.GridPosition.y == Width - 1)
-            {
-                type = CornerType.BottomLeft;
-                return true;
-            }
-
-            return false;
+            return GridHelper.IsCorner(cell, out type, Width, Height);
         }
     }
 }

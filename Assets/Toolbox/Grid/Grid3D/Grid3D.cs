@@ -23,7 +23,7 @@ namespace Toolbox.Grid
         [field: Min(0)]
         [field: SerializeReference]
         public int Depth { get; private set; }
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -37,7 +37,7 @@ namespace Toolbox.Grid
             this.Height = yAmount;
             this.Depth = zAmount;
             cellType = typeof(T);
-            if(generate) GenerateGrid();
+            if (generate) GenerateGrid();
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Toolbox.Grid
         {
             ResetGrid();
 
-            int cellIndex = 0;    
+            int cellIndex = 0;
             for (int gridZ = 0; gridZ < Depth; gridZ++)
             {
                 for (int gridY = 0; gridY < Height; gridY++)
@@ -65,6 +65,7 @@ namespace Toolbox.Grid
                     }
                 }
             }
+
             return this;
         }
 
@@ -74,11 +75,11 @@ namespace Toolbox.Grid
         /// <returns></returns>
         public Grid3D<T> ResetGrid()
         {
-            onResetGrid.Invoke();   
+            onResetGrid.Invoke();
             cells.Clear();
             return this;
         }
-        
+
         //========== getters && Setters ===========
         public List<T> Cells => cells;
 
@@ -97,106 +98,14 @@ namespace Toolbox.Grid
         public Type CellType => cellType;
 
         //========== helping methods ===========
-        public bool IsBorder(ICell cell3D, out BorderType type)
+        public bool IsBorder(ICell cell, out BorderType type)
         {
-            type = BorderType.NONE;
-
-            if (cell3D.GridPosition.z == 0)
-            {
-                type = BorderType.front;
-                return true;
-            }
-
-            if (cell3D.GridPosition.z == Depth - 1)
-            {
-                type = BorderType.back;
-                return true;
-            }
-
-            if (cell3D.GridPosition.y == Height - 1)
-            {
-                type = BorderType.Top;
-                return true;
-            }
-
-            if (cell3D.GridPosition.y == 0)
-            {
-                type = BorderType.Bottom;
-                return true;
-            }
-
-            if (cell3D.GridPosition.x == 0)
-            {
-                type = BorderType.Left;
-                return true;
-            }
-
-            if (cell3D.GridPosition.x == Width - 1)
-            {
-                type = BorderType.Right;
-                return true;
-            }
-
-            return false;
+            return GridHelper.IsBorder(cell, out type, Width, Height, Depth);
         }
 
-        public bool IsCorner(ICell cell3D, out CornerType type)
+        public bool IsCorner(ICell cell, out CornerType type)
         {
-            type = CornerType.NONE;
-            var x = cell3D.GridPosition.x;
-            var y = cell3D.GridPosition.y;
-            var z = cell3D.GridPosition.z;
-
-            if (x == 0 && y == 0 && z == 0)
-            {
-                type = CornerType.BottomLeft;
-                return true;
-            }
-
-            if (x == Width - 1 && y == 0 && z == 0)
-            {
-                type = CornerType.BottomRight;
-                return true;
-            }
-
-            if (x == Width - 1 && y == 0 && z == Depth - 1)
-            {
-                type = CornerType.TopRight;
-                return true;
-            }
-
-            if (x == 0 && y == 0 && z == Depth - 1)
-            {
-                type = CornerType.TopLeft;
-                return true;
-            }
-            
-            //3d
-            if (x == 0 && y == Height - 1 && z == 0)
-            {
-                type = CornerType.TopBottomLeft;
-                return true;
-            }
-
-            if (x == Width - 1 && y == Height - 1 && z == 0)
-            {
-                type = CornerType.TopBottomRight;
-                return true;
-            }
-
-            if (x == Width - 1 && y == Height - 1 && z == Depth - 1)
-            {
-                type = CornerType.TopTopRight;
-                return true;
-            }
-
-            if (x == 0 && y == Height - 1 && z == Depth - 1)
-            {
-                type = CornerType.TopTopLeft;
-                return true;
-            }
-            
-            return false;
+            return GridHelper.IsCorner(cell, out type, Width, Height, Depth);
         }
     }
 }

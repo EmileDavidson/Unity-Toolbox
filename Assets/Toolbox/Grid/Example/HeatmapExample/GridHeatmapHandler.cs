@@ -1,33 +1,29 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Toolbox.MethodExtensions;
-using Toolbox.Other;
-using UnityEngine;
 
 namespace Toolbox.Grid
 {
-    public class GridHeatmapHandler : SingletonMonoGridHandler<GridHeatmapHandler>
+    public class GridHeatmapHandler : MonoSingletonGridHandler<GridHeatmapHandler>
     {
         public override bool AddGrid<T>(Grid2D<T> grid)
         {
+            if (!typeof(T).GetInterfaces().Contains(typeof(ICell))) return false;
             if (!typeof(T).GetInterfaces().Contains(typeof(IHeatMapCell))) return false;
-            _grids.Add(grid);
+            
+            //base.AddGrid(grid) handles all the adding im using this so I can't forget something
+            base.AddGrid(grid);
             return true;
         }
 
-        public IHeatMapCell GetHeatCell<T>(int gridIndex, int cellIndex) where T : IHeatMapCell
+        public IHeatMapCell GetHeatCell(int gridIndex, int cellIndex)
         {
-            if (!_grids.ContainsSlot(gridIndex)) return null;
-            Grid2D<T> grid = _grids.Get(gridIndex) as Grid2D<T>;
-            if (grid == null) return null;
-            if (!grid.cells.ContainsSlot(cellIndex)) return null;
+            if (!gridsCellsList.ContainsSlot(gridIndex)) return null;
+            List<IHeatMapCell> heatCellList = gridsCellsList.Get(gridIndex).ConvertListItemsTo<ICell, IHeatMapCell>();
+            if (heatCellList == null) return null;
+            if (!heatCellList.ContainsSlot(cellIndex)) return null;
 
-            return grid.cells.Get(cellIndex) as IHeatMapCell;
-        }
-
-        public void Damn()
-        {
+            return heatCellList.Get(cellIndex);
         }
     }
 }
