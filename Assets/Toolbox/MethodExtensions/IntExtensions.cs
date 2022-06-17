@@ -20,7 +20,7 @@ namespace Toolbox.MethodExtensions
         /// <returns></returns>
         public static int[] FindClosestIndex(this int current, int[] arr)
         {
-            if (arr.IsEmpty()) return new []{current};
+            if (arr.IsEmpty()) throw new System.IndexOutOfRangeException("Cannot get closest number from an empty list");
             if (arr.Contains(current)) return new []{current};
             if (arr.Length == 1) return new []{arr[0]};
 
