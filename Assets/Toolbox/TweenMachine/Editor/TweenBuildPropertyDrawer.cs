@@ -33,13 +33,16 @@ namespace Toolbox.TweenMachine.Editor
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
+            _tweenBuild ??= property.ToProperty<TweenBuild>();
+            if (!_tweenBuild.Drawer) return 0;
             return _totalPropertyHeight + _standardPropertyHeight;
         }
+        
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             //repaint
-            EditorUtility.SetDirty(property.serializedObject.targetObject);
+            // EditorUtility.SetDirty(property.serializedObject.targetObject);
 
             //logic
             Setup(position, property, label);
@@ -48,7 +51,6 @@ namespace Toolbox.TweenMachine.Editor
             EditorGUI.BeginProperty(position, label, property);
 
             if(_tweenBuild.Drawer){Draw(position, property, label);}
-            else{ GUI.Label(_currentPosition, property.name);}
 
             EditorGUI.EndProperty();
         }
