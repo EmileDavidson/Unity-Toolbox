@@ -2,7 +2,7 @@
 using Toolbox.Other;
 using UnityEngine;
 
-namespace Toolbox.TweenMachine
+namespace Toolbox.Optional.TweenMachine
 {
     public class TweenController : MonoSingleton<TweenController>
     {

@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Toolbox.TweenMachine
+namespace Toolbox.Optional.TweenMachine
 {
     public class Tween : TweenBase
     {

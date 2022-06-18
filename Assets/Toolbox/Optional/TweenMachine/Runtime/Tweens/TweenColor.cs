@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Reflection;
 using Toolbox.MethodExtensions;
 using UnityEngine;
 
-namespace Toolbox.TweenMachine
+namespace Toolbox.Optional.TweenMachine
 {
     [Serializable]
     public class TweenColor : TweenBase

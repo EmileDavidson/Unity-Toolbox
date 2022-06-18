@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Toolbox.TweenMachine
+namespace Toolbox.Optional.TweenMachine
 {
     public class TweenTester : MonoBehaviour
     {

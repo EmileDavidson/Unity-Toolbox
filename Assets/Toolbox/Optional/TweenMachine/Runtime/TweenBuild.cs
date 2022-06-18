@@ -7,7 +7,7 @@ using Toolbox.MethodExtensions;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Toolbox.TweenMachine
+namespace Toolbox.Optional.TweenMachine
 {
     [Serializable]
     public class TweenBuild

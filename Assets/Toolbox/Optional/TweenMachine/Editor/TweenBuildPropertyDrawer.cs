@@ -1,16 +1,12 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Runtime.InteropServices;
 using Toolbox.MethodExtensions;
 using Toolbox.Utils;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-namespace Toolbox.TweenMachine.Editor
+namespace Toolbox.Optional.TweenMachine.Editor
 {
     [CustomPropertyDrawer(typeof(TweenBuild))]
     public class TweenBuildPropertyDrawer : PropertyDrawer

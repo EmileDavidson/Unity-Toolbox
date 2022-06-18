@@ -43,11 +43,13 @@ namespace Toolbox.Utils
 
         private static Texture2D _arrowDownTexture2D;
 
+        //todo: ADD WHEN THE TEXTURE IS NOT FOUND IN ASSET PATH WE LOAD A ' BLANK 1PX TEXTURE ' THIS PREVENTS ERRORS 
+        //LOG A WARNING IN THE CONSOLE THAT TEXTURE PATH WAS NOT FOUND AND RE-CHECK EVERY TIME ITS REQUESTED AGAIN 
         public static Texture2D ArrowDownTexture2D
         {
             get
             {
-                var texture = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Toolbox/Resources/icons/small/icon dropdown.png");
+                var texture = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Toolbox/Required/Resources/icons/small/icon dropdown.png");
                 _arrowDownTexture2D = texture;
 
                 return _arrowDownTexture2D;
@@ -61,7 +63,7 @@ namespace Toolbox.Utils
             get
             {
                 if (_arrowRightTexture2D != null) return _arrowRightTexture2D;
-                var texture = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Toolbox/Resources/icons/small/icon dropdown.png");
+                var texture = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Toolbox/Required/Resources/icons/small/icon dropdown.png");
                 texture = texture.RotateTexture();
                 _arrowRightTexture2D = texture;
                 

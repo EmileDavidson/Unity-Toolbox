@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using Toolbox.Animation;
 using Toolbox.MethodExtensions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Toolbox.TweenMachine
+namespace Toolbox.Optional.TweenMachine
 {
     /// <summary>
     /// TweenBase is the base of the Tween classes the generic it needs is the generic of the Inheritance class.
