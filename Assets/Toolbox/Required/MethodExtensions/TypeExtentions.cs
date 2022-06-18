@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-namespace Toolbox.MethodExtensions
+namespace Toolbox.Required
 {
     public static class TypeExtentions
     {

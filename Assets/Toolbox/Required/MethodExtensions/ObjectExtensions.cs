@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Toolbox.MethodExtensions
+namespace Toolbox.Required
 {
     public static class ObjectExtensions
     {

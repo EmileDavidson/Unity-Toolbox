@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using Random = System.Random;
 
-namespace Toolbox.MethodExtensions
+namespace Toolbox.Required
 {
     public static class ListExtensions
     {

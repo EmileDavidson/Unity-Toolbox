@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Toolbox.Utils
+namespace Toolbox.Required
 {
     /// <summary>
     /// A set of methods that simplify drawing of button controls.

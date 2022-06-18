@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Toolbox.Animation;
-using Toolbox.MethodExtensions;
+using Toolbox.Required;
 using UnityEngine;
 using UnityEngine.Events;
 

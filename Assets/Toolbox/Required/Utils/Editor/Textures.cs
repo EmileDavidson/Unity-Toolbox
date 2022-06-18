@@ -1,7 +1,6 @@
-﻿using Toolbox.MethodExtensions;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Toolbox.Utils
+namespace Toolbox.Required
 {
     public static class Textures
     {

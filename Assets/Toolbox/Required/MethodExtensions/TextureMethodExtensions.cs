@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace Toolbox.MethodExtensions
+namespace Toolbox.Required
 {
     public static class TextureMethodExtensions
     {
