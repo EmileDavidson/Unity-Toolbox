@@ -1,5 +1,5 @@
 ﻿using System;
-using Toolbox.MethodExtensions;
+using Toolbox.Required;
 using UnityEngine;
 
 namespace Toolbox.Optional.TweenMachine

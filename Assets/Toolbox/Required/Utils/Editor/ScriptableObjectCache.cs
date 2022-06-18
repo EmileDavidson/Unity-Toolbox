@@ -5,11 +5,10 @@ using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
 using Toolbox.Attributes;
-using Toolbox.MethodExtensions;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Toolbox.Utils
+namespace Toolbox.Required
 {
     internal static class ScriptableObjectCache
     {

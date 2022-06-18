@@ -1,9 +1,7 @@
-﻿using System;
-using JetBrains.Annotations;
-using Toolbox.Animation;
+﻿using Toolbox.Animation;
 using UnityEngine;
 
-namespace Toolbox.MethodExtensions
+namespace Toolbox.Required
 {
     public static class AnimationCurveExtensions
     {

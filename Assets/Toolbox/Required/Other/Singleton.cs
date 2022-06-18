@@ -1,8 +1,6 @@
 ﻿using System;
-using Toolbox.MethodExtensions;
-using UnityEngine;
 
-namespace Toolbox.Other
+namespace Toolbox.Required
 {
     public class Singleton<T>
     {

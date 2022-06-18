@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Toolbox.Grid.Example.HeatmapExample;
-using Toolbox.MethodExtensions;
 using Toolbox.Other;
+using Toolbox.Required;
 using UnityEngine.Events;
 
 namespace Toolbox.Grid
