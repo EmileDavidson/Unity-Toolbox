@@ -1,5 +1,4 @@
-﻿using Toolbox.Editor;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace Toolbox.Attributes

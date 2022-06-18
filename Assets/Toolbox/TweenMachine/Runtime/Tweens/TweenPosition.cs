@@ -80,8 +80,6 @@ namespace Toolbox.TweenMachine
             addedHeight += 16;
 
             targetPosition = EditorGUI.Vector3Field(newCurrentPosition, "Target vector", targetPosition);
-            newCurrentPosition.y += 32;
-            addedHeight += 32;
         }
 
 #endif

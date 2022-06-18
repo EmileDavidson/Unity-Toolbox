@@ -44,5 +44,13 @@ namespace Toolbox.MethodExtensions
             curve = new AnimationCurve(newCurve.keys);
             return curve;
         }
+
+        public static AnimationCurve Clone(this AnimationCurve oldCurve)
+        {
+            var clonedCurve = new AnimationCurve();
+            clonedCurve.keys = (Keyframe[]) oldCurve.keys.Clone();
+
+            return clonedCurve;
+        }
     }
 }

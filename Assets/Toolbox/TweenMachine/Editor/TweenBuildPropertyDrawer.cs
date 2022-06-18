@@ -30,6 +30,8 @@ namespace Toolbox.TweenMachine.Editor
         private Color _guiContentColor;
 
         private Dictionary<Type, bool> _subClassesDropdown = new Dictionary<Type, bool>();
+        private List<Type> subclasses = new List<Type>();
+        private bool initialized = false;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -37,58 +39,66 @@ namespace Toolbox.TweenMachine.Editor
             if (!_tweenBuild.Drawer) return 0;
             return _totalPropertyHeight + _standardPropertyHeight;
         }
-        
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            //repaint
-            // EditorUtility.SetDirty(property.serializedObject.targetObject);
-
-            //logic
+            if (!initialized) Initialize(position, property, label);
             Setup(position, property, label);
+            
             if (CheckNull()) return;
-
             EditorGUI.BeginProperty(position, label, property);
 
-            if(_tweenBuild.Drawer){Draw(position, property, label);}
-
+            if (_tweenBuild.Drawer)
+            {
+                Draw(position, property, label);
+            }
+            
             EditorGUI.EndProperty();
         }
 
-        private void Setup(Rect position, SerializedProperty serializedProperty, GUIContent label)
+        /// <summary>
+        /// Runs everytime the object gets selected
+        /// </summary>
+        private void Initialize(Rect position, SerializedProperty serializedProperty, GUIContent label)
         {
             _guiColor = GUI.color;
             _guiBackgroundColor = GUI.backgroundColor;
             _guiContentColor = GUI.contentColor;
-
+            
             _property = serializedProperty;
             _position = position;
-            _position.height = 16;
-            _currentPosition = _position;
-            _totalPropertyHeight = 0;
             _label = label;
 
+            _myGameObject = serializedProperty.GetGameObject();
+            _tweenBuild = serializedProperty.ToProperty<TweenBuild>();
+            subclasses = typeof(TweenBase).GetDerrivedClasses();
+            
             foreach (var subClassType in typeof(TweenBase).GetDerrivedClasses())
             {
                 if (_subClassesDropdown.ContainsKey(subClassType)) continue;
                 _subClassesDropdown.Add(subClassType, false);
             }
-
-            var subClasses = typeof(TweenBase).GetDerrivedClasses();
+            
             foreach (var keyValuePair in _subClassesDropdown)
             {
-                if (subClasses.Contains(keyValuePair.Key)) continue;
+                if (subclasses.Contains(keyValuePair.Key)) continue;
                 _subClassesDropdown.Remove(keyValuePair.Key);
             }
+            
+            initialized = true;
+        }
 
-            _myGameObject = serializedProperty.GetGameObject();
-            _tweenBuild = serializedProperty.ToProperty<TweenBuild>();
+        private void Setup(Rect position, SerializedProperty serializedProperty, GUIContent label)
+        {
+            _position = position;
+            
+            _position.height = 16;
+            _currentPosition = _position;
+            _totalPropertyHeight = 0;
         }
 
         private void Draw(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (CheckNull()) return;
-
             _property.isExpanded = DrawUtility.DrawFoldout(_currentPosition, _property.isExpanded, _label.text, () =>
             {
                 _currentPosition.y += 16;
@@ -108,43 +118,29 @@ namespace Toolbox.TweenMachine.Editor
             _totalPropertyHeight += height;
             _currentPosition.y += height;
 
-            AnimationCurve curve = EditorGUI.CurveField(_currentPosition, "Curve", _tweenBuild.Curve);
+            _tweenBuild.Curve = EditorGUI.CurveField(_currentPosition, "Curve", _tweenBuild.Curve);
             _totalPropertyHeight += _standardPropertyHeight;
             _currentPosition.y += _standardPropertyHeight;
 
-            bool paused = EditorGUI.Toggle(_currentPosition, "Paused", _tweenBuild.paused);
+            _tweenBuild.paused = EditorGUI.Toggle(_currentPosition, "Paused", _tweenBuild.paused);
             _totalPropertyHeight += _standardPropertyHeight;
             _currentPosition.y += _standardPropertyHeight;
         }
+
+
 
         private void DrawSubClasses()
         {
-            DrawSubClassDropdowns();
-        }
-
-        private void DrawSubClassDropdowns()
-        {
             _currentPosition.x += 8;
             _currentPosition.width -= 8;
-            foreach (var subClassType in typeof(TweenBase).GetDerrivedClasses())
+            foreach (var subClassType in subclasses)
             {
-                _subClassesDropdown[subClassType] = DrawUtility.DrawFoldout(_currentPosition,
-                    _subClassesDropdown[subClassType], subClassType.Name, () =>
+                _subClassesDropdown[subClassType] = DrawUtility.DrawFoldout(_currentPosition, _subClassesDropdown[subClassType], subClassType.Name, () =>
                     {
                         _currentPosition.x += 8;
                         _currentPosition.width -= 8;
 
-                        if (_tweenBuild.tweenList.IsEmpty())
-                        {
-                            DrawAddButton(subClassType);
-
-                            _currentPosition.x -= 8;
-                            _currentPosition.width += 8;
-                            return;
-                        }
-
-                        var tweenOfSubType = _tweenBuild.tweenList.Where(tween => tween.GetType() == subClassType)
-                            .ToArray();
+                        var tweenOfSubType = _tweenBuild.tweenList.Where(tween => tween.GetType() == subClassType).ToArray();
                         if (tweenOfSubType.IsEmpty())
                         {
                             DrawAddButton(subClassType);
@@ -164,10 +160,8 @@ namespace Toolbox.TweenMachine.Editor
                         
                         _totalPropertyHeight += _standardPropertyHeight;
                         _currentPosition.y += _standardPropertyHeight;
-                        if(GUI.Button(_currentPosition,"Remove!"))
-                        {
-                            _tweenBuild.RemoveAllTweensOfType(subClassType);
-                        }
+                        
+                        if(GUI.Button(_currentPosition,"Remove")) _tweenBuild.RemoveAllTweensOfType(subClassType);
 
                         _currentPosition.x -= 8;
                         _currentPosition.width += 8;
@@ -189,7 +183,7 @@ namespace Toolbox.TweenMachine.Editor
                 {
                     if (!(Activator.CreateInstance(type) is TweenBase tween)) return;
                     tween.gameObject = _tweenBuild.GameObject;
-                    tween.Curve = _tweenBuild.Curve;
+                    tween.Curve = _tweenBuild.Curve.Clone();
                     _tweenBuild.ChainAdd(tween);
                     _totalPropertyHeight += 16;
                     _currentPosition.y += 16;
@@ -197,17 +191,22 @@ namespace Toolbox.TweenMachine.Editor
             }
         }
 
+        /// <summary>
+        /// Checks if something of the data that is needed is null
+        /// if it is it logs HelpBox in the Inspector and return true 
+        /// </summary>
+        /// <returns></returns>
         private bool CheckNull()
         {
             bool nullStatus = false;
 
-            if (_tweenBuild == null)
+            if (_tweenBuild is null)
             {
                 EditorGUI.HelpBox(_position, "TweenBuild is null", MessageType.Error);
                 nullStatus = true;
             }
 
-            if (_myGameObject == null)
+            if (_myGameObject is null)
             {
                 EditorGUI.HelpBox(_position, "myGameObject is null", MessageType.Error);
                 nullStatus = true;

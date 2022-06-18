@@ -156,7 +156,7 @@ namespace Toolbox.TweenMachine
             newCurrentPosition.y += 16;
             addedHeight += 16;
 
-            Curve = EditorGUI.CurveField(newCurrentPosition, "Curve", Curve);
+            Curve = EditorGUI.CurveField(newCurrentPosition, "Curve", this.Curve);
         }
 
 #endif
