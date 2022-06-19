@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.EnterpriseServices;
 using System.Linq;
 using Toolbox.Required;
 using UnityEditor;
@@ -27,6 +28,11 @@ namespace Toolbox.Optional.TweenMachine.Editor
         private Dictionary<Type, bool> _subClassesDropdown = new Dictionary<Type, bool>();
         private List<Type> subclasses = new List<Type>();
         private bool initialized = false;
+
+        private List<Type> _ignoredTypes = new List<Type>()
+        {
+            typeof(Tween)
+        };
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -130,6 +136,7 @@ namespace Toolbox.Optional.TweenMachine.Editor
             _currentPosition.width -= 8;
             foreach (var subClassType in subclasses)
             {
+                if(_ignoredTypes.Contains(subClassType)) continue;
                 _subClassesDropdown[subClassType] = DrawUtility.DrawFoldout(_currentPosition, _subClassesDropdown[subClassType], subClassType.Name, () =>
                     {
                         _currentPosition.x += 8;
@@ -148,7 +155,7 @@ namespace Toolbox.Optional.TweenMachine.Editor
                         var myTween = tweenOfSubType.First();
                         _currentPosition.y += 16;
                         _totalPropertyHeight += 16;
-
+                        
                         myTween.DrawProperties(_currentPosition, out var addedHeight, out var newCurrentPosition);
                         _currentPosition = newCurrentPosition;
                         _totalPropertyHeight += addedHeight;
@@ -174,6 +181,7 @@ namespace Toolbox.Optional.TweenMachine.Editor
             _totalPropertyHeight += 16;
             if (GUI.Button(_currentPosition, "Add: " + type.Name))
             {
+                Debug.Log("CLICKED");
                 if (type.HasEmptyConstructor())
                 {
                     if (!(Activator.CreateInstance(type) is TweenBase tween)) return;

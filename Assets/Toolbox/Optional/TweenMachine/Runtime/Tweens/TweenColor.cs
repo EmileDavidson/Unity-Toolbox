@@ -1,5 +1,6 @@
 ﻿using System;
 using Toolbox.Required;
+using UnityEditor;
 using UnityEngine;
 
 namespace Toolbox.Optional.TweenMachine
@@ -34,8 +35,10 @@ namespace Toolbox.Optional.TweenMachine
             this.gameObject = gameObject;
             this.targetColor = targetColor;
         }
+        
 
         //========== Tween logic functions ==========
+
         public override void TweenStart()
         {
             _renderer = gameObject.GetOrAddComponent<Renderer>();
@@ -89,6 +92,23 @@ namespace Toolbox.Optional.TweenMachine
             get => targetColor;
             set => targetColor = value;
         }
+        
+        
+        #if UNITY_EDITOR
+        
+        public override void DrawProperties(Rect currentPosition, out int addedHeight, out Rect newCurrentPosition)
+        {
+            addedHeight = 0;
+            newCurrentPosition = currentPosition;
+            
+            base.DrawProperties(currentPosition, out addedHeight, out newCurrentPosition);
+            newCurrentPosition.y += 16;
+            addedHeight += 16;
+
+            targetColor = EditorGUI.ColorField(newCurrentPosition, targetColor);
+        }
+        
+        #endif
 
     }
 }

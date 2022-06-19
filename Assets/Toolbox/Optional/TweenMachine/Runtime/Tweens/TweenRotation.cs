@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace Toolbox.Optional.TweenMachine
@@ -31,6 +32,8 @@ namespace Toolbox.Optional.TweenMachine
         //========== Tween logic functions ==========
         public override void TweenStart()
         {
+            _startRotation = gameObject.transform.rotation.eulerAngles;
+            
             this._direction.x = targetRotation.x - _startRotation.x;
             this._direction.y = targetRotation.y - _startRotation.y;
             this._direction.z = targetRotation.z - _startRotation.z;
@@ -71,5 +74,20 @@ namespace Toolbox.Optional.TweenMachine
             set => targetRotation = value;
         }
 
+#if UNITY_EDITOR
+        
+        public override void DrawProperties(Rect currentPosition, out int addedHeight, out Rect newCurrentPosition)
+        {
+            addedHeight = 0;
+            newCurrentPosition = currentPosition;
+            
+            base.DrawProperties(currentPosition, out addedHeight, out newCurrentPosition);
+            newCurrentPosition.y += 16;
+            addedHeight += 16;
+
+            targetRotation = EditorGUI.Vector3Field(newCurrentPosition, "Target Vector",targetRotation);
+        }
+        
+#endif
     }
 }

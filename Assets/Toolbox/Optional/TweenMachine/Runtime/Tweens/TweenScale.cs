@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace Toolbox.Optional.TweenMachine
@@ -13,7 +14,9 @@ namespace Toolbox.Optional.TweenMachine
         /// <summary>
         /// empty constructor
         /// </summary>
-        public TweenScale() { }
+        public TweenScale()
+        {
+        }
         
         /// <summary>
         /// Constructor with targeted GameObject and target value
@@ -23,13 +26,14 @@ namespace Toolbox.Optional.TweenMachine
         public TweenScale(GameObject gameObject, Vector3 targetScale)
         {
             this.gameObject = gameObject;
-            this._startScale = gameObject.transform.localScale;
             this.targetScale = targetScale;
         }
         
         //========== Tween logic functions ==========
         public override void TweenStart()
         {
+            _startScale = gameObject.transform.localScale;
+            
             _scaleDirection = targetScale - _startScale; 
             this.percent = 0;
         }
@@ -59,6 +63,22 @@ namespace Toolbox.Optional.TweenMachine
             get => targetScale;
             set => targetScale = value;
         }
+        
+#if UNITY_EDITOR
+        
+        public override void DrawProperties(Rect currentPosition, out int addedHeight, out Rect newCurrentPosition)
+        {
+            addedHeight = 0;
+            newCurrentPosition = currentPosition;
+            
+            base.DrawProperties(currentPosition, out addedHeight, out newCurrentPosition);
+            newCurrentPosition.y += 16;
+            addedHeight += 16;
+
+            targetScale = EditorGUI.Vector3Field(newCurrentPosition, "Target Vector", targetScale);
+        }
+        
+#endif
     }
 }
 

@@ -30,10 +30,12 @@ namespace Toolbox.Optional.TweenMachine
             this._startPosition = gameObject.transform.position;
         }
         
+
         //========== Tween logic functions ==========
 
         public override void TweenStart()
         {
+            this._startPosition = gameObject.transform.position;
             this._direction = targetPosition - _startPosition;
             this.percent = 0;
         }

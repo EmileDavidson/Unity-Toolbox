@@ -1,5 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
+using UnityEditor;
 using UnityEngine;
 
 namespace Toolbox.Optional.TweenMachine
@@ -10,6 +11,7 @@ namespace Toolbox.Optional.TweenMachine
         public Tween(){}
         
         //========== Tween logic functions ==========
+
         public override void TweenStart() { }
 
         protected override void UpdateTween()
