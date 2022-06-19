@@ -66,12 +66,12 @@ namespace Toolbox.Optional.TweenMachine
         
 #if UNITY_EDITOR
         
-        public override void DrawProperties(Rect currentPosition, out int addedHeight, out Rect newCurrentPosition)
+        public override void DrawProperties(Rect currentPosition,SerializedProperty property, out int addedHeight, out Rect newCurrentPosition)
         {
             addedHeight = 0;
             newCurrentPosition = currentPosition;
             
-            base.DrawProperties(currentPosition, out addedHeight, out newCurrentPosition);
+            base.DrawProperties(currentPosition,property, out addedHeight, out newCurrentPosition);
             newCurrentPosition.y += 16;
             addedHeight += 16;
 

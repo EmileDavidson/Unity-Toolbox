@@ -29,6 +29,8 @@ namespace Toolbox.Optional.TweenMachine.Editor
         private List<Type> subclasses = new List<Type>();
         private bool initialized = false;
 
+        private TweenBase _currentTween;
+
         private List<Type> _ignoredTypes = new List<Type>()
         {
             typeof(Tween)
@@ -134,8 +136,10 @@ namespace Toolbox.Optional.TweenMachine.Editor
         {
             _currentPosition.x += 8;
             _currentPosition.width -= 8;
+            var index = 0;
             foreach (var subClassType in subclasses)
             {
+                var innerIndex = index; //prevents out of scope warning
                 if(_ignoredTypes.Contains(subClassType)) continue;
                 _subClassesDropdown[subClassType] = DrawUtility.DrawFoldout(_currentPosition, _subClassesDropdown[subClassType], subClassType.Name, () =>
                     {
@@ -152,11 +156,16 @@ namespace Toolbox.Optional.TweenMachine.Editor
                             return;
                         }
 
-                        var myTween = tweenOfSubType.First();
+                        _currentTween = tweenOfSubType.First();
                         _currentPosition.y += 16;
                         _totalPropertyHeight += 16;
                         
-                        myTween.DrawProperties(_currentPosition, out var addedHeight, out var newCurrentPosition);
+                        // TESTING 
+                        
+                        var tweenSerializedProperty = _property.FindPropertyRelative("tweenList.Array.data[" + innerIndex + "]");
+                        //END TESTING
+                        
+                        _currentTween.DrawProperties(_currentPosition, tweenSerializedProperty , out var addedHeight, out var newCurrentPosition);
                         _currentPosition = newCurrentPosition;
                         _totalPropertyHeight += addedHeight;
                         
@@ -167,6 +176,7 @@ namespace Toolbox.Optional.TweenMachine.Editor
 
                         _currentPosition.x -= 8;
                         _currentPosition.width += 8;
+                        index++;
                     });
 
 
@@ -181,7 +191,6 @@ namespace Toolbox.Optional.TweenMachine.Editor
             _totalPropertyHeight += 16;
             if (GUI.Button(_currentPosition, "Add: " + type.Name))
             {
-                Debug.Log("CLICKED");
                 if (type.HasEmptyConstructor())
                 {
                     if (!(Activator.CreateInstance(type) is TweenBase tween)) return;
