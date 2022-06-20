@@ -23,9 +23,10 @@ namespace Toolbox.Optional.TweenMachine
         [SerializeReference] protected bool paused = false;
 
         //actions
-        [SerializeReference] public UnityEvent onTweenStart = new UnityEvent();
-        [SerializeReference] public UnityEvent onTweenFinish = new UnityEvent();
-        [SerializeReference] public UnityEvent onTweenUpdate = new UnityEvent();
+        public UnityEvent onTweenStart = new UnityEvent();
+        public UnityEvent onTweenFinish = new UnityEvent();
+        public UnityEvent onTweenUpdate = new UnityEvent();
+        public UnityEvent<float> onTweenStepUpdate = new UnityEvent<float>();
 
         public bool IsFinished => percent >= 1;
         protected bool HasStarted => percent > 0;
@@ -107,6 +108,20 @@ namespace Toolbox.Optional.TweenMachine
             return (Curve[Curve.keys.Length - 1].value);
         }
 
+        /// <summary>
+        /// Resets all values including events
+        /// this is used by the Drawer since Events stay even after creating a new instance?
+        /// </summary>
+        public void ResetValues()
+        {
+            percent = 0;
+            paused = false;
+            //actions
+            onTweenStart = new UnityEvent();
+            onTweenFinish = new UnityEvent();
+            onTweenUpdate = new UnityEvent();
+            onTweenStepUpdate = new UnityEvent<float>();
+        }
         #endregion
 
         #region ========== ChainSetters ============
@@ -159,6 +174,7 @@ namespace Toolbox.Optional.TweenMachine
         
         public void DrawEventProperties(Rect currentPosition, SerializedProperty property, out int addedHeight, out Rect newCurrentPosition)
         {
+
             addedHeight = 0;
             newCurrentPosition = currentPosition;
             if (property is null || Application.isPlaying) return;
@@ -172,21 +188,20 @@ namespace Toolbox.Optional.TweenMachine
             //
             if (onStartProperty is not null)
             {
-                EditorGUI.PropertyField(newCurrentPosition, onStartProperty, null);
+                EditorGUI.PropertyField(newCurrentPosition, onStartProperty, null); 
                 newCurrentPosition.y += 100 ;
                 addedHeight += 100;
             
                 //add aditional height for all methods in events
-                if (onTweenStart.GetPersistentEventCount() > 1)
+                if (onTweenStart.GetPersistentEventCount() > 0)
                 {
                     newCurrentPosition.y += (onTweenStart.GetPersistentEventCount() - 1) * 49;
                     addedHeight += (onTweenStart.GetPersistentEventCount() - 1) * 49;
-
                     newCurrentPosition.y += 2;
                     addedHeight += 2;
                 }
             }
-            
+
             //
             //UPDATE EVENT PROPERTY DRAWER
             //
@@ -197,9 +212,9 @@ namespace Toolbox.Optional.TweenMachine
                 addedHeight += 100;
             
                 //add aditional height for all methods in events
-                if (onTweenUpdate.GetPersistentEventCount() > 1)
+                if (onTweenUpdate.GetPersistentEventCount() > 0)
                 {
-                    newCurrentPosition.y += (onTweenUpdate.GetPersistentEventCount() - 1) * 49;
+                    newCurrentPosition.y += (onTweenUpdate.GetPersistentEventCount() - 1 ) * 49;
                     addedHeight += (onTweenUpdate.GetPersistentEventCount() - 1) * 49;
 
                     newCurrentPosition.y += 2;
@@ -217,7 +232,7 @@ namespace Toolbox.Optional.TweenMachine
                 addedHeight += 80;
             
                 //add aditional height for all methods in events
-                if (onTweenFinish.GetPersistentEventCount() > 1)
+                if (onTweenFinish.GetPersistentEventCount() > 0)
                 {
                     newCurrentPosition.y += (onTweenFinish.GetPersistentEventCount() - 1) * 49;
                     addedHeight += (onTweenFinish.GetPersistentEventCount() - 1) * 49;
@@ -226,8 +241,6 @@ namespace Toolbox.Optional.TweenMachine
                     addedHeight += 2;
                 }
             }
-
-            addedHeight += 49;
         }
 
 

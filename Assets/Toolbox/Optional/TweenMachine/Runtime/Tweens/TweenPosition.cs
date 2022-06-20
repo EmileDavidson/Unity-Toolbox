@@ -87,10 +87,9 @@ namespace Toolbox.Optional.TweenMachine
             addedHeight += 20; 
             
             //draw unity events
-
-            DrawEventProperties(newCurrentPosition, property, out addedHeight, out newCurrentPosition);
-            // addedHeight = eventHeight;
-            // newCurrentPosition.y = eventCurrentPosition.y;
+            DrawEventProperties(newCurrentPosition, property, out var eventHeight, out var eventNewPosition);
+            addedHeight += eventHeight;
+            newCurrentPosition = eventNewPosition;
         }
 #endif
 

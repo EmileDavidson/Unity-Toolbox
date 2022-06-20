@@ -16,5 +16,10 @@ namespace Toolbox
                 tweenBuild?.StartTween();
             }
         }
+
+        public void Test(string debugText)
+        {
+            print(debugText);
+        }
     }
 }

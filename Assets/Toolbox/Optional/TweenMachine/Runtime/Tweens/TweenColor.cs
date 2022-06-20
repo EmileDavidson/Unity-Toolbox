@@ -106,6 +106,13 @@ namespace Toolbox.Optional.TweenMachine
             addedHeight += 16;
 
             targetColor = EditorGUI.ColorField(newCurrentPosition, targetColor);
+            newCurrentPosition.y += 16;
+            addedHeight += 16;
+            
+            //draw unity events
+            DrawEventProperties(newCurrentPosition, property, out var eventHeight, out var eventNewPosition);
+            addedHeight += eventHeight;
+            newCurrentPosition = eventNewPosition;
         }
         
         #endif

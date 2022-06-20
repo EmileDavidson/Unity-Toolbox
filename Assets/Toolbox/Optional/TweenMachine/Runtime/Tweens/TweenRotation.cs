@@ -86,6 +86,13 @@ namespace Toolbox.Optional.TweenMachine
             addedHeight += 16;
 
             targetRotation = EditorGUI.Vector3Field(newCurrentPosition, "Target Vector",targetRotation);
+            newCurrentPosition.y += 16;
+            addedHeight += 16;
+            
+            //draw unity events
+            DrawEventProperties(newCurrentPosition, property, out var eventHeight, out var eventNewPosition);
+            addedHeight += eventHeight;
+            newCurrentPosition = eventNewPosition;
         }
         
 #endif
