@@ -184,6 +184,27 @@ namespace Toolbox.Optional.TweenMachine
             var onUpdateProperty = property.FindPropertyRelative("onTweenUpdate");
             
             //
+            //Update event with step ( 0 to 1 ) parameter
+            //
+            var onTweenStepUpdateProperty = property.FindPropertyRelative("onTweenStepUpdate");
+            if (onTweenStepUpdateProperty is not null)
+            {
+                EditorGUI.PropertyField(newCurrentPosition, onTweenStepUpdateProperty, null);
+                newCurrentPosition.y += 100 ;
+                addedHeight += 100;
+            
+                //add aditional height for all methods in events
+                if (onTweenStepUpdate.GetPersistentEventCount() > 0)
+                {
+                    newCurrentPosition.y += (onTweenStepUpdate.GetPersistentEventCount() - 1 ) * 49;
+                    addedHeight += (onTweenStepUpdate.GetPersistentEventCount() - 1) * 49;
+
+                    newCurrentPosition.y += 2;
+                    addedHeight += 2;
+                }
+            }
+            
+            //
             //START EVENT PROPERTY DRAWER
             //
             if (onStartProperty is not null)

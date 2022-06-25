@@ -1,4 +1,5 @@
 ﻿using System;
+using Toolbox.Attributes;
 using Toolbox.Optional.TweenMachine;
 using UnityEngine;
 
@@ -17,9 +18,14 @@ namespace Toolbox
             }
         }
 
-        public void Test(string debugText)
+        [Button]
+        public void TestLenght()
         {
-            print(debugText);
+            Debug.Log(tweenBuild.tweenList);
+            foreach (var tween in tweenBuild.tweenList)
+            {
+                Debug.Log(tween.GetType());
+            }
         }
     }
 }

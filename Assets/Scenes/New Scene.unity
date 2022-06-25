@@ -439,160 +439,34 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     tweenList:
-    - rid: 3276561592137023592
-    - rid: 3276561592137023600
-    - rid: 3276561592137023608
-    - rid: 3276561592137023640
+    - rid: 3276561722229129236
+    - rid: 3276561722229129240
     paused: 0
     onTweenBuildFinish:
-      rid: 3276561592137023585
+      rid: 3276561722229129221
     onTweenBuildUpdate:
-      rid: 3276561592137023586
+      rid: 3276561722229129222
     onTweenBuildStart:
-      rid: 3276561592137023587
+      rid: 3276561722229129223
   references:
     version: 2
     RefIds:
-    - rid: 3276561592137023585
+    - rid: 3276561722229129221
       type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
       data:
         m_PersistentCalls:
           m_Calls: []
-    - rid: 3276561592137023586
+    - rid: 3276561722229129222
       type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
       data:
         m_PersistentCalls:
           m_Calls: []
-    - rid: 3276561592137023587
+    - rid: 3276561722229129223
       type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
       data:
         m_PersistentCalls:
           m_Calls: []
-    - rid: 3276561592137023592
-      type: {class: TweenColor, ns: Toolbox.Optional.TweenMachine, asm: Assembly-CSharp}
-      data:
-        easeCurve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0
-            inSlope: 1
-            outSlope: 1
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 1
-            value: 1
-            inSlope: 1
-            outSlope: 1
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        percent: 0
-        gameObject: {fileID: 2055842141}
-        paused: 0
-        onTweenStart:
-          rid: 3276561592137023593
-        onTweenFinish:
-          rid: 3276561592137023594
-        onTweenUpdate:
-          rid: 3276561592137023595
-        targetColor: {r: 0, g: 0, b: 0, a: 0}
-    - rid: 3276561592137023593
-      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
-      data:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: 
-            m_MethodName: 
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: 
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: 
-            m_MethodName: 
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: 
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-    - rid: 3276561592137023594
-      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
-      data:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: 
-            m_MethodName: 
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: 
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: 
-            m_MethodName: 
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: 
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-    - rid: 3276561592137023595
-      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
-      data:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: 
-            m_MethodName: 
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: 
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: 
-            m_MethodName: 
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: 
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-    - rid: 3276561592137023600
+    - rid: 3276561722229129236
       type: {class: TweenRotation, ns: Toolbox.Optional.TweenMachine, asm: Assembly-CSharp}
       data:
         easeCurve:
@@ -623,77 +497,20 @@ MonoBehaviour:
         gameObject: {fileID: 2055842141}
         paused: 0
         onTweenStart:
-          rid: 3276561592137023601
+          m_PersistentCalls:
+            m_Calls: []
         onTweenFinish:
-          rid: 3276561592137023602
+          m_PersistentCalls:
+            m_Calls: []
         onTweenUpdate:
-          rid: 3276561592137023603
+          m_PersistentCalls:
+            m_Calls: []
+        onTweenStepUpdate:
+          m_PersistentCalls:
+            m_Calls: []
         targetRotation: {x: 0, y: 0, z: 0}
-    - rid: 3276561592137023601
-      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
-      data:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: 
-            m_MethodName: 
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: 
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-    - rid: 3276561592137023602
-      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
-      data:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: 
-            m_MethodName: 
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: 
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-    - rid: 3276561592137023603
-      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
-      data:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: 
-            m_MethodName: 
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: 
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: 
-            m_MethodName: 
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: 
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-    - rid: 3276561592137023608
-      type: {class: TweenScale, ns: Toolbox.Optional.TweenMachine, asm: Assembly-CSharp}
+    - rid: 3276561722229129240
+      type: {class: Tween, ns: Toolbox.Optional.TweenMachine, asm: Assembly-CSharp}
       data:
         easeCurve:
           serializedVersion: 2
@@ -723,76 +540,14 @@ MonoBehaviour:
         gameObject: {fileID: 2055842141}
         paused: 0
         onTweenStart:
-          rid: 3276561592137023609
+          m_PersistentCalls:
+            m_Calls: []
         onTweenFinish:
-          rid: 3276561592137023610
+          m_PersistentCalls:
+            m_Calls: []
         onTweenUpdate:
-          rid: 3276561592137023611
-        targetScale: {x: 0, y: 0, z: 0}
-    - rid: 3276561592137023609
-      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
-      data:
-        m_PersistentCalls:
-          m_Calls: []
-    - rid: 3276561592137023610
-      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
-      data:
-        m_PersistentCalls:
-          m_Calls: []
-    - rid: 3276561592137023611
-      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
-      data:
-        m_PersistentCalls:
-          m_Calls: []
-    - rid: 3276561592137023640
-      type: {class: TweenPosition, ns: Toolbox.Optional.TweenMachine, asm: Assembly-CSharp}
-      data:
-        easeCurve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0
-            inSlope: 1
-            outSlope: 1
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 1
-            value: 1
-            inSlope: 1
-            outSlope: 1
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        percent: 0
-        gameObject: {fileID: 2055842141}
-        paused: 0
-        onTweenStart:
-          rid: 3276561592137023641
-        onTweenFinish:
-          rid: 3276561592137023642
-        onTweenUpdate:
-          rid: 3276561592137023643
-        targetPosition: {x: 0, y: 0, z: 0}
-    - rid: 3276561592137023641
-      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
-      data:
-        m_PersistentCalls:
-          m_Calls: []
-    - rid: 3276561592137023642
-      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
-      data:
-        m_PersistentCalls:
-          m_Calls: []
-    - rid: 3276561592137023643
-      type: {class: UnityEvent, ns: UnityEngine.Events, asm: UnityEngine.CoreModule}
-      data:
-        m_PersistentCalls:
-          m_Calls: []
+          m_PersistentCalls:
+            m_Calls: []
+        onTweenStepUpdate:
+          m_PersistentCalls:
+            m_Calls: []

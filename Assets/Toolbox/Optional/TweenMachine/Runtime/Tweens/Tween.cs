@@ -29,25 +29,6 @@ namespace Toolbox.Optional.TweenMachine
             base.DrawProperties(currentPosition, property, out addedHeight, out newCurrentPosition);
             newCurrentPosition.y += 16;
             addedHeight += 16;
-
-            //
-            var onTweenStepUpdateProperty = property.FindPropertyRelative("onTweenStepUpdate");
-            if (onTweenStepUpdateProperty is not null)
-            {
-                EditorGUI.PropertyField(newCurrentPosition, onTweenStepUpdateProperty, null);
-                newCurrentPosition.y += 100 ;
-                addedHeight += 100;
-            
-                //add aditional height for all methods in events
-                if (onTweenStepUpdate.GetPersistentEventCount() > 0)
-                {
-                    newCurrentPosition.y += (onTweenStepUpdate.GetPersistentEventCount() - 1 ) * 49;
-                    addedHeight += (onTweenStepUpdate.GetPersistentEventCount() - 1) * 49;
-
-                    newCurrentPosition.y += 2;
-                    addedHeight += 2;
-                }
-            }
             
             //draw unity events
             DrawEventProperties(newCurrentPosition, property, out var eventHeight, out var eventNewPosition);

@@ -146,6 +146,7 @@ namespace Toolbox.Optional.TweenMachine.Editor
                         _currentPosition.x += 8;
                         _currentPosition.width -= 8;
 
+                        
                         var tweenOfSubType = _tweenBuild.tweenList.Where(tween => tween.GetType() == subClassType).ToArray();
                         if (tweenOfSubType.IsEmpty())
                         {
