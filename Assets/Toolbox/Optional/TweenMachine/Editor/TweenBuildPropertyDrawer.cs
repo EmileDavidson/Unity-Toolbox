@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.EnterpriseServices;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Toolbox.Required;
 using UnityEditor;
 using UnityEngine;
@@ -27,6 +29,13 @@ namespace Toolbox.Optional.TweenMachine.Editor
         private Dictionary<Type, bool> _subClassesDropdown = new Dictionary<Type, bool>();
         private List<Type> subclasses = new List<Type>();
         private bool initialized = false;
+
+        private TweenBase _currentTween;
+
+        private List<Type> _ignoredTypes = new List<Type>()
+        {
+    
+        };
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -128,8 +137,10 @@ namespace Toolbox.Optional.TweenMachine.Editor
         {
             _currentPosition.x += 8;
             _currentPosition.width -= 8;
+            int index = 0;
             foreach (var subClassType in subclasses)
             {
+                if(_ignoredTypes.Contains(subClassType)) continue;
                 _subClassesDropdown[subClassType] = DrawUtility.DrawFoldout(_currentPosition, _subClassesDropdown[subClassType], subClassType.Name, () =>
                     {
                         _currentPosition.x += 8;
@@ -145,11 +156,20 @@ namespace Toolbox.Optional.TweenMachine.Editor
                             return;
                         }
 
-                        var myTween = tweenOfSubType.First();
+                        _currentTween = tweenOfSubType.First();
                         _currentPosition.y += 16;
                         _totalPropertyHeight += 16;
+                        
+                        // TESTING 
+                        SerializedProperty tweenSerializedProperty = null;
+                        if (_tweenBuild.tweenList.ContainsSlot(index))
+                        {
+                            tweenSerializedProperty = _property.FindPropertyRelative("tweenList.Array.data[" + index + "]");
+                        }
+                        //END TESTING
+                        
+                        _currentTween.DrawProperties(_currentPosition, tweenSerializedProperty , out var addedHeight, out var newCurrentPosition);
 
-                        myTween.DrawProperties(_currentPosition, out var addedHeight, out var newCurrentPosition);
                         _currentPosition = newCurrentPosition;
                         _totalPropertyHeight += addedHeight;
                         
@@ -160,6 +180,7 @@ namespace Toolbox.Optional.TweenMachine.Editor
 
                         _currentPosition.x -= 8;
                         _currentPosition.width += 8;
+                        index++;
                     });
 
 
@@ -176,9 +197,12 @@ namespace Toolbox.Optional.TweenMachine.Editor
             {
                 if (type.HasEmptyConstructor())
                 {
-                    if (!(Activator.CreateInstance(type) is TweenBase tween)) return;
+                    var tween = Activator.CreateInstance(type) as TweenBase;
+                    if (tween is null) return;
+                    tween.ResetValues(); 
                     tween.gameObject = _tweenBuild.GameObject;
                     tween.Curve = _tweenBuild.Curve.Clone();
+                    tween.ResetValues();
                     _tweenBuild.ChainAdd(tween);
                     _totalPropertyHeight += 16;
                     _currentPosition.y += 16;

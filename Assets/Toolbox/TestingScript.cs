@@ -1,15 +1,25 @@
-﻿using Toolbox.Optional.TweenMachine;
+﻿using System;
+using Toolbox.Optional.TweenMachine;
 using UnityEngine;
 
 namespace Toolbox
 {
     public class TestingScript : MonoBehaviour
     {
-        public TweenBuild TweenBuild = new TweenBuild();
+        public int test;
+        public TweenBuild tweenBuild = new TweenBuild();
 
-        private void Awake()
+        private void Update()
         {
-            TweenBuild.StartTween();
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                tweenBuild?.StartTween();
+            }
+        }
+
+        public void Test(string debugText)
+        {
+            print(debugText);
         }
     }
 }
