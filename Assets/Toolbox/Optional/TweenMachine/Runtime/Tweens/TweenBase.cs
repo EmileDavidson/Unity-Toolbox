@@ -23,10 +23,9 @@ namespace Toolbox.Optional.TweenMachine
         [SerializeReference] protected bool paused = false;
 
         //actions
-        public UnityEvent onTweenStart = new UnityEvent();
-        public UnityEvent onTweenFinish = new UnityEvent();
-        public UnityEvent onTweenUpdate = new UnityEvent();
-        public UnityEvent<float> onTweenStepUpdate = new UnityEvent<float>();
+        [SerializeReference] public UnityAction onTweenStart;
+        [SerializeReference] public UnityAction onTweenFinish;
+        [SerializeReference] public UnityAction onTweenUpdate;
 
         public bool IsFinished => percent >= 1;
         protected bool HasStarted => percent > 0;
@@ -37,18 +36,16 @@ namespace Toolbox.Optional.TweenMachine
         /// <summary>
         /// Empty constructor so we can have constructor with different parameters in derived classes.
         /// </summary>
-        protected TweenBase()
-        {
-            
-        }
+        protected TweenBase(){}
 
         /// <summary>
         /// Base Constructor that need to be in all derived classes! this is used for the generic function to create new tween. 
         /// </summary>
         /// <param name="gameObject"></param>
-        protected TweenBase(GameObject gameObject)
+        protected TweenBase(GameObject gameObject, UnityAction onTweenStart)
         {
             this.gameObject = gameObject;
+            this.onTweenStart = onTweenStart;
         }
 
         #endregion
@@ -108,20 +105,6 @@ namespace Toolbox.Optional.TweenMachine
             return (Curve[Curve.keys.Length - 1].value);
         }
 
-        /// <summary>
-        /// Resets all values including events
-        /// this is used by the Drawer since Events stay even after creating a new instance?
-        /// </summary>
-        public void ResetValues()
-        {
-            percent = 0;
-            paused = false;
-            //actions
-            onTweenStart = new UnityEvent();
-            onTweenFinish = new UnityEvent();
-            onTweenUpdate = new UnityEvent();
-            onTweenStepUpdate = new UnityEvent<float>();
-        }
         #endregion
 
         #region ========== ChainSetters ============
@@ -160,89 +143,20 @@ namespace Toolbox.Optional.TweenMachine
 
 #if UNITY_EDITOR
 
-        public virtual void DrawProperties(Rect currentPosition, SerializedProperty property, out int addedHeight, out Rect newCurrentPosition)
+        public virtual void DrawProperties(Rect currentPosition, out int addedHeight, out Rect newCurrentPosition)
         {
             addedHeight = 0;
             newCurrentPosition = currentPosition;
-
+            
+            addedHeight = 0;
+            newCurrentPosition = currentPosition;
+            
             gameObject = EditorGUI.ObjectField(newCurrentPosition, "GameObject", gameObject, typeof(GameObject), true) as GameObject;
             newCurrentPosition.y += 16;
             addedHeight += 16;
 
             Curve = EditorGUI.CurveField(newCurrentPosition, "Curve", this.Curve);
         }
-        
-        public void DrawEventProperties(Rect currentPosition, SerializedProperty property, out int addedHeight, out Rect newCurrentPosition)
-        {
-
-            addedHeight = 0;
-            newCurrentPosition = currentPosition;
-            if (property is null || Application.isPlaying) return;
-
-            var onStartProperty = property.FindPropertyRelative("onTweenStart");
-            var onEndProperty = property.FindPropertyRelative("onTweenFinish");
-            var onUpdateProperty = property.FindPropertyRelative("onTweenUpdate");
-            
-            //
-            //START EVENT PROPERTY DRAWER
-            //
-            if (onStartProperty is not null)
-            {
-                EditorGUI.PropertyField(newCurrentPosition, onStartProperty, null); 
-                newCurrentPosition.y += 100 ;
-                addedHeight += 100;
-            
-                //add aditional height for all methods in events
-                if (onTweenStart.GetPersistentEventCount() > 0)
-                {
-                    newCurrentPosition.y += (onTweenStart.GetPersistentEventCount() - 1) * 49;
-                    addedHeight += (onTweenStart.GetPersistentEventCount() - 1) * 49;
-                    newCurrentPosition.y += 2;
-                    addedHeight += 2;
-                }
-            }
-
-            //
-            //UPDATE EVENT PROPERTY DRAWER
-            //
-            if (onUpdateProperty is not null)
-            {
-                EditorGUI.PropertyField(newCurrentPosition, onUpdateProperty, null);
-                newCurrentPosition.y += 100 ;
-                addedHeight += 100;
-            
-                //add aditional height for all methods in events
-                if (onTweenUpdate.GetPersistentEventCount() > 0)
-                {
-                    newCurrentPosition.y += (onTweenUpdate.GetPersistentEventCount() - 1 ) * 49;
-                    addedHeight += (onTweenUpdate.GetPersistentEventCount() - 1) * 49;
-
-                    newCurrentPosition.y += 2;
-                    addedHeight += 2;
-                }
-            }
-            
-            //
-            //END EVENT PROPERTY DRAWER
-            //
-            if (onEndProperty is not null)
-            {
-                EditorGUI.PropertyField(newCurrentPosition, onEndProperty, null);
-                newCurrentPosition.y += 80 ;
-                addedHeight += 80;
-            
-                //add aditional height for all methods in events
-                if (onTweenFinish.GetPersistentEventCount() > 0)
-                {
-                    newCurrentPosition.y += (onTweenFinish.GetPersistentEventCount() - 1) * 49;
-                    addedHeight += (onTweenFinish.GetPersistentEventCount() - 1) * 49;
-
-                    newCurrentPosition.y += 2;
-                    addedHeight += 2;
-                }
-            }
-        }
-
 
 #endif
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using Toolbox.Required;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,12 +30,10 @@ namespace Toolbox.Optional.TweenMachine
             this._startPosition = gameObject.transform.position;
         }
         
-
         //========== Tween logic functions ==========
 
         public override void TweenStart()
         {
-            this._startPosition = gameObject.transform.position;
             this._direction = targetPosition - _startPosition;
             this.percent = 0;
         }
@@ -73,24 +70,18 @@ namespace Toolbox.Optional.TweenMachine
 
 #if UNITY_EDITOR
 
-        public override void DrawProperties(Rect currentPosition, SerializedProperty property, out int addedHeight, out Rect newCurrentPosition)
+        public override void DrawProperties(Rect currentPosition, out int addedHeight, out Rect newCurrentPosition)
         {
             addedHeight = 0;
             newCurrentPosition = currentPosition;
             
-            base.DrawProperties(currentPosition, property, out addedHeight, out newCurrentPosition);
+            base.DrawProperties(currentPosition, out addedHeight, out newCurrentPosition);
             newCurrentPosition.y += 16;
             addedHeight += 16;
 
             targetPosition = EditorGUI.Vector3Field(newCurrentPosition, "Target vector", targetPosition);
-            newCurrentPosition.y += 20;
-            addedHeight += 20; 
-            
-            //draw unity events
-            DrawEventProperties(newCurrentPosition, property, out var eventHeight, out var eventNewPosition);
-            addedHeight += eventHeight;
-            newCurrentPosition = eventNewPosition;
         }
+
 #endif
 
         #endregion
