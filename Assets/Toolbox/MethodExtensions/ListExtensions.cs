@@ -156,12 +156,11 @@ namespace Toolbox.MethodExtensions
         {
             return index >= 0 && list.Count - 1 >= index;
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="oldList"></param>
-        /// <param name="objectList"></param>
         /// <typeparam name="TY"></typeparam>
         /// <typeparam name="TU"></typeparam>
         public static List<TU> ConvertListItemsTo<TY, TU>(this IList<TY> oldList) where TU : class

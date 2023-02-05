@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using Toolbox.MethodExtensions;
 using UnityEngine;
 
 namespace Toolbox.Utils.Runtime
@@ -60,16 +61,7 @@ namespace Toolbox.Utils.Runtime
             }
 
             _instance = this as T;
-            Init();
-        }
-
-        /// <summary>
-        /// Awake Initializing 
-        /// </summary>
-        [PublicAPI]
-        public void Init()
-        {
-            
+            DontDestroyOnLoad(_instance);
         }
     }
 }

@@ -57,7 +57,8 @@ namespace Toolbox.MethodExtensions
         /// <param name="vector3"></param>
         /// <param name="otherPositions">list of other positions</param>
         /// <returns>list of ordered position by distance</returns>
-        public static Vector3[] GetPositionsByDistance(this Vector3 vector3, IEnumerable<Vector3> otherPositions) {
+        public static Vector3[] GetPositionsByDistance(this Vector3 vector3, IEnumerable<Vector3> otherPositions)
+        {
             return otherPositions.OrderBy(trans => Vector3.Distance(trans, vector3)).ToArray();
         }
 
@@ -67,10 +68,11 @@ namespace Toolbox.MethodExtensions
         /// <param name="vector2"></param>
         /// <param name="otherPositions">list of other positions</param>
         /// <returns>list of ordered position by distance</returns>
-        public static Vector2[] GetPositionsByDistance(this Vector2 vector2, IEnumerable<Vector2> otherPositions) {
+        public static Vector2[] GetPositionsByDistance(this Vector2 vector2, IEnumerable<Vector2> otherPositions)
+        {
             return otherPositions.OrderBy(trans => Vector2.Distance(trans, vector2)).ToArray();
         }
-        
+
         /// <summary>
         /// checks if the vector is 0 
         /// </summary>
@@ -80,7 +82,7 @@ namespace Toolbox.MethodExtensions
         {
             return dir.sqrMagnitude == 0;
         }
-        
+
         /// <summary>
         /// checks if the vector is 0 
         /// </summary>
@@ -90,8 +92,8 @@ namespace Toolbox.MethodExtensions
         {
             return dir.sqrMagnitude == 0;
         }
-        
-                /// <summary>
+
+        /// <summary>
         /// Check if the vector is pointing in the same direction as otherVector
         /// </summary>
         /// <param name="dir"></param>
@@ -185,7 +187,8 @@ namespace Toolbox.MethodExtensions
         /// <param name="second"></param>
         /// <param name="offset"></param>
         /// <returns></returns>
-        public static (Vector2, Vector2) OffSetToDirectionXY(this Vector2 vec, Vector2 first, Vector2 second, float offset)
+        public static (Vector2, Vector2) OffSetToDirectionXY(this Vector2 vec, Vector2 first, Vector2 second,
+            float offset)
         {
             Vector2 pointBetween = Vector3.Lerp(first, second, .5f);
             Vector2 dirToCurrent = pointBetween.Direction(vec);
@@ -203,7 +206,7 @@ namespace Toolbox.MethodExtensions
             Vector2 dir = v - targetVector;
             return dir;
         }
-        
+
         /// <summary>
         /// The LengthSquare method calculates the square of the distance between two Vector2 values vec1 and vec2.
         /// It does this by finding the difference between the x values of the two Vector2 and the difference between the y values,
@@ -218,22 +221,24 @@ namespace Toolbox.MethodExtensions
             float yDiff = vec2.y - vec1.y;
             return xDiff * xDiff + yDiff * yDiff;
         }
-        
+
         /// <summary>
         /// returns a vector2 from the vector3.x and vector3.y
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
-        public static Vector2 XY(this Vector3 v) {
+        public static Vector2 XY(this Vector3 v)
+        {
             return new Vector2(v.x, v.y);
         }
-        
+
         /// <summary>
         /// returns a vector2 from the vector3.y and vector3.z
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
-        public static Vector2 YZ(this Vector3 v) {
+        public static Vector2 YZ(this Vector3 v)
+        {
             return new Vector2(v.y, v.z);
         }
 
@@ -242,142 +247,268 @@ namespace Toolbox.MethodExtensions
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
-        public static Vector2 XZ(this Vector3 v) {
+        public static Vector2 XZ(this Vector3 v)
+        {
             return new Vector2(v.x, v.z);
         }
 
         /// <summary>
-        /// returns a new vector of given value with the x value of the set value
+        /// Sets the X value of the vector to the given value and returns to vector itself for chaining
         /// </summary>
-        /// <param name="v"></param>
-        /// <param name="x"></param>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static Vector3 SetX(this Vector3 v, float x)
+        public static Vector3 ChainSetX(this Vector3 vector, float value)
         {
-            return new Vector3(x, v.y, v.z);
+            vector.x = value;
+            return vector;
         }
 
         /// <summary>
-        /// returns a new vector of given value with the y value of the set value
+        /// Sets the Y value of the vector to the given value and returns to vector itself for chaining
         /// </summary>
-        /// <param name="v"></param>
-        /// <param name="y"></param>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static Vector3 SetY(this Vector3 v, float y) {
-            return new Vector3(v.x, y, v.z);
-        }
-
-        /// <summary>
-        /// returns a new vector of given value with the z value of the set value
-        /// </summary>
-        /// <param name="v"></param>
-        /// <param name="z"></param>
-        /// <returns></returns>
-        public static Vector3 SetZ(this Vector3 v, float z) {
-            return new Vector3(v.x, v.y, z);
-        }
-
-        /// <summary>
-        /// returns a new vector of given value with the x value of the set value
-        /// </summary>
-        /// <param name="v"></param>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        public static Vector2 SetX(this Vector2 v, float x) {
-            return new Vector2(x, v.y);
-        }
-	
-        /// <summary>
-        /// returns a new vector of given value with the y value of the set value
-        /// </summary>
-        /// <param name="v"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public static Vector2 SetY(this Vector2 v, float y) {
-            return new Vector2(v.x, y);
-        }
-
-        /// <summary>
-        /// returns a new vector of given value with 
-        /// </summary>
-        /// <param name="v"></param>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        public static Vector3 AddX(this Vector3 v, float x)
+        public static Vector3 ChainSetY(this Vector3 vector, float value)
         {
-            return new Vector3(v.x + x, v.y, v.z);
+            vector.y = value;
+            return vector;
         }
 
         /// <summary>
-        /// Creates a new vector with the input vector values
-        /// adds the given value Y value to the newly generated vector and sets the input vector as newly initialized vector
+        /// Set the Z value of the vector to the given value and returns to vector itself for chaining
         /// </summary>
-        /// <param name="v"></param>
-        /// <param name="y"></param>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static Vector3 AddY(this Vector3 v, float y)
+        public static Vector3 ChainSetZ(this Vector3 vector, float value)
         {
-            return new Vector3(v.x, v.y + y, v.z);
+            vector.z = value;
+            return vector;
         }
 
         /// <summary>
-        /// Creates a new vector with the input vector values
-        /// adds the given value Z value to the newly generated vector and sets the input vector as newly initialized vector
+        /// sets the X value of the vector to the given value and returns to vector itself for chaining
         /// </summary>
-        /// <param name="v"></param>
-        /// <param name="z"></param>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static Vector3 AddZ(this Vector3 v, float z)
+        public static Vector2 ChainSetX(this Vector2 vector, float value)
         {
-            return new Vector3(v.x, v.y, v.z + z);
+            vector.x = value;
+            return vector;
+        }
+
+        /// <summary>
+        /// Sets the Y value of the vector to the given value and returns to vector itself for chaining
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Vector2 ChainSetY(this Vector2 vector, float value)
+        {
+            vector.y = value;
+            return vector;
+        }
+
+        /// <summary>
+        /// Sets the vector values to the given vector values.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Vector3 ChainSetVector(this Vector3 vector, Vector3 value)
+        {
+            vector.x = value.x;
+            vector.y = value.y;
+            vector.z = value.z;
+            return vector;
         }
         
         /// <summary>
-        /// Creates a new vector with the input vector values
-        /// adds the given value X value to the newly generated vector and sets the input vector as newly initialized vector
+        /// Sets the vector values to the given vector values.
         /// </summary>
-        /// <param name="v"></param>
-        /// <param name="x"></param>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static Vector2 AddX(this Vector2 v, float x)
+        public static Vector2 ChainSetVector(this Vector2 vector, Vector2 value)
         {
-            return new Vector2(v.x + x, v.y);
+            vector.x = value.x;
+            vector.y = value.y;
+            return vector;
         }
         
         /// <summary>
-        /// Creates a new vector with the input vector values
-        /// adds the given value Y value to the newly generated vector and sets the input vector as newly initialized vector
+        /// Adds the given value to the X value of the vector and returns to vector itself for chaining
         /// </summary>
-        /// <param name="v"></param>
-        /// <param name="y"></param>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static Vector2 AddY(this Vector2 v, float y)
+        public static Vector3 ChainAddX(this Vector3 vector, float value)
         {
-            return new Vector2(v.x, v.y + y);
+            vector.x += value;
+            return vector;
         }
 
         /// <summary>
-        /// Creates a new vector with the input vector values
-        /// adds the given vector to the newly generated vector and sets the input vector as newly initialized vector
+        /// Adds the given value to the Y value of the vector and returns to vector itself for chaining
         /// </summary>
-        /// <param name="v"></param>
-        /// <param name="addVec"></param>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static Vector2 AddVector(this Vector2 v, Vector2 addVec)
+        public static Vector3 ChainAddY(this Vector3 vector, float value)
         {
-            return new Vector2(v.x + addVec.x, v.y + addVec.y);
+            vector.y += value;
+            return vector;
+        }
+
+        
+        /// <summary>
+        /// Adds the given value to the Z value of the vector and returns to vector itself for chaining
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Vector3 ChainAddZ(this Vector3 vector, float value)
+        {
+            vector.z += value;
+            return vector;
+        }
+
+        
+        /// <summary>
+        /// Adds the given value to the X value of the vector and returns to vector itself for chaining
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Vector2 ChainAddX(this Vector2 vector, float value)
+        {
+            vector.x += value;
+            return vector;
         }
         
         /// <summary>
-        /// Creates a new vector with the input vector values
-        /// adds the given vector to the newly generated vector and sets the input vector as newly initialized vector
+        /// Adds the given value to the Y value of the vector and returns to vector itself for chaining
         /// </summary>
-        /// <param name="v"></param>
-        /// <param name="addVec"></param>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static Vector3 AddVector(this Vector3 v, Vector3 addVec)
+        public static Vector2 ChainAddY(this Vector2 vector, float value)
         {
-            return new Vector3(v.x + addVec.x, v.y + addVec.y, v.z + addVec.z);
+            vector.y += value;
+            return vector;
+        }
+        
+        /// <summary>
+        /// Adds the given vector value from the vector and returns to vector itself for chaining
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Vector3 ChainAddVector(this Vector3 vector, Vector3 value)
+        {
+            vector += value;
+            return vector;
+        }
+        
+        /// <summary>
+        /// Adds the given vector value from the vector and returns to vector itself for chaining
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Vector2 ChainAddVector(this Vector2 vector, Vector2 value)
+        {
+            vector += value;
+            return vector;
+        }
+
+        /// <summary>
+        /// Subtracts the given value from the X value of the vector and returns to vector itself for chaining
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Vector3 ChainSubtractX(this Vector3 vector, float value)
+        {
+            vector.x -= value;
+            return vector;
+        }
+        
+        /// <summary>
+        /// Subtracts the given value from the Y value of the vector and returns to vector itself for chaining
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Vector3 ChainSubtractY(this Vector3 vector, float value)
+        {
+            vector.y -= value;
+            return vector;
+        }
+        
+        
+        /// <summary>
+        /// Subtracts the given value from the Z value of the vector and returns to vector itself for chaining
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Vector3 ChainSubtractZ(this Vector3 vector, float value)
+        {
+            vector.z -= value;
+            return vector;
+        }
+        
+        /// <summary>
+        /// Subtracts the given value from the X value of the vector and returns to vector itself for chaining
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Vector2 ChainSubtractX(this Vector2 vector, float value)
+        {
+            vector.x -= value;
+            return vector;
+        }
+        
+        /// <summary>
+        /// Subtracts the given value from the Y value of the vector and returns to vector itself for chaining
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Vector2 ChainSubtractY(this Vector2 vector, float value)
+        {
+            vector.y -= value;
+            return vector;
+        }
+        
+        /// <summary>
+        /// Subtracts the given vector value from the vector and returns to vector itself for chaining
+
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Vector3 ChainSubtractVector(this Vector3 vector, Vector3 value)
+        {
+            vector -= value;
+            return vector;
+        }
+        
+        /// <summary>
+        /// Subtracts the given vector value from the vector and returns to vector itself for chaining
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Vector2 ChainSubtractVector(this Vector2 vector, Vector2 value)
+        {
+            vector -= value;
+            return vector;
         }
     }
 }

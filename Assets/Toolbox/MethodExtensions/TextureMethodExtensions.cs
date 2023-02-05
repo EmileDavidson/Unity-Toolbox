@@ -4,6 +4,13 @@ namespace Toolbox.MethodExtensions
 {
     public static class TextureMethodExtensions
     {
+        
+        /// <summary>
+        /// Rotates the texture by 90 degrees.
+        /// </summary>
+        /// <param name="originalTexture"></param>
+        /// <param name="clockwise"></param>
+        /// <returns></returns>
         public static Texture2D RotateTexture(this Texture2D originalTexture, bool clockwise = false)
         {
             var original = originalTexture.GetPixels32();

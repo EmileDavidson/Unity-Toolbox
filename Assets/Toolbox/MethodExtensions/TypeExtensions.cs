@@ -8,6 +8,12 @@ namespace Toolbox.MethodExtensions
 {
     public static class TypeExtensions
     {
+        /// <summary>
+        /// Checks if the type is a subclass of the given type.
+        /// </summary>
+        /// <param name="myType"></param>
+        /// <param name="baseType"></param>
+        /// <returns></returns>
         public static bool IsDerivedFrom(this Type myType, Type baseType)
         {
             var dict = myType.GetInheritedClassesDict();
@@ -88,30 +94,22 @@ namespace Toolbox.MethodExtensions
                 select assemblyType).ToList();
         }
 
+        /// <summary>
+        /// Returns a list of all types that inherent from the given type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static List<string> GetInheritedClassesNames(this Type type)
         {
             List<Type> types = type.GetInheritedClassesList();
             List<string> names = new List<string>();
-            foreach (var VARIABLE in types)
+            foreach (var t in types)
             {
-                names.Add(VARIABLE.Name);
+                names.Add(t.Name);
             }
 
             return names;
         }
-
-        private static readonly HashSet<Type> UnitySerializablePrimitiveTypes = new HashSet<Type>
-        {
-            typeof(bool), typeof(byte), typeof(sbyte), typeof(char), typeof(double), typeof(float), typeof(int),
-            typeof(uint), typeof(long), typeof(ulong), typeof(short), typeof(ushort), typeof(string)
-        };
-
-        private static readonly HashSet<Type> UnitySerializableBuiltinTypes = new HashSet<Type>
-        {
-            typeof(Vector2), typeof(Vector3), typeof(Vector4), typeof(Rect), typeof(Quaternion), typeof(Matrix4x4),
-            typeof(Color), typeof(Color32), typeof(LayerMask), typeof(AnimationCurve), typeof(Gradient),
-            typeof(RectOffset), typeof(GUIStyle)
-        };
 
         /// <summary>Checks if the type is serializable by Unity.</summary>
         /// <param name="type">The type to check.</param>
@@ -181,8 +179,7 @@ namespace Toolbox.MethodExtensions
             {
                 Type cur = typeToCheck.IsGenericType ? typeToCheck.GetGenericTypeDefinition() : typeToCheck;
 
-                if (generic == cur)
-                    return true;
+                if (generic == cur) return true;
 
                 typeToCheck = typeToCheck.BaseType;
             }
@@ -214,5 +211,25 @@ namespace Toolbox.MethodExtensions
 
             return baseType.IsAssignableFrom(typeToCheck) || subClassOfRawGeneric;
         }
+        
+        
+        /// <summary>
+        /// A hashset of all the types that can be serialized by Unity.
+        /// </summary>
+        private static readonly HashSet<Type> UnitySerializablePrimitiveTypes = new HashSet<Type>
+        {
+            typeof(bool), typeof(byte), typeof(sbyte), typeof(char), typeof(double), typeof(float), typeof(int),
+            typeof(uint), typeof(long), typeof(ulong), typeof(short), typeof(ushort), typeof(string)
+        };
+
+        /// <summary>
+        /// A hashset of all the types that can be serialized by Unity.
+        /// </summary>
+        private static readonly HashSet<Type> UnitySerializableBuiltinTypes = new HashSet<Type>
+        {
+            typeof(Vector2), typeof(Vector3), typeof(Vector4), typeof(Rect), typeof(Quaternion), typeof(Matrix4x4),
+            typeof(Color), typeof(Color32), typeof(LayerMask), typeof(AnimationCurve), typeof(Gradient),
+            typeof(RectOffset), typeof(GUIStyle)
+        };
     }
 }

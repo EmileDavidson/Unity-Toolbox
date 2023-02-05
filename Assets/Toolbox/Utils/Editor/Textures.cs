@@ -44,8 +44,6 @@ namespace Toolbox.Utils.Editor
 
         private static Texture2D _arrowDownTexture2D;
 
-        //todo: ADD WHEN THE TEXTURE IS NOT FOUND IN ASSET PATH WE LOAD A ' BLANK 1PX TEXTURE ' THIS PREVENTS ERRORS 
-        //LOG A WARNING IN THE CONSOLE THAT TEXTURE PATH WAS NOT FOUND AND RE-CHECK EVERY TIME ITS REQUESTED AGAIN 
         public static Texture2D ArrowDownTexture2D
         {
             get

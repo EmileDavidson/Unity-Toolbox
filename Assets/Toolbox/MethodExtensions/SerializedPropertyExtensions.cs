@@ -23,6 +23,11 @@ namespace Toolbox.MethodExtensions
             return field.GetValue(targetObject) as T;
         }
 
+        /// <summary>
+        /// Gets the GameObject of the serializedProperty
+        /// </summary>
+        /// <param name="property"></param>
+        /// <returns></returns>
         public static GameObject GetGameObject(this SerializedProperty property)
         {
             var targetObject = property.serializedObject.targetObject;

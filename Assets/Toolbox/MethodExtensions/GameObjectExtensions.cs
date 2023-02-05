@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Toolbox.MethodExtensions
@@ -105,6 +106,20 @@ namespace Toolbox.MethodExtensions
             List<GameObject> childGameObjects = new List<GameObject>();
             childrenTransforms.ForEach((objTrans => childGameObjects.Add(objTrans.gameObject)));
             return childGameObjects;
+        }
+        
+        /// <summary>
+        /// Find all children of the GameObject by tag (includes self)
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="tags"></param>
+        /// <returns></returns>
+        public static List<GameObject> FindChildrenByTag(this GameObject gameObject, params string[] tags)
+        {
+            return gameObject.transform.FindChildrenByTag(tags)
+                .Select(tran => tran.gameObject)
+                .Where(gameOb => gameOb != null)
+                .ToList();
         }
     }
 }
