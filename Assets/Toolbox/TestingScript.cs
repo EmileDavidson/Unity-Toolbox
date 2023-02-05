@@ -1,31 +1,19 @@
 ﻿using System;
 using Toolbox.Attributes;
-using Toolbox.Optional.TweenMachine;
+using Toolbox.MethodExtensions;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Toolbox
 {
     public class TestingScript : MonoBehaviour
     {
-        public int test;
-        public TweenBuild tweenBuild = new TweenBuild();
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                tweenBuild?.StartTween();
-            }
-        }
-
+        
+        
         [Button]
-        public void TestLenght()
+        public void Test()
         {
-            Debug.Log(tweenBuild.tweenList);
-            foreach (var tween in tweenBuild.tweenList)
-            {
-                Debug.Log(tween.GetType());
-            }
+            gameObject.transform.position.SetX(10).SetY(10).SetZ(10);
         }
     }
 }
